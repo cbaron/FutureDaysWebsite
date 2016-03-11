@@ -5,6 +5,8 @@ module.exports = Object.create(
         constructor() {
         },
 
+        fs: require('fs'),
+
         handler( request, response ) {
             var path
 
@@ -13,6 +15,14 @@ module.exports = Object.create(
             request.setEncoding('utf8')
 
             path = this.url.parse( request.url ).pathname.split("/")
+
+            this.resources[ request.method ].some( resource => {
+                if( ! resource.condition.call( this, request, path ) ) return false
+            
+                this[ resource.method ]( request, response, path )
+                .catch( err => this.handleFailure( response, err, 500, true ) )
+                return true
+            } )
 
             
 
@@ -31,7 +41,14 @@ module.exports = Object.create(
             }
 
             return this.handleFailure( response, new Error("Not Found"), 404, false )
+        },
 
+        html( request, response, path ) {
+            return new Promise( ( resolve, reject ) => {
+                this.response.writeHead( 200 )
+                this.response.end( require('./templates/page')( require('handlebars') )( { title: 'Future Days' } ) )
+                resolve()
+            } )
         },
 
         pgQuerySync: ( query, args ) =>
@@ -51,7 +68,7 @@ module.exports = Object.create(
                     condition: ( request, path ) => /text\/html/.test( request.headers.accept )
                     method: 'html'
                 }, {
-                    condition: ( request, path ) => /text\/html/.test( request.headers.accept )
+                    condition: ( request, path ) => /application\/ld\+json/.test( request.headers.accept )
                     method: 'hyper'
                 }
             ],
@@ -70,6 +87,22 @@ module.exports = Object.create(
                 condition: ( request, path ) => /application\/json/.test( request.headers.accept ) && ( this.routes.REST[ path[1] ] || this.tables[ path[1] ] )
                 method: 'rest'
             ]
+        },
+
+        static( request, response, path ) {
+            var file = this.format( '%s/%s', __dirname, path.join('/')
+
+            return new Promise( ( resolve, reject ) => {
+                this.fs.stat( file, err => {
+                    var stream
+                    if( err ) return reject(err) 
+                    stream = this.fs.createReadStream( file )
+                    response.on( 'error', err => stream.end() )
+                    response.writeHead( 200, 'Content-Length': stat.size )
+                    stream.pipe( response )
+                    resolve()
+                } )
+            } )
         },
 
     } ),
@@ -172,20 +205,14 @@ Object.assign( Router.prototype, MyObject.prototype, {
     
 
     initialize() {
-        var static = require('node-static')
-
         this.storeTableData( this._postgresQuerySync( this.getAllTables() ) )
         this.storeTableMetaData( this._postgresQuerySync( "SELECT * FROM tablemeta" ) )
         this.storeForeignKeyData( this._postgresQuerySync( this.getForeignKeys() ) )
-
-        this.staticFolder = new static.Server( undefined, { cache: false } )
 
         return this;
     },
 
     
-
-    serveStaticFile( request, response ) { this.staticFolder.serve( request, response ) },
 
     storeForeignKeyData( foreignKeyResult ) {
         foreignKeyResult.forEach( row => {
