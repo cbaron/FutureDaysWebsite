@@ -1,19 +1,85 @@
-module.exports = {
+module.exports = Object.create(
 
-    "__proto__": Object.assign( {}, Object.getPrototypeOf( require('./lib/MyObject') ), {
+    Object.assign( {}, Object.getPrototypeOf( require('./lib/MyObject') ), {
 
-    } )
+        constructor() {
+        },
 
-}
+        handler( request, response ) {
+            var path
 
-var router,
-    MyObject = require('./lib/MyObject'),
-    Router = function() { return MyObject.apply( this, arguments ) }
+            if( ! this.resources[ request.method ] ) return this.handleFailure( response, new Error("Not Found"), 404, false )
+
+            request.setEncoding('utf8')
+
+            path = this.url.parse( request.url ).pathname.split("/")
+
+            
+
+            if( ( request.method === "GET" && path[1] === "static" ) || path[1] === "favicon.ico" ) {
+                return request.addListener( 'end', this.serveStaticFile.bind( this, request, response ) ).resume() }
+
+            if( /text\/html/.test( request.headers.accept ) && request.method === "GET" ) {
+                return this.applyHTMLResource( request, response, path ).catch( err => this.handleFailure( response, err, 500, true ) )
+
+            } else if( ( /application\/json/.test( request.headers.accept ) || /(POST|PATCH|DELETE)/.test(request.method) ) &&
+                       ( this.routes.REST[ path[1] ] || this.tables[ path[1] ] ) ) {
+                return this.applyResource( request, response, path ).catch( err => this.handleFailure( response, err, 500, true ) )
+            } else if( /application\/ld\+json/.test( request.headers.accept ) && ( this.tables[ path[1] ] || path[1] === "" ) ) {
+                if( path[1] === "" ) path[1] === "index"
+                return this.applyResource( request, response, path, '/hyper' ).catch( err => this.handleFailure( response, err, 500, true ) )
+            }
+
+            return this.handleFailure( response, new Error("Not Found"), 404, false )
+
+        },
+
+        pgQuerySync: ( query, args ) =>
+            new ( require('./dal/postgres') )( { connectionString: process.env.POSTGRES } ).querySync( query, args ),
+
+        resources: {
+            "DELETE: [
+                condition: ( request, path ) => /application\/json/.test( request.headers.accept ) && ( this.routes.REST[ path[1] ] || this.tables[ path[1] ] )
+                method: 'rest'
+            ],
+
+            "GET": [
+                {
+                    condition: ( request, path ) => ( path[1] === "static" ) || path[1] === "favicon.ico",
+                    method: 'static'
+                }, {
+                    condition: ( request, path ) => /text\/html/.test( request.headers.accept )
+                    method: 'html'
+                }, {
+                    condition: ( request, path ) => /text\/html/.test( request.headers.accept )
+                    method: 'hyper'
+                }
+            ],
+            
+            "PATCH: [
+                condition: ( request, path ) => /application\/json/.test( request.headers.accept ) && ( this.routes.REST[ path[1] ] || this.tables[ path[1] ] )
+                method: 'rest'
+            ],
+
+            "POST: [
+                condition: ( request, path ) => /application\/json/.test( request.headers.accept ) && ( this.routes.REST[ path[1] ] || this.tables[ path[1] ] )
+                method: 'rest'
+            ],
+    
+            "PUT: [
+                condition: ( request, path ) => /application\/json/.test( request.headers.accept ) && ( this.routes.REST[ path[1] ] || this.tables[ path[1] ] )
+                method: 'rest'
+            ]
+        },
+
+    } ),
+
+    { tables: { } }
+)
+
+router = new Router( { routes: { REST: { } }, tables: { } } ).initialize()
 
 Object.assign( Router.prototype, MyObject.prototype, {
-
-    _postgresQuerySync( query, args ) =>
-        new ( require('./dal/postgres') )( { connectionString: process.env.POSTGRES } ).querySync( query, args ),
 
     applyHTMLResource( request, response, path ) {
         return new Promise( ( resolve, reject ) => {
@@ -103,26 +169,7 @@ Object.assign( Router.prototype, MyObject.prototype, {
         response.end( message )
     },
     
-    handler( request, response ) {
-        var path = this.url.parse( request.url ).pathname.split("/")
-        request.setEncoding('utf8');
-
-        if( ( request.method === "GET" && path[1] === "static" ) || path[1] === "favicon.ico" ) {
-            return request.addListener( 'end', this.serveStaticFile.bind( this, request, response ) ).resume() }
-
-        if( /text\/html/.test( request.headers.accept ) && request.method === "GET" ) {
-            return this.applyHTMLResource( request, response, path ).catch( err => this.handleFailure( response, err, 500, true ) )
-        } else if( ( /application\/json/.test( request.headers.accept ) || /(POST|PATCH|DELETE)/.test(request.method) ) &&
-                   ( this.routes.REST[ path[1] ] || this.tables[ path[1] ] ) ) {
-            return this.applyResource( request, response, path ).catch( err => this.handleFailure( response, err, 500, true ) )
-        } else if( /application\/ld\+json/.test( request.headers.accept ) && ( this.tables[ path[1] ] || path[1] === "" ) ) {
-            if( path[1] === "" ) path[1] === "index"
-            return this.applyResource( request, response, path, '/hyper' ).catch( err => this.handleFailure( response, err, 500, true ) )
-        }
-
-        return this.handleFailure( response, new Error("Not Found"), 404, false )
-
-    },
+    
 
     initialize() {
         var static = require('node-static')
@@ -136,18 +183,7 @@ Object.assign( Router.prototype, MyObject.prototype, {
         return this;
     },
 
-    resources: {
-        "GET":
-            [
-                {
-                    condition: ( request, path ) => ( path[1] === "static" ) || path[1] === "favicon.ico",
-                    method: 'static'
-                }, {
-                    condition: ( request, path ) => /text\/html/.test( request.headers.accept )
-                    method: 'html'
-                },
-            ]
-    },
+    
 
     serveStaticFile( request, response ) { this.staticFolder.serve( request, response ) },
 
@@ -182,6 +218,4 @@ Object.assign( Router.prototype, MyObject.prototype, {
 
 } )
 
-router = new Router( { tables: { } } ).initialize()
 
-module.exports = router.handler.bind(router)
