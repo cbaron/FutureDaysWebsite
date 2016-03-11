@@ -1,0 +1,20 @@
+{
+  "description": "Site for Patchwork Gardens",
+  "engines": {
+    "node": "5.1.0"
+  },
+  "dependencies": {
+    "moment": "^2.12.0",
+    "pg": "^4.5.1",
+    "pg-native": "^1.10.0",
+    "underscore": "^1.8.3"
+  },
+  "devDependencies": {},
+  "license": "BSD-3-Clause",
+  "name": "FutureDays",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cbaron/futuredays.git"
+  },
+  "version": "0.0.1"
+}
