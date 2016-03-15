@@ -7,8 +7,9 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <script src="/static/js/main.js"</script>
+        {{? it.isDev }}<script src="//localhost:9091"></script>{{?}}
 
-        <title>{{title}}</title>
+        <title>{{it.title}}</title>
     </head>
 
     <body>

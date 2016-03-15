@@ -46,7 +46,10 @@ module.exports = Object.create(
         html( request, response, path ) {
             return new Promise( ( resolve, reject ) => {
                 this.response.writeHead( 200 )
-                this.response.end( require('./templates/page')( require('handlebars') )( { title: 'Future Days' } ) )
+                this.response.end( require('./templates/page')( {
+                    isDev: ( process.env.ENV === 'development' ) ? true : false
+                    title: 'Future Days'
+                } ) )
                 resolve()
             } )
         },

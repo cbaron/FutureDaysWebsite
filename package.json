@@ -13,10 +13,13 @@
   },
   "devDependencies": {
     "browserify": "^13.0.0",
-    "dot-packer": "0.0.5",
+    "commander": "^2.9.0",
+    "dot": "^1.0.3",
+    "live-reload": "^1.1.0",
     "parallelshell": "^2.0.0",
     "stylus": "^0.54.0",
-    "watch": "^0.17.1"
+    "uglify-js": "^2.6.2",
+    "watch": "0.17.1"
   },
   "license": "BSD-3-Clause",
   "name": "FutureDays",
@@ -26,13 +29,15 @@
   },
   "scripts": {
     "build:css": "stylus -w stylus/main.styl -o static/css/main.css",
-    "build:html": "./scripts/precompileServerHbs.sh",
+    "build:html": "dottojs -s ./jst/server/ -d ./templates/",
     "build:js": "browserify client/js/main.js > static/js/main.js",
-    "build:templates": "handlebars hbs/client -f client/js/templates -c",
-    "build:watch": "parallelshell 'npm run watch:css' 'npm run watch:js' 'npm run watch:html'",
-    "watch:css": "watch 'npm run build:css' stylus",
-    "watch:html": "watch 'npm run build:html' hbs/server",
-    "watch:js": "watch 'npm run build:js' client/js"
+    "build:templates": "dottojs -s ./jst/client/ -d ./client/js/templates/",
+    "build:watch": "parallelshell 'npm run watch:css' 'npm run watch:js' 'npm run watch:html' 'npm run watch:templates' 'npm run livereload'",
+    "livereload": "live-reload --port 9091 static/",
+    "watch:css": "watch 'npm run build:css' stylus --ignoreDotFiles",
+    "watch:html": "watch 'npm run build:html' jst/server --ignoreDotFiles",
+    "watch:js": "watch 'npm run build:js' client/js --ignoreDotFiles",
+    "watch:templates": "watch 'npm run build:templates' jst/client --ignoreDotFiles"
   },
   "version": "0.0.1"
 }
