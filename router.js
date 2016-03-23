@@ -2,13 +2,59 @@ module.exports = Object.create(
 
     Object.assign( {}, Object.getPrototypeOf( require('./lib/MyObject') ), {
 
+        applyResource( request, response, path, dir, file ) {
+        
+            return new Promise( ( resolve, reject ) => {
+
+                require('fs').stat( this.format( '%s/%s.js', __dirname, file ), err => {
+                    var instance
+
+                    if( err ) { 
+                        if( err.code !== "ENOENT" ) return reject( err )
+                        file = this.format( '%s/__proto__', dir )
+                    }
+
+                    instance = Object.create( require(file), {
+                        request: request,
+                        response: response,
+                        path: path,
+                        tables: this.tables,
+                    } )
+
+                    if( !instance[ request.method ] ) { this.handleFailure( response, new Error("Not Found"), 404, false ); return resolve() }
+
+                    instance[ request.method ]().then( resolve ).catch( reject )
+                } )
+            } )
+        },
+
         constructor() {
+            this.storeTableData( this._postgresQuerySync( this.getAllTables() ) )
+            this.storeTableMetaData( this._postgresQuerySync( "SELECT * FROM tablemeta" ) )
+            this.storeForeignKeyData( this._postgresQuerySync( this.getForeignKeys() ) )
+
+            return this.handler.bind(this)
         },
 
         fs: require('fs'),
 
+        handleFailure( response, err, code, log ) {
+
+            var message = ( process.env.NODE_ENV === "production" ) ? "Unknown Error" : err.stack || err.toString()
+
+            if( log ) console.log( err.stack || err )
+
+            response.writeHead( code || 500, {
+                "Content-Length": Buffer.byteLength( message ),
+                'Content-Type': 'text/plain',
+                'Cache-Control': 'no-cache, no-store, must-revalidate'
+            } )
+
+            response.end( message )
+        },
+
         handler( request, response ) {
-            var path
+            var path, resource
 
             if( ! this.resources[ request.method ] ) return this.handleFailure( response, new Error("Not Found"), 404, false )
 
@@ -16,7 +62,7 @@ module.exports = Object.create(
 
             path = this.url.parse( request.url ).pathname.split("/")
 
-            this.resources[ request.method ].some( resource => {
+            resource = this.resources[ request.method ].find( resource => {
                 if( ! resource.condition.call( this, request, path ) ) return false
             
                 this[ resource.method ]( request, response, path )
@@ -24,76 +70,59 @@ module.exports = Object.create(
                 return true
             } )
 
-            
+            if( ! resource ) return this.handleFailure( response, new Error("Not Found"), 404, false )
 
-            if( ( request.method === "GET" && path[1] === "static" ) || path[1] === "favicon.ico" ) {
-                return request.addListener( 'end', this.serveStaticFile.bind( this, request, response ) ).resume() }
-
-            if( /text\/html/.test( request.headers.accept ) && request.method === "GET" ) {
-                return this.applyHTMLResource( request, response, path ).catch( err => this.handleFailure( response, err, 500, true ) )
-
-            } else if( ( /application\/json/.test( request.headers.accept ) || /(POST|PATCH|DELETE)/.test(request.method) ) &&
-                       ( this.routes.REST[ path[1] ] || this.tables[ path[1] ] ) ) {
-                return this.applyResource( request, response, path ).catch( err => this.handleFailure( response, err, 500, true ) )
-            } else if( /application\/ld\+json/.test( request.headers.accept ) && ( this.tables[ path[1] ] || path[1] === "" ) ) {
-                if( path[1] === "" ) path[1] === "index"
-                return this.applyResource( request, response, path, '/hyper' ).catch( err => this.handleFailure( response, err, 500, true ) )
-            }
-
-            return this.handleFailure( response, new Error("Not Found"), 404, false )
+            this[ resource.method ].call( request, response, path ).catch( e => this.handleFailure( response, e, 500, true ) )
         },
 
         html( request, response, path ) {
             return new Promise( ( resolve, reject ) => {
                 this.response.writeHead( 200 )
                 this.response.end( require('./templates/page')( {
-                    isDev: ( process.env.ENV === 'development' ) ? true : false
+                    isDev: ( process.env.ENV === 'development' ) ? true : false,
                     title: 'Future Days'
                 } ) )
                 resolve()
             } )
         },
 
+        hyper( request, response, path ) { return this.applyResource( request, response, './resources/hyper', path[1] || 'index' ) },
+
         pgQuerySync: ( query, args ) =>
             new ( require('./dal/postgres') )( { connectionString: process.env.POSTGRES } ).querySync( query, args ),
 
         resources: {
-            "DELETE: [
-                condition: ( request, path ) => /application\/json/.test( request.headers.accept ) && ( this.routes.REST[ path[1] ] || this.tables[ path[1] ] )
-                method: 'rest'
-            ],
+            "DELETE": [ this.RESThandler ],
 
             "GET": [
                 {
                     condition: ( request, path ) => ( path[1] === "static" ) || path[1] === "favicon.ico",
                     method: 'static'
                 }, {
-                    condition: ( request, path ) => /text\/html/.test( request.headers.accept )
+                    condition: ( request, path ) => /text\/html/.test( request.headers.accept ),
                     method: 'html'
                 }, {
-                    condition: ( request, path ) => /application\/ld\+json/.test( request.headers.accept )
+                    condition: ( request, path ) => /application\/ld\+json/.test( request.headers.accept ),
                     method: 'hyper'
                 }
             ],
             
-            "PATCH: [
-                condition: ( request, path ) => /application\/json/.test( request.headers.accept ) && ( this.routes.REST[ path[1] ] || this.tables[ path[1] ] )
-                method: 'rest'
-            ],
+            "PATCH": [ this.RESTHandler ],
 
-            "POST: [
-                condition: ( request, path ) => /application\/json/.test( request.headers.accept ) && ( this.routes.REST[ path[1] ] || this.tables[ path[1] ] )
-                method: 'rest'
-            ],
+            "POST": [ this.RESTHandler ],
     
-            "PUT: [
-                condition: ( request, path ) => /application\/json/.test( request.headers.accept ) && ( this.routes.REST[ path[1] ] || this.tables[ path[1] ] )
-                method: 'rest'
-            ]
+            "PUT": [ this.RESTHandler ],
+        },
+
+        rest( request, response, path ) { return this.applyResource( request, response, './resources/rest', path[1] ) },
+
+        RESTHandler: {
+            condition: ( request, path ) => /application\/json/.test( request.headers.accept ) && ( this.routes.REST[ path[1] ] || this.tables[ path[1] ] ),
+            method: 'rest'
         },
 
         static( request, response, path ) {
-            var file = this.format( '%s/%s', __dirname, path.join('/')
+            var file = this.format( '%s/%s', __dirname, path.join('/') )
 
             return new Promise( ( resolve, reject ) => {
                 this.fs.stat( file, err => {
@@ -101,7 +130,7 @@ module.exports = Object.create(
                     if( err ) return reject(err) 
                     stream = this.fs.createReadStream( file )
                     response.on( 'error', err => stream.end() )
-                    response.writeHead( 200, 'Content-Length': stat.size )
+                    response.writeHead( 200, { 'Content-Length': stat.size } )
                     stream.pipe( response )
                     resolve()
                 } )
