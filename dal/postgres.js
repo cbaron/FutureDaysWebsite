@@ -1,6 +1,6 @@
 module.exports = {
 
-    "__proto__": Object.assign( {}, Object.getPrototypeOf( require('../lib/MyObject') ), {
+    proto: Object.assign( {}, Object.getPrototypeOf( require('../lib/MyObject') ), {
 
         Pg: require('pg'),
 
@@ -38,10 +38,45 @@ module.exports = {
         },
 
         querySync( query, args ) {
-            var client = new this._pgNative()
+            var client = new this.PgNative()
             client.connectSync( this.connectionString )
             return client.querySync( query, args )
         }
 
-    } )
+    } ),
+
+    Queries: {
+
+        format: require('util').format,
+        
+        selectAllTables() { return [
+           "SELECT table_name",
+           "FROM information_schema.tables",
+           "WHERE table_schema='public'",
+           "AND table_type='BASE TABLE';"
+        ].join(' ') },
+
+        selectForeignKeys() { return [
+            "SELECT conrelid::regclass AS tableFrom, conname, pg_get_constraintdef(c.oid)",
+            "FROM pg_constraint c",
+            "JOIN pg_namespace n ON n.oid = c.connamespace",
+            "WHERE contype = 'f' AND n.nspname = 'public';"
+        ].join(' ') },
+
+        selectTableColumns( tableName ) {
+            return this.format(
+                'SELECT column_name, data_type',
+                'FROM information_schema.columns',
+                this.format( "WHERE table_name = '%s';", tableName ) )
+        },
+
+    },
+
+    dataTypeToRange: {
+        "character varying": "Text",
+        "date": "Date",
+        "integer": "Integer",
+        "money": "Float",
+        "timestamp with time zone": "DateTime"
+    }
 }

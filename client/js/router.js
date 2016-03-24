@@ -8,7 +8,7 @@ module.exports = new (
         initialize: function() {
             this.user = require('./models/User');
 
-            //this.userPromise = new Promise( ( resolve, reject ) => this.user.fetch().done( resolve ).fail( reject ) )
+            this.userPromise = this.user.fetch().fail( e => new this.Error(e) )
 
             this.views = { }
 
