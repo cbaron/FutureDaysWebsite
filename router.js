@@ -2,7 +2,7 @@ module.exports = Object.create(
 
     Object.assign( {}, ( require('./lib/MyObject') ), {
 
-        Postgres: require('./dal/Postgres'),
+        Postgres: require('./dal/postgres'),
 
         applyResource( request, response, path, dir, file ) {
         
@@ -32,7 +32,7 @@ module.exports = Object.create(
 
         constructor() {
             this.storeTableData()
-                .storeTableMetaData()
+                //.storeTableMetaData()
                 .storeForeignKeyData()
 
             return this.handler.bind(this)
@@ -163,13 +163,13 @@ module.exports = Object.create(
             return this
         },
         
-        storeTableMetaData() {
+        /*storeTableMetaData() {
             this.pgQuerySync( "SELECT * FROM tablemeta" ).forEach( row => {
                 if( this.tables[ row.name ] ) this.tables[ row.name ].meta = this._( row ).pick( [ 'label', 'description', 'recorddescriptor' ] )
             } )
 
             return this
-        },
+        },*/
 
         url: require('url')
 

@@ -25,7 +25,7 @@ module.exports = new (
 
             if( !resource ) return this.navigate( 'home', { trigger: true } )
          
-            /* 
+             
             this.userPromise.then( () => {
 
                 if( this.user.id ) this.header.onUser( this.user )
@@ -35,14 +35,20 @@ module.exports = new (
 
                 if( this.views[ resource ] ) this.views[ resource ].show()
                 else this.views[ resource ] = new ( this.resources[ resource ].view )( this.resources[ resource ].options )
-                
+            /*    
                 if( this.header.$('.header-title').css( 'display' ) === 'none' ) this.header.toggleLogo()
                 this.header.$('.navbar-collapse').removeClass( 'in' )
                 this.$(window).scrollTop(0)
                 this.footer.size()
-
+*/
             } ).catch( err => new this.Error(err) )
-            */
+            
+        },
+
+        resources: {
+
+            home: { view: require('./views/Home'), options: { } }
+
         },
         
         routes: {

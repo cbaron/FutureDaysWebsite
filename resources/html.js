@@ -6,7 +6,7 @@ Object.assign( Html.prototype, {
         return this.respond( this.page( {
             bodyClass: this.path[1],
             firefox: /Firefox/.test( this.request.headers[ 'user-agent' ] ),
-            title: "Patchwork Gardens"
+            title: "Future Days"
         } ) )
     },
 
@@ -20,7 +20,7 @@ Object.assign( Html.prototype, {
         }
     },
     
-    page: require('../templates/page')( require('handlebars') ),
+    page: require('../templates/page'),
 
     respond: function( body ) {
         return new Promise( ( resolve, reject ) => {
