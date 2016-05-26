@@ -3,7 +3,11 @@ var MyView = require('./MyView'),
 
 Object.assign( Home.prototype, MyView.prototype, {
 
-	template: require('../templates/home')
+	postRender() { return },
+
+    requiresLogin: false,
+
+    template: require('./templates/home')
 
 } )
 

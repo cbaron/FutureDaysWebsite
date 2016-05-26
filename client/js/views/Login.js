@@ -1,7 +1,7 @@
 var MyView = require('./MyView'),
     Login = function() { return MyView.apply( this, arguments ) };
 
-Object.assign( Login.prototype, MyView.prototype, {
+Object.assign( Login.prototype, MyView.prototype, require('./util/Form').prototype, {
 
     checkForEnter( e ) { if( e.keyCode === 13 ) this.login() },
 
@@ -61,7 +61,7 @@ Object.assign( Login.prototype, MyView.prototype, {
 
     requiresLogin: false,
 
-    template: require('../templates/login')
+    //template: require('../templates/login')( require('handlebars') )
 
 } )
 

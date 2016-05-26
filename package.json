@@ -13,7 +13,10 @@
     "underscore": "^1.8.3"
   },
   "devDependencies": {
-    "browserify": "^13.0.0",
+    "babel-cli": "^6.9.0",
+    "babel-preset-es2015": "^6.9.0",
+    "babelify": "^7.3.0",
+    "browserify": "^13.0.1",
     "browserify-fs": "^1.0.0",
     "commander": "^2.9.0",
     "dot": "^1.0.3",
@@ -21,7 +24,7 @@
     "parallelshell": "^2.0.0",
     "stylus": "^0.54.0",
     "uglify-js": "^2.6.2",
-    "watch": "0.17.1"
+    "watch": "^0.17.1"
   },
   "license": "BSD-3-Clause",
   "name": "FutureDays",
@@ -31,15 +34,13 @@
   },
   "scripts": {
     "build:css": "stylus -w stylus/main.styl -o static/css/main.css",
-    "build:html": "dottojs -s ./jst/server/ -d ./templates/",
-    "build:js": "browserify client/js/main.js > static/js/main.js",
-    "build:templates": "dottojs -s ./jst/client/ -d ./client/js/templates/",
-    "build:watch": "parallelshell 'npm run watch:css' 'npm run watch:js' 'npm run watch:html' 'npm run watch:templates' 'npm run livereload'",
+    "build:js": "browserify client/js/main.js -o static/dist/js/bundle.js -t [ babelify --presets [ es2015 ] ]",
+    "build:js-debug": "browserify client/js/main.js -o static/dist/js/debug.js -d -t [ babelify --presets [ es2015 ] ]",
+    "build:watch": "parallelshell 'npm run watch:js-debug' 'npm run watch:js'",
     "livereload": "live-reload --port 9091 static/",
     "watch:css": "watch 'npm run build:css' stylus --ignoreDotFiles",
-    "watch:html": "watch 'npm run build:html' jst/server --ignoreDotFiles",
-    "watch:js": "watch 'npm run build:js' client/js --ignoreDotFiles",
-    "watch:templates": "watch 'npm run build:templates' jst/client --ignoreDotFiles"
+    "watch:js": "watch 'npm run build:js' client/js/ --ignoreDotFiles",
+    "watch:js-debug": "watch 'npm run build:js-debug' client/js/ --ignoreDotFiles"
   },
   "version": "0.0.1"
 }
