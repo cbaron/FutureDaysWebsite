@@ -55,13 +55,13 @@ Object.assign( Login.prototype, MyView.prototype, {
     },
 
     postRender() {
-        this.templateData.container.find( 'input' ).on( 'focus', this.removeErrors.bind(this) )
+        //this.templateData.container.find( 'input' ).on( 'focus', this.removeErrors.bind(this) )
         this.$(document).on( 'keyup', this.checkForEnter.bind(this) )
     },
 
     requiresLogin: false,
 
-    template: require('../templates/login')
+    template: require('./templates/login')
 
 } )
 

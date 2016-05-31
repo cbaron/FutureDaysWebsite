@@ -1,10 +1,5 @@
-var MyView = require('./MyView'),
-    Home = function() { return MyView.apply( this, arguments ) }
+module.exports = Object.assign( {}, require('./__proto__'), {
 
-Object.assign( Home.prototype, MyView.prototype, {
-
-	template: require('../templates/home')
+	template: require('./templates/home')
 
 } )
-
-module.exports = Home

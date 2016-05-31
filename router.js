@@ -2,7 +2,7 @@ module.exports = Object.create(
 
     Object.assign( {}, ( require('./lib/MyObject') ), {
 
-        Postgres: require('./dal/postgres'),
+        //Postgres: require('./dal/postgres'),
 
         applyResource( request, response, path, dir, file ) {
         
@@ -31,13 +31,15 @@ module.exports = Object.create(
         },
 
         constructor() {
+            /*
             this.storeTableData()
-                //.storeTableMetaData()
+                .storeTableMetaData()
                 .storeForeignKeyData()
+            */
 
             return this.handler.bind(this)
         },
-
+    
         fs: require('fs'),
 
         handleFailure( response, err, code, log ) {
@@ -73,8 +75,6 @@ module.exports = Object.create(
             } )
 
             if( ! resource ) return this.handleFailure( response, new Error("Not Found"), 404, false )
-
-            this[ resource.method ]( request, response, path ).catch( e => this.handleFailure( response, e, 500, true ) )
         },
 
         html( request, response, path ) {
@@ -123,6 +123,9 @@ module.exports = Object.create(
         },
 
         static( request, response, path ) {
+            //request.addListener( 'end', this.serveStaticFile.bind( this, request, response ) ).resume() 
+            //return new Promise( resolve => resolve )
+
             var file = this.format( '%s%s', __dirname, path.join('/') )
 
             return new Promise( ( resolve, reject ) => {
@@ -131,7 +134,7 @@ module.exports = Object.create(
                     if( err ) return reject(err) 
                     stream = this.fs.createReadStream( file )
                     response.on( 'error', err => { console.log( err ); stream.end() } )
-                    response.writeHead( 200, { 'Content-Length': stat.size } )
+                    response.writeHead( 200, { 'Connection': 'keep-alive', 'Content-Length': stat.size } )
                     stream.pipe( response )
                     resolve()
                 } )

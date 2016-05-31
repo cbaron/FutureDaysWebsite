@@ -1,60 +1,53 @@
 module.exports = new (
     require('backbone').Router.extend( {
 
-        $: require('jquery'),
-
         Error: require('../../lib/MyError'),
 
-        initialize: function() {
-            this.user = require('./models/User');
+        Format: require('util').format,
 
-            this.userPromise = this.user.fetch().fail( e => new this.Error(e) )
+        Header: require('./views/Header'),
+
+        initialize() {
+
+            this.userPromise = this.user.fetch()
 
             this.views = { }
 
-            return this;
+            return this
         },
 
         handler( resource ) {
 
-            /*
-            this.header = ( resource === 'admin' ) ? require('./views/AdminHeader') : require('./views/Header')
-            this.footer = require('./views/Footer')
-            this.footer[ ( resource === 'admin' ) ? 'hide' : 'show' ]()
-            */
-
             if( !resource ) return this.navigate( 'home', { trigger: true } )
-         
+
+            this.Header.constructor()
              
-            this.userPromise.then( () => {
+            this.userPromise.done( () => {
 
                 if( this.user.id ) this.header.onUser( this.user )
+                
+                Promise.all( Object.keys( this.views ).map( view => this.views[ view ].hide() ) )
+                .then( () => {
+                    console.log(resource)
+                    if( this.views[ resource ] ) return this.views[ resource ].show()
+                    this.views[ resource ] =
+                        Object.create(
+                            require( this.Format( './views/%s', resource.charAt(0).toUpperCase() + resource.slice(1) ) ),
+                            { user: { value: this.user }, router: { value: this } }
+                        ).constructor()
+                } )
                
-                //promise.all 
-                Object.keys( this.views ).forEach( view => this.views[ view ].hide() )
-
-                if( this.views[ resource ] ) this.views[ resource ].show()
-                else this.views[ resource ] = new ( this.resources[ resource ].view )( this.resources[ resource ].options )
-            /*    
-                if( this.header.$('.header-title').css( 'display' ) === 'none' ) this.header.toggleLogo()
-                this.header.$('.navbar-collapse').removeClass( 'in' )
                 this.$(window).scrollTop(0)
-                this.footer.size()
-*/
-            } ).catch( err => new this.Error(err) )
+            
+            } ).fail( this.Error )
             
         },
 
-        resources: {
-
-            home: { view: require('./views/Home'), options: { } }
-
+        routes: {
+            '(:resource)': 'handler',
         },
         
-        routes: {
-            '': 'handler',
-            ':resource': 'handler',
-        }
+        user: require('./models/User'),
 
     } )
 )()

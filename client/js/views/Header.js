@@ -1,10 +1,7 @@
-var MyView = require('./MyView'),
-    AdminHeader = function() { return MyView.apply( this, arguments ) }
-
-Object.assign( AdminHeader.prototype, MyView.prototype, {
+module.exports = Object.create( Object.assign( {}, require('./__proto__'), {
 
     events: {
-        'signoutBtn': { event: 'click', selector: '', method: 'signout' }
+        signoutBtn: { method: 'signout' }
     },
 
     getTemplateOptions() { return { logo: '/static/img/logo.gif' } },
@@ -29,8 +26,6 @@ Object.assign( AdminHeader.prototype, MyView.prototype, {
         this.templateData.userPanel.removeClass('hide')
     },
     
-    requiresLogin: false,
-
     signout: function() {
 
         document.cookie = 'patchworkjwt=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
@@ -48,8 +43,6 @@ Object.assign( AdminHeader.prototype, MyView.prototype, {
         this.router.navigate( "/", { trigger: true } )
     },
 
-    template: require('../templates/adminHeader')( require('handlebars') )
+    template: require('./templates/header')
 
-} )
-
-module.exports = new AdminHeader()
+} ) )

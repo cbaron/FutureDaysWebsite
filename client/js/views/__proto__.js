@@ -10,18 +10,14 @@ module.exports = Object.assign( { }, ( require('../../../lib/MyObject') ), Objec
 
         if( ! this.container ) this.container = this.$('#content')
         
-        this.router = require('../router')
-
-        //this.modalView = require('./modal')
-
         if( this.size ) this.$(window).resize( this._.throttle( () => this.size(), 500 ) )
 
-        if( this.requiresLogin && !this.user.id ) require('./Login').show().once( "loggedIn", () => this.onLogin() ); return this
+        if( this.requiresLogin && !this.user.id ) { require('./Login').show().once( "loggedIn", () => this.onLogin() ); return this }
 
         if( this.user.id && this.requiresRole ) return this[ ( this.hasPrivileges() ) ? 'render' : 'showNoAccess' ]()
-
+        
         return this.render()
-    }
+    },
 
     delegateEvents( key, el ) {
         var type;
@@ -46,7 +42,7 @@ module.exports = Object.assign( { }, ( require('../../../lib/MyObject') ), Objec
         this.formData = { }
 
         Object.keys( this.templateData, key => {
-            if( /INPUT|TEXTAREAD/.test( this.templateData[ key ].prop("tagName") ) this.formData[ key ] = this.templateData[ key ].val()
+            if( /INPUT|TEXTAREAD/.test( this.templateData[ key ].prop("tagName") ) ) this.formData[ key ] = this.templateData[ key ].val()
         } )
 
         return this.formData
@@ -68,16 +64,17 @@ module.exports = Object.assign( { }, ( require('../../../lib/MyObject') ), Objec
         this.router.header.onUser( this.user )
 
         this[ ( this.hasPrivileges() ) ? 'render' : 'showNoAccess' ]()
-    } ),
+    },
 
     showNoAccess() {
         alert("No privileges, son")
         return this
-    }
+    },
 
     postRender: function() { return this },
 
     render() {
+
         this.slurpTemplate( {
             template: this.template( this.getTemplateOptions() ),
             insertion: { $el: this.insertionEl || this.container, method: this.insertionMethod } } )
@@ -154,7 +151,7 @@ module.exports = Object.assign( { }, ( require('../../../lib/MyObject') ), Objec
         return true;
     },
 
-    requiresLogin: true,
+    requiresLogin: false,
     
     size: () => { this },
 
@@ -163,5 +160,3 @@ module.exports = Object.assign( { }, ( require('../../../lib/MyObject') ), Objec
     util: require('util')
 
 } )
-
-module.exports = MyView
