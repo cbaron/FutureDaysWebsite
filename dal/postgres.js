@@ -1,54 +1,73 @@
-module.exports = {
+module.exports = Object.create( Object.assign( {}, require('../lib/MyObject'), {
 
-    proto: Object.assign( {}, Object.getPrototypeOf( require('../lib/MyObject') ), {
+    query( query, args, opts = { } ) { return this._factory( opts ).query( query, args ).fail( e => this.Error(e) ) },
 
-        Pg: require('pg'),
+    querySync( query, args, opts = { } ) {
+        var client = new ( require('pg-native') )(), rows
+        client.connectSync( process.env.POSTGRES || opts.connectionString )
+        rows = client.querySync( query, args )
+        client.end()
+        return rows
+    },
 
-        PgNative: require('pg-native'),
+    getTableData() {
 
-        _connect() {
-            return new Promise( ( resolve, reject ) => {
-                this.Pg.connect( this.connectionString, ( err, client, done ) => {
-                    if( err ) return reject( err )
+        this.querySync( this._queries.selectAllTables() ).forEach( row => {
+             var columnResult = this.querySync( this._queries.selectTableColumns( row.table_name ) )
+             this.tables[ row.table_name ] =
+                { columns: columnResult.map( columnRow => ( { name: columnRow.column_name, range: this.dataTypeToRange[columnRow.data_type] } ) ) } 
+        } )
 
-                    this.client = client
-                    this.done = done
-                 
-                    resolve()
+        this.querySync( "SELECT * FROM tablemeta" ).forEach( row => {
+            if( this.tables[ row.name ] ) this.tables[ row.name ].meta = this._( row ).pick( [ 'label', 'description', 'recorddescriptor' ] )
+        } )
+
+        this.querySync( this._queries.selectForeignKeys() ).forEach( row => {
+            var match = /FOREIGN KEY \((\w+)\) REFERENCES (\w+)\((\w+)\)/.exec( row.pg_get_constraintdef )
+                column = this.tables[ row.table_from ].columns.find( column => column.name === match[1] )
+           
+            column.fk = {
+                table: match[2],
+                column: match[3],
+                recorddescriptor: ( this.tables[ match[2] ].meta ) ? this.tables[ match[2] ].meta.recorddescriptor : null
+            }
+        } )
+
+    },
+
+    _factory( data ) {
+        return Object.create( {
+            connect() {
+                return new Promise( ( resolve, reject ) => {
+                    require('pg').connect( this.connectionString, ( err, client, done ) => {
+                        if( err ) return reject( err )
+
+                        this.client = client
+                        this.done = done
+                     
+                        resolve()
+                    } )
                 } )
-            } )
-        },
+            },
 
-        _query( query, args ) {
-            return new Promise( ( resolve, reject ) => {
-                this.client.query( query, args, ( err, result ) => {
-                    this.done()
+            query( query, args ) {
+                return this.connect().then( () =>
+                    new Promise( ( resolve, reject ) => {
+                        this.client.query( query, args, ( err, result ) => {
+                            this.done()
 
-                    if( err ) return reject( err )
+                            if( err ) return reject( err )
 
-                    resolve( result )
-                } )
-            } )
-        },
+                            resolve( result )
+                        } )
+                    } )
+                )
+            },
+        }, { connectionString: { value: data.connectionString || process.env.POSTGRES } } )
+    },
 
-        query( query, args ) {
-            return this._connect()
-                .then( () => this._query( query, args ) )
-                .catch( e => this.Error(e) )
-        },
+    _queries: {
 
-        querySync( query, args ) {
-            var client = new this.PgNative()
-            client.connectSync( this.connectionString )
-            return client.querySync( query, args )
-        }
-
-    } ),
-
-    Queries: {
-
-        format: require('util').format,
-        
         selectAllTables() { return [
            "SELECT table_name",
            "FROM information_schema.tables",
@@ -64,10 +83,11 @@ module.exports = {
         ].join(' ') },
 
         selectTableColumns( tableName ) {
-            return this.format(
+            return [
                 'SELECT column_name, data_type',
                 'FROM information_schema.columns',
-                this.format( "WHERE table_name = '%s';", tableName ) )
+                `WHERE table_name = '${tableName}'`
+            ].join(' ')
         },
 
     },
@@ -79,4 +99,4 @@ module.exports = {
         "money": "Float",
         "timestamp with time zone": "DateTime"
     }
-}
+} ), { tables: { value: { } } } )

@@ -1,8 +1,8 @@
 module.exports = Object.create(
 
-    Object.assign( {}, ( require('./lib/MyObject') ), {
+    Object.assign( {}, require('./lib/MyObject'), {
 
-        //Postgres: require('./dal/postgres'),
+        Postgres: require('./dal/Postgres'),
 
         applyResource( request, response, path, dir, file ) {
         
@@ -17,10 +17,10 @@ module.exports = Object.create(
                     }
 
                     instance = Object.create( require(file), {
-                        request: request,
-                        response: response,
-                        path: path,
-                        tables: this.tables,
+                        request: { value: request },
+                        response: { value: response },
+                        path: { value: path },
+                        tables: { value: this.Postgres.tables }
                     } )
 
                     if( !instance[ request.method ] ) { this.handleFailure( response, new Error("Not Found"), 404, false ); return resolve() }
@@ -31,11 +31,7 @@ module.exports = Object.create(
         },
 
         constructor() {
-            /*
-            this.storeTableData()
-                .storeTableMetaData()
-                .storeForeignKeyData()
-            */
+            this.Postgres.getTableData()
 
             return this.handler.bind(this)
         },
@@ -90,8 +86,6 @@ module.exports = Object.create(
 
         hyper( request, response, path ) { return this.applyResource( request, response, './resources/hyper', path[1] || 'index' ) },
 
-        pgQuerySync( query, args ) { return Object.create( this.Postgres.proto, { connectionString: { value: process.env.POSTGRES } } ).querySync( query, args ) },
-
         resources: {
             "DELETE": [ this.RESThandler ],
 
@@ -105,7 +99,8 @@ module.exports = Object.create(
                 }, {
                     condition: ( request, path ) => /application\/ld\+json/.test( request.headers.accept ),
                     method: 'hyper'
-                }
+                },
+                this.RESTHandler
             ],
             
             "PATCH": [ this.RESTHandler ],
@@ -115,17 +110,14 @@ module.exports = Object.create(
             "PUT": [ this.RESTHandler ],
         },
 
-        rest( request, response, path ) { return this.applyResource( request, response, './resources/rest', path[1] ) },
+        rest( request, response, path ) { return this.applyResource( request, response, './resources', path[1] ) },
 
         RESTHandler: {
-            condition: ( request, path ) => /application\/json/.test( request.headers.accept ) && ( this.routes.REST[ path[1] ] || this.tables[ path[1] ] ),
+            condition: ( request, path ) => /application\/json/.test( request.headers.accept ) && ( this.routes.REST[ path[1] ] || this.Postgres.tables[ path[1] ] ),
             method: 'rest'
         },
 
         static( request, response, path ) {
-            //request.addListener( 'end', this.serveStaticFile.bind( this, request, response ) ).resume() 
-            //return new Promise( resolve => resolve )
-
             var file = this.format( '%s%s', __dirname, path.join('/') )
 
             return new Promise( ( resolve, reject ) => {
@@ -141,42 +133,7 @@ module.exports = Object.create(
             } )
         },
 
-        storeForeignKeyData() {
-            this.pgQuerySync( this.Postgres.Queries.selectForeignKeys() ).forEach( row => {
-                var match = /FOREIGN KEY \((\w+)\) REFERENCES (\w+)\((\w+)\)/.exec( row.pg_get_constraintdef )
-                    column = this.tables[ row.table_from ].columns.find( column => column.name === match[1] )
-               
-                column.fk = {
-                    table: match[2],
-                    column: match[3],
-                    recorddescriptor: ( this.tables[ match[2] ].meta ) ? this.tables[ match[2] ].meta.recorddescriptor : null
-                }
-            } )
-
-            return this
-        },
-
-        storeTableData( tableResult ) {
-            this.pgQuerySync( this.Postgres.Queries.selectAllTables() ).forEach( row => {
-                 var columnResult = this.pgQuerySync( this.Postgres.Queries.selectTableColumns( row.table_name ) )
-                 this.tables[ row.table_name ] =
-                    { columns: columnResult.map( columnRow => ( { name: columnRow.column_name, range: this.Postgres.dataTypeToRange[columnRow.data_type] } ) ) } 
-             } )
-
-            return this
-        },
-        
-        /*storeTableMetaData() {
-            this.pgQuerySync( "SELECT * FROM tablemeta" ).forEach( row => {
-                if( this.tables[ row.name ] ) this.tables[ row.name ].meta = this._( row ).pick( [ 'label', 'description', 'recorddescriptor' ] )
-            } )
-
-            return this
-        },*/
-
         url: require('url')
 
-    } ),
-
-    { tables: { value: {} } }
+    } ), { routes: { value: { REST: { user: true } } } }
 ).constructor()
