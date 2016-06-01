@@ -1,22 +1,18 @@
 module.exports = Object.assign( { }, require('./__proto__'), {
 
-    GET() { return this.validate.GET.call(this).then( () => this.respond( { body: this.user } ) ) },
-
-    PATCH() {
-        return this.slurpBody()
-        .then( () => {
-            Object.keys( this.body ).forEach( key => this.user[ key ] = this.body[ key ] )
-            return this.Q( this.User.createToken.call(this) )
-        } )
-        .then( token => this.User.respondSetCookie.call( this, token, { } ) )
+    chains: {
+        DELETE: [ this.respond( { code: 404 } ) ],
+        GET: [ this.validate.GET, () => this.respond( { body: this.user } ) ],
+        PATCH: [ this.respond( { code: 404 } ) ],
+        POST: [ this.respond( { code: 404 } ) ]
     },
 
-    User: require('./util/User'),
+    createChain( method ) {
+        if( ! this.chains[ method ] ) return this.getDefaultChain()
+        this.chains[ method ].forEach( fun => this.callChain = this.callChain.then( fun.bind(this) ) )
+        return this
+    },
 
-    validate: Object.assign( {}, Base.prototype.validate, {
-        PATCH: Base.prototype.validate.GET
-    } )
+    GET() { return this.validate.GET.call(this).then( () => this.respond( { body: this.user } ) ) }
 
 } )
-
-module.exports = User

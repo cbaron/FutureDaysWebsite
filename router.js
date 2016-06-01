@@ -9,23 +9,18 @@ module.exports = Object.create(
             return new Promise( ( resolve, reject ) => {
 
                 require('fs').stat( this.format( '%s/%s.js', __dirname, file ), err => {
-                    var instance
-
                     if( err ) { 
                         if( err.code !== "ENOENT" ) return reject( err )
                         file = this.format( '%s/__proto__', dir )
                     }
 
-                    instance = Object.create( require(file), {
+                    Object.create( require(file), {
+                        callChain: { value: new Promise( resolve => resolve() ) },
                         request: { value: request },
                         response: { value: response },
                         path: { value: path },
                         tables: { value: this.Postgres.tables }
-                    } )
-
-                    if( !instance[ request.method ] ) { this.handleFailure( response, new Error("Not Found"), 404, false ); return resolve() }
-
-                    instance[ request.method ]().then( resolve ).catch( reject )
+                    } ).apply( request.method ).then( resolve ).catch( reject )
                 } )
             } )
         },
