@@ -1,3 +1,8 @@
+var RESTHandler = {
+    condition( request, path ) { return /application\/json/.test( request.headers.accept ) && ( this.routes.REST[ path[1] ] || this.Postgres.tables[ path[1] ] ) },
+    method: 'rest'
+}
+
 module.exports = Object.create(
 
     Object.assign( {}, require('./lib/MyObject'), {
@@ -8,13 +13,13 @@ module.exports = Object.create(
         
             return new Promise( ( resolve, reject ) => {
 
-                require('fs').stat( this.format( '%s/%s.js', __dirname, file ), err => {
+                require('fs').stat( `${__dirname}/${dir}/${file}.js`, err => {
                     if( err ) { 
                         if( err.code !== "ENOENT" ) return reject( err )
-                        file = this.format( '%s/__proto__', dir )
+                        file = `${dir}/__proto__`
                     }
 
-                    Object.create( require(file), {
+                    Object.create( require(`${dir}/${file}`), {
                         callChain: { value: new Promise( resolve => resolve() ) },
                         request: { value: request },
                         response: { value: response },
@@ -49,7 +54,7 @@ module.exports = Object.create(
         },
 
         handler( request, response ) {
-            var path, resource
+            var path, routeFound
 
             if( ! this.resources[ request.method ] ) return this.handleFailure( response, new Error("Not Found"), 404, false )
 
@@ -57,7 +62,7 @@ module.exports = Object.create(
 
             path = this.url.parse( request.url ).pathname.split("/")
 
-            resource = this.resources[ request.method ].find( resource => {
+            routeFound = this.resources[ request.method ].find( resource => {
                 if( ! resource.condition.call( this, request, path ) ) return false
             
                 this[ resource.method ]( request, response, path )
@@ -65,7 +70,7 @@ module.exports = Object.create(
                 return true
             } )
 
-            if( ! resource ) return this.handleFailure( response, new Error("Not Found"), 404, false )
+            if( ! routeFound ) return this.handleFailure( response, new Error("Not Found"), 404, false )
         },
 
         html( request, response, path ) {
@@ -79,10 +84,10 @@ module.exports = Object.create(
             } )
         },
 
-        hyper( request, response, path ) { return this.applyResource( request, response, './resources/hyper', path[1] || 'index' ) },
+        hyper( request, response, path ) { return this.applyResource( request, response, path, './resources/hyper', path[1] || 'index' ) },
 
         resources: {
-            "DELETE": [ this.RESThandler ],
+            "DELETE": [ RESTHandler ],
 
             "GET": [
                 {
@@ -95,22 +100,17 @@ module.exports = Object.create(
                     condition: ( request, path ) => /application\/ld\+json/.test( request.headers.accept ),
                     method: 'hyper'
                 },
-                this.RESTHandler
+                RESTHandler
             ],
             
-            "PATCH": [ this.RESTHandler ],
+            "PATCH": [ RESTHandler ],
 
-            "POST": [ this.RESTHandler ],
+            "POST": [ RESTHandler ],
     
-            "PUT": [ this.RESTHandler ],
+            "PUT": [ RESTHandler ],
         },
 
-        rest( request, response, path ) { return this.applyResource( request, response, './resources', path[1] ) },
-
-        RESTHandler: {
-            condition: ( request, path ) => /application\/json/.test( request.headers.accept ) && ( this.routes.REST[ path[1] ] || this.Postgres.tables[ path[1] ] ),
-            method: 'rest'
-        },
+        rest( request, response, path ) { return this.applyResource( request, response, path, './resources', path[1] ) },
 
         static( request, response, path ) {
             var file = this.format( '%s%s', __dirname, path.join('/') )

@@ -2,7 +2,7 @@ module.exports = Object.assign( { }, require('../lib/MyObject'), {
 
     Postgres: require('../dal/Postgres'),
 
-    apply( method ) { return this.createChain( method ).callChain() },
+    apply( method ) { return this.createChain( method ).callChain },
 
     context: {
         DELETE(){},
@@ -24,7 +24,20 @@ module.exports = Object.assign( { }, require('../lib/MyObject'), {
         POST(){}
     },
 
-    createChain( method ) { return this.getDefaultChain( method ) },
+    chains: { },
+
+    createChain( method ) {
+        console.log( this.chains )
+
+        if( ! this.chains[ method ] ) return this.getDefaultChain( method )
+ 
+        this.chains[ method ].forEach( fun => {
+            console.log( fun )
+            this.callChain = this.callChain.then( () => fun.call(this) )
+        } )
+
+        return this
+    },
 
     getDefaultChain( method ) {
         if( /(PATCH|POST)/.test( method ) ) this.callChain = this.callChain.then( () => this.slurpBody() )
@@ -43,6 +56,8 @@ module.exports = Object.assign( { }, require('../lib/MyObject'), {
     },
 
     jws: require('jws'),
+
+    notFound() { this.respond( { code: 404 } ) },
 
     respond( data ) {
         data.body = JSON.stringify( data.body )
@@ -106,6 +121,8 @@ module.exports = Object.assign( { }, require('../lib/MyObject'), {
         },
 
         GET() {
+
+            console.log("AD")
 
             this.validate.Token.call(this)
 
