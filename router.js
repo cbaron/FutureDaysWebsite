@@ -9,7 +9,7 @@ module.exports = Object.create(
 
         Postgres: require('./dal/Postgres'),
 
-        applyResource( request, response, path, dir, file ) {
+        applyResource( request, response, path, parsedUrl, dir, file ) {
         
             return new Promise( ( resolve, reject ) => {
 
@@ -24,6 +24,7 @@ module.exports = Object.create(
                         request: { value: request },
                         response: { value: response },
                         path: { value: path },
+                        parsedUrl: { value: parsedUrl },
                         tables: { value: this.Postgres.tables }
                     } ).apply( request.method ).then( resolve ).catch( reject )
                 } )
@@ -54,18 +55,22 @@ module.exports = Object.create(
         },
 
         handler( request, response ) {
-            var path, routeFound
+            var parsedUrl,
+                path,
+                routeFound,
+                
 
             if( ! this.resources[ request.method ] ) return this.handleFailure( response, new Error("Not Found"), 404, false )
 
             request.setEncoding('utf8')
 
-            path = this.url.parse( request.url ).pathname.split("/")
+            parsedUrl = require('url').parse( request.url )
+            path = parsedUrl.pathname.split("/")
 
             routeFound = this.resources[ request.method ].find( resource => {
                 if( ! resource.condition.call( this, request, path ) ) return false
             
-                this[ resource.method ]( request, response, path )
+                this[ resource.method ]( request, response, path, parsedUrl )
                 .catch( err => this.handleFailure( response, err, 500, true ) )
                 return true
             } )
@@ -84,7 +89,7 @@ module.exports = Object.create(
             } )
         },
 
-        hyper( request, response, path ) { return this.applyResource( request, response, path, './resources/hyper', path[1] || 'index' ) },
+        hyper( request, response, path ) { return this.applyResource( request, response, path, parsedUrl, './resources/hyper', path[1] || 'index' ) },
 
         resources: {
             "DELETE": [ RESTHandler ],
@@ -110,7 +115,7 @@ module.exports = Object.create(
             "PUT": [ RESTHandler ],
         },
 
-        rest( request, response, path ) { return this.applyResource( request, response, path, './resources', path[1] ) },
+        rest( request, response, path, parsedUrl ) { return this.applyResource( request, response, path, parsedUrl, './resources', path[1] ) },
 
         static( request, response, path ) {
             var file = this.format( '%s%s', __dirname, path.join('/') )
@@ -126,9 +131,7 @@ module.exports = Object.create(
                     resolve()
                 } )
             } )
-        },
-
-        url: require('url')
+        }
 
     } ), { routes: { value: { REST: { user: true } } } }
 ).constructor()
