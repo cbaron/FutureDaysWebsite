@@ -11,7 +11,7 @@ module.exports = {
         Object.keys( resource.query ).forEach( attr => {
             var value = resource.query[ attr ]
 
-            if( /^({|[)/.test(value) ) {
+            if( /^({|\[)/.test(value) ) {
                 resource.query[ attr ] = JSON.parse( value )
                 
                 if( typeof resource.query[ attr ] === "object" && (! [ '<', '>', '<=', '>=', '=', '<>', '!=' ].includes( resource.query[ attr ].operation ) ) ) {

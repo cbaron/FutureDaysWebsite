@@ -57,8 +57,7 @@ module.exports = Object.create(
         handler( request, response ) {
             var parsedUrl,
                 path,
-                routeFound,
-                
+                routeFound
 
             if( ! this.resources[ request.method ] ) return this.handleFailure( response, new Error("Not Found"), 404, false )
 
