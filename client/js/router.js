@@ -5,6 +5,8 @@ module.exports = new (
 
         Header: require('./views/Header'),
         
+        Home: require('./views/Home'),
+        
         initialize() {
 
             this.userPromise = this.user.fetch()
@@ -29,7 +31,7 @@ module.exports = new (
                     if( this.views[ resource ] ) return this.views[ resource ].show()
                     this.views[ resource ] =
                         Object.create(
-                            require( `client/js/views/${resource.charAt(0).toUpperCase() + resource.slice(1)}` ),
+                            require( `./views/${resource.charAt(0).toUpperCase() + resource.slice(1)}` ),
                             { user: { value: this.user }, router: { value: this } }
                         ).constructor()
                 } )

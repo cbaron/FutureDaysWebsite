@@ -31,8 +31,8 @@
   },
   "scripts": {
     "build:css": "stylus -w stylus/main.styl -o static/css/main.css",
-    "build:js": "browserify client/js/views/*.js client/js/main.js -o static/js/debug.js -d -t [ babelify --presets [ es2015 ] ]",
-    "build:watch": "parallelshell 'npm run watch:css' 'npm run watch:js' 'npm run livereload'",
+    "build:js": "browserify client/js/main.js -o static/js/debug.js -d -t [ babelify --presets [ es2015 ] ]",
+    "build:watch": "parallelshell 'npm run watch:css' 'npm run watch:js'",
     "livereload": "live-reload --port 9091 static/",
     "watch:css": "watch 'npm run build:css' stylus --ignoreDotFiles",
     "watch:js": "watch 'npm run build:js' client/js --ignoreDotFiles"
