@@ -2,6 +2,8 @@ module.exports = new (
     require('backbone').Router.extend( {
 
         Error: require('../../lib/MyError'),
+        
+        Demo: require('./views/Demo'),
 
         Header: require('./views/Header'),
         
