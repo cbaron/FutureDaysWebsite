@@ -1,6 +1,6 @@
 module.exports = {
 
-    Postgres: require('../dal/Postgres'),
+    Postgres: require('../../dal/Postgres'),
 
     apply( resource ) { return this[ resource.request.method ]( resource ) },
 
@@ -29,14 +29,13 @@ module.exports = {
     },
 
     POST( resource ) {
-        var paramCtr = 1,
-            name = resource.path[1],
-            bodyKeys = Object.keys( resource.body ),
-            set = 'SET ' + bodyKeys.map( key => `${key} = $${paramCtr++}` ).join(', ')
-
-        return this.Postgres.query( `INSERT INTO ${name} ( ${this._getColumns(name)} ) VALUES ( 
-            `UPDATE ${name} ${set} WHERE id = ${paramCtr} RETURNING ${this._getColumns(name)}`,
+        var bodyKeys = Object.keys( resource.body ),
+            name = resource.path[1]
+            
+        return this.Postgres.query(
+            `INSERT INTO ${name} ( ${bodyKeys.join(', ')} ) VALUES ( ${ bodyKeys.map( ( key, i ) => "$"+(i+1) ).join(', ') } ) RETURNING ${this._getColumns(name)}`,
+            bodyKeys.map( key => resource.body[key] ) )
     },
 
-    _getColumns( name ) { this.Postgres.tables[ name ].columns.map( column => `${name}.${column.name} ).join(', ') },
+    _getColumns( name ) { this.Postgres.tables[ name ].columns.map( column => `${name}.${column.name}` ).join(', ') },
 }

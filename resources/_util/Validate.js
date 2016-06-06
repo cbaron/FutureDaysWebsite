@@ -78,7 +78,7 @@ module.exports = {
                 resolve()
             } )
         } )
-    }
+    },
 
     throwInvalid() { throw new Error("Invalid request") }
 }

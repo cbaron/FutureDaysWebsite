@@ -3,10 +3,8 @@ module.exports = new (
 
         Error: require('../../lib/MyError'),
 
-        Format: require('util').format,
-
         Header: require('./views/Header'),
-
+        
         initialize() {
 
             this.userPromise = this.user.fetch()
@@ -28,16 +26,15 @@ module.exports = new (
                 
                 Promise.all( Object.keys( this.views ).map( view => this.views[ view ].hide() ) )
                 .then( () => {
-                    console.log(resource)
                     if( this.views[ resource ] ) return this.views[ resource ].show()
                     this.views[ resource ] =
                         Object.create(
-                            require( this.Format( './views/%s', resource.charAt(0).toUpperCase() + resource.slice(1) ) ),
+                            require( `client/js/views/${resource.charAt(0).toUpperCase() + resource.slice(1)}` ),
                             { user: { value: this.user }, router: { value: this } }
                         ).constructor()
                 } )
                
-                this.$(window).scrollTop(0)
+                require('jquery')(window).scrollTop(0)
             
             } ).fail( this.Error )
             
