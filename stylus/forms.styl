@@ -1,0 +1,48 @@
+.form-input
+    display: block
+    position: relative
+    background-color: $input-bg
+    margin-bottom: $input-margin-bottom
+    padding: $input-padding
+    border: $input-border $input-border-color
+    border-radius: $input-border-radius
+    transition: all .25s
+    &:focus
+        box-shadow: 0 0 1px 1px #999
+        outline: 0
+    
+.form-label
+    display: inline-block
+    font-size: .9rem
+    font-weight: 700
+    margin-bottom: .5rem
+        
+.input-flat
+    display: block
+    height: 1.3rem
+    margin-bottom: 1rem
+    padding: .75rem .375rem .25rem
+    border-top: none
+    border-left: none
+    border-right: none
+    border-bottom: 3px solid $dark-gray
+    transition: all .4s ease-in-out
+    &:focus
+        background-color: #ddd
+        outline: 0
+        
+.input-borderless
+    display: block
+    font-style: italic
+    background-color: #ddd
+    padding: $input-padding
+    font-size: 1rem
+    margin-bottom: 1rem
+    outline: 0
+    line-height: 1em
+    border: none
+    transition: all .4s ease-in-out
+    &:focus
+        background-color: #eee
+    
+        

@@ -1,0 +1,39 @@
+button:active:focus
+    outline: none
+
+.btn-default
+    display: inline-block
+    padding: $btn-default-padding
+    color: $btn-default-color
+    background-color: $btn-default-bg
+    font-size: $btn-default-font-size
+    font-weight: 700
+    text-align: center
+    cursor: pointer
+    border: $btn-default-border $btn-default-border-color
+    border-radius: $btn-default-radius
+    box-shadow: $btn-default-box-shadow $btn-default-box-shadow-color
+    transition: $btn-transition    
+    &:hover
+        background-color: $btn-default-hover-bg        
+    &:active
+        background-color: $btn-default-active-bg
+        
+.btn-ghost
+    display: inline-block
+    font-size: $btn-ghost-font-size
+    width: $btn-ghost-width
+    padding: $btn-ghost-padding
+    color: $btn-ghost-color
+    background-color: $btn-ghost-bg
+    border: $btn-ghost-border $btn-ghost-border-color
+    text-align: center
+    cursor: pointer
+    transition: $btn-transition
+    &:hover
+        background-color: $btn-ghost-hover-bg
+        color: $btn-ghost-hover-color        
+    &:active
+        background-color: $btn-ghost-active-bg
+        color: $btn-ghost-hover-color
+        border: $btn-ghost-border $btn-ghost-active-bg

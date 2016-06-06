@@ -1,0 +1,19 @@
+.list
+    max-width: $list-width
+
+.list-item
+    display: block
+    position: relative
+    padding: $list-padding
+    border-top: $list-border $list-border-color
+    color: $list-color
+    background-color: $list-bg
+    list-style-type: none 
+    
+    &:hover
+        box-shadow: $list-box-shadow $list-box-shadow-color
+        cursor: pointer          
+        z-index: 3
+        
+    &:first-child
+        border-top: none
