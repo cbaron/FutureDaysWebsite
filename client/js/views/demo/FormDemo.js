@@ -3,8 +3,6 @@ var MyView = require('../MyView'),
 
 Object.assign( FormDemo.prototype, MyView.prototype, {
 
-	postRender() { return },
-
     requiresLogin: false,
 
     template: require('../templates/demo/formDemo')

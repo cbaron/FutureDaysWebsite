@@ -1,1 +1,3 @@
-module.exports = ( options ) => `<div>Future Days</div>`
+let html = `<div>Future Days</div>`
+
+module.exports = () => html
