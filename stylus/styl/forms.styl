@@ -16,17 +16,15 @@
     padding: $input-padding
     border: $input-border $input-border-color
     border-radius: $input-border-radius
-    transition: all .25s
+    transition: $input-transition
     &:focus
-        //box-shadow: 0 0 1px 1px #999
-        //background: linear-gradient(#f7f7f7, #fff)
-        outline: 0
+        box-shadow: $input-focus-box-shadow $input-focus-box-shadow-color
     
 .form-label
     display: inline-block
-    font-size: .95rem
-    font-weight: 700
-    margin-bottom: .5rem
+    font-size: $label-font-size
+    font-weight: $label-font-weight
+    margin-bottom: $label-margin-bottom
         
 .input-flat
     display: block
@@ -34,36 +32,29 @@
     border-top: none
     border-left: none
     border-right: none
-    border-bottom: 3px solid $dark-gray
-    transition: all .4s ease-in-out
+    border-bottom: $input-flat-border-bottom
+    transition: $input-transition
     &:focus
-        background-color: #ddd
-        outline: 0
-    &::-webkit-input-placeholder
-        font-size: .9rem
-        font-style: italic
+        background-color: $input-flat-focus-bg
+    style-placeholder()
         
 .input-borderless
     display: block
-    background-color: #ddd
+    background-color: $input-borderless-bg
     padding: $input-padding
-    outline: 0
-    line-height: 1em
     border: none
-    transition: all .4s ease-in-out
+    transition: $input-transition
     &:focus
         background-color: #eee
-    &::-webkit-input-placeholder
-        font-size: .9rem
-        font-style: italic
+    style-placeholder()
         
 .feedback
-    font-size: .9rem
     display: block
-    margin-top: 2px 
+    font-size: $feedback-font-size
+    margin-top: $feedback-margin-top
   
 .valid
-    form-validation($valid-color)
+    form-validation($valid-green)
     
 .error
-    form-validation($error-color)  
+    form-validation($error-red)  

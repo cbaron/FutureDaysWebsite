@@ -36,11 +36,9 @@ module.exports = Object.assign( {}, require('./__proto__'), {
 
     login() { this.formInstance.submitForm( { resource: "auth" } ) },
 
-    name: "Login",
-
     onSubmissionResponse( response ) {
         if( Object.keys( response ).length === 0 ) {
-            return this.slurpTemplate( { template: this.templates.invalidLoginError( response ), insertion: { $el: this.templateData.container } } )
+            return this.slurpTemplate( { template: this.templates.invalidLoginError, insertion: { $el: this.templateData.container } } )
         }
     
         require('../models/User').set( response )

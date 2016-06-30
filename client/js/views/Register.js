@@ -42,7 +42,6 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     },
 
     postRender() {
-        console.log( this.formInstance )
         this.formInstance = Object.create( this.Form, { 
             fields: { value: this.fields }, 
             container: { value: this.templateData.form },

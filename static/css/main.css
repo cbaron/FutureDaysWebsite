@@ -48,9 +48,9 @@ textarea {
   margin: 0;
   border-radius: 0;
 }
-button:focus,
-button:active:focus {
-  outline: none;
+input:focus,
+button:focus {
+  outline: 0;
 }
 .btn-default {
   display: inline-block;
@@ -64,7 +64,7 @@ button:active:focus {
   border: 1px solid transparent;
   border-radius: 0.3rem;
   box-shadow: 0 2px 3px #999;
-  transition: all 0.2s ease-out;
+  transition: all 0.3s ease-out;
 }
 .btn-default:hover,
 .btn-default:focus {
@@ -83,7 +83,7 @@ button:active:focus {
   border: 3px solid #444;
   text-align: center;
   cursor: pointer;
-  transition: all 0.2s ease-out;
+  transition: all 0.3s ease-out;
 }
 .btn-ghost:hover,
 .btn-ghost:focus {
@@ -153,10 +153,10 @@ button:active:focus {
   padding: 0.5rem 0.375rem;
   border: 2px solid #666;
   border-radius: 0.2rem;
-  transition: all 0.25s;
+  transition: all 0.4s ease-in-out;
 }
 .form-input:focus {
-  outline: 0;
+  box-shadow: 0 0 1px 1px #999;
 }
 .form-label {
   display: inline-block;
@@ -175,9 +175,20 @@ button:active:focus {
 }
 .input-flat:focus {
   background-color: #ddd;
-  outline: 0;
 }
 .input-flat::-webkit-input-placeholder {
+  font-size: 0.9rem;
+  font-style: italic;
+}
+.input-flat::-moz-placeholder {
+  font-size: 0.9rem;
+  font-style: italic;
+}
+.input-flat:-ms-input-placeholder {
+  font-size: 0.9rem;
+  font-style: italic;
+}
+.input-flat:-moz-placeholder {
   font-size: 0.9rem;
   font-style: italic;
 }
@@ -185,8 +196,6 @@ button:active:focus {
   display: block;
   background-color: #ddd;
   padding: 0.5rem 0.375rem;
-  outline: 0;
-  line-height: 1em;
   border: none;
   transition: all 0.4s ease-in-out;
 }
@@ -197,9 +206,21 @@ button:active:focus {
   font-size: 0.9rem;
   font-style: italic;
 }
-.feedback {
+.input-borderless::-moz-placeholder {
   font-size: 0.9rem;
+  font-style: italic;
+}
+.input-borderless:-ms-input-placeholder {
+  font-size: 0.9rem;
+  font-style: italic;
+}
+.input-borderless:-moz-placeholder {
+  font-size: 0.9rem;
+  font-style: italic;
+}
+.feedback {
   display: block;
+  font-size: 0.9rem;
   margin-top: 2px;
 }
 .valid .feedback,

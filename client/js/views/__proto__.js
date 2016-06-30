@@ -7,26 +7,16 @@ module.exports = Object.assign( { }, ( require('../../../lib/MyObject') ), ( req
     Model: require('backbone').Model,
 
     constructor() {
-        console.log('constructor')
 
         if( ! this.container ) this.container = this.$('#content')
         
         if( this.size ) this.$(window).resize( this._.throttle( () => this.size(), 500 ) )
 
-        if( this.requiresLogin && !this.user.id ) { 
-            console.log('login')
-            console.log( require('events').EventEmitter )
-            console.log( Object.getPrototypeOf( require('events').EventEmitter ) )
-            console.log( require('events').EventEmitter.prototype )
-            var loginInstance = Object.create( require('./Login') )//.constructor()
-            console.log(loginInstance)
+        if( this.requiresLogin && !this.user.id ) {
+            var loginInstance = Object.create( require('./Login') )
             loginInstance.constructor()
             loginInstance.show().then( () => loginInstance.once( "loggedIn", () => this.onLogin() ) )
-            //login.on('click', () => console.log('hey') )
-            //login.once( "loggedIn", () => this.onLogin() )
-            //login.constructor()
-            //login.hide()
-            //login.show().once( "loggedIn", () => this.onLogin() )
+ 
             return this
         }
 

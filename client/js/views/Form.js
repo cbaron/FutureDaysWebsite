@@ -14,7 +14,7 @@ module.exports = Object.assign( { }, require('./__proto__'), {
     onSubmissionResponse() { },
 
     postForm( data ) {
-        console.log('postForm')
+        
         return new Promise( ( resolve, reject ) => {
             this.$.ajax( {
                 data: JSON.stringify( data.values ) || JSON.stringify( this.getFormData() ),
@@ -64,12 +64,13 @@ module.exports = Object.assign( { }, require('./__proto__'), {
         $el.siblings('.feedback').remove()
     },
 
-    submitForm( resource ) { 
-        if ( this.validate() === false ) return
-
-        this.postForm( resource )
-          .then( () => this.onSubmissionResponse() )
-          .catch( e => this.onFormFail( e ) )    
+    submitForm( resource ) {
+        this.validate().then( result => {
+            if( result === false ) return
+            this.postForm( resource )
+            .then( () => this.onSubmissionResponse() )
+            .catch( e => this.onFormFail( e ) )
+        } )    
     },
 
     template: require('./templates/form'),
@@ -80,17 +81,16 @@ module.exports = Object.assign( { }, require('./__proto__'), {
 
     validate() {
         var valid = true
-
-        if( this.container.find('error').length ) return false
-
+        
         return Promise.all( this.fields.map( field => {
-            return new Promise( ( resolve, reject ) => 
-                resolve( field.validate.call(this, this.templateData[ field.name ].val() ) ) )
-            .then( result => {
+            return new Promise( ( resolve, reject ) => {
+                var result = field.validate.call(this, this.templateData[ field.name ].val() )                          
                 if( result === false ) {
                     valid = false
-                    this.showError( this.templateData[ field.name ], field.error )
+                    this.showError( this.templateData[ field.name ], field.error )                    
                 }
+
+                resolve()
             } )
         } ) )
         .then( () => valid )
