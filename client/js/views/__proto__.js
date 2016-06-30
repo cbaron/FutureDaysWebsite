@@ -1,4 +1,4 @@
-module.exports = Object.assign( { }, ( require('../../../lib/MyObject') ), Object.getPrototypeOf( require('events').EventEmitter ), {
+module.exports = Object.assign( { }, ( require('../../../lib/MyObject') ), ( require('events').EventEmitter.prototype ), {
 
     $: require('jquery'),
 
@@ -7,12 +7,28 @@ module.exports = Object.assign( { }, ( require('../../../lib/MyObject') ), Objec
     Model: require('backbone').Model,
 
     constructor() {
+        console.log('constructor')
 
         if( ! this.container ) this.container = this.$('#content')
         
         if( this.size ) this.$(window).resize( this._.throttle( () => this.size(), 500 ) )
 
-        if( this.requiresLogin && !this.user.id ) { require('./Login').show().once( "loggedIn", () => this.onLogin() ); return this }
+        if( this.requiresLogin && !this.user.id ) { 
+            console.log('login')
+            console.log( require('events').EventEmitter )
+            console.log( Object.getPrototypeOf( require('events').EventEmitter ) )
+            console.log( require('events').EventEmitter.prototype )
+            var loginInstance = Object.create( require('./Login') )//.constructor()
+            console.log(loginInstance)
+            loginInstance.constructor()
+            loginInstance.show().then( () => loginInstance.once( "loggedIn", () => this.onLogin() ) )
+            //login.on('click', () => console.log('hey') )
+            //login.once( "loggedIn", () => this.onLogin() )
+            //login.constructor()
+            //login.hide()
+            //login.show().once( "loggedIn", () => this.onLogin() )
+            return this
+        }
 
         if( this.user.id && this.requiresRole ) return this[ ( this.hasPrivileges() ) ? 'render' : 'showNoAccess' ]()
         
@@ -61,6 +77,8 @@ module.exports = Object.assign( { }, ( require('../../../lib/MyObject') ), Objec
     isHidden: function() { return this.templateData.container.css('display') === 'none' },
 
     onLogin() {
+        console.log('onLogin')
+        console.log(this)
         this.router.header.onUser( this.user )
 
         this[ ( this.hasPrivileges() ) ? 'render' : 'showNoAccess' ]()
@@ -71,10 +89,9 @@ module.exports = Object.assign( { }, ( require('../../../lib/MyObject') ), Objec
         return this
     },
 
-    postRender: function() { return this },
+    postRender() { return this },
 
     render() {
-
         this.slurpTemplate( {
             template: this.template( this.getTemplateOptions() ),
             insertion: { $el: this.insertionEl || this.container, method: this.insertionMethod } } )

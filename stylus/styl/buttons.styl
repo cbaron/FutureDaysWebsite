@@ -1,4 +1,4 @@
-button:active:focus
+button:focus, button:active:focus
     outline: none
 
 .btn-default
@@ -14,7 +14,7 @@ button:active:focus
     border-radius: $btn-default-radius
     box-shadow: $btn-default-box-shadow $btn-default-box-shadow-color
     transition: $btn-transition    
-    &:hover
+    &:hover, &:focus
         background-color: $btn-default-hover-bg        
     &:active
         background-color: $btn-default-active-bg
@@ -30,7 +30,7 @@ button:active:focus
     text-align: center
     cursor: pointer
     transition: $btn-transition
-    &:hover
+    &:hover, &:focus
         background-color: $btn-ghost-hover-bg
         color: $btn-ghost-hover-color        
     &:active

@@ -1,27 +1,36 @@
+.form-group
+    margin-bottom: $input-margin-bottom
+    &.horizontal
+        .form-input
+            display: inline-block
+            margin-left: .5rem
+        .form-label
+            width: 6%
+            text-align: right
+            margin-right: 1rem
+
 .form-input
     display: block
     position: relative
     background-color: $input-bg
-    margin-bottom: $input-margin-bottom
     padding: $input-padding
     border: $input-border $input-border-color
     border-radius: $input-border-radius
     transition: all .25s
     &:focus
-        box-shadow: 0 0 1px 1px #999
+        //box-shadow: 0 0 1px 1px #999
+        //background: linear-gradient(#f7f7f7, #fff)
         outline: 0
     
 .form-label
     display: inline-block
-    font-size: .9rem
+    font-size: .95rem
     font-weight: 700
     margin-bottom: .5rem
         
 .input-flat
     display: block
-    height: 1.3rem
-    margin-bottom: 1rem
-    padding: .75rem .375rem .25rem
+    padding: $input-padding
     border-top: none
     border-left: none
     border-right: none
@@ -30,19 +39,31 @@
     &:focus
         background-color: #ddd
         outline: 0
+    &::-webkit-input-placeholder
+        font-size: .9rem
+        font-style: italic
         
 .input-borderless
     display: block
-    font-style: italic
     background-color: #ddd
     padding: $input-padding
-    font-size: 1rem
-    margin-bottom: 1rem
     outline: 0
     line-height: 1em
     border: none
     transition: all .4s ease-in-out
     &:focus
         background-color: #eee
-    
+    &::-webkit-input-placeholder
+        font-size: .9rem
+        font-style: italic
         
+.feedback
+    font-size: .9rem
+    display: block
+    margin-top: 2px 
+  
+.valid
+    form-validation($valid-color)
+    
+.error
+    form-validation($error-color)  

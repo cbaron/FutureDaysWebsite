@@ -1,32 +1,6 @@
-var MyView = require('./MyView'),
-    Login = function() { return MyView.apply( this, arguments ) };
+module.exports = Object.assign( {}, require('./__proto__'), {
 
-Object.assign( Login.prototype, MyView.prototype, {
-
-    checkForEnter( e ) { if( e.keyCode === 13 ) this.login() },
-
-    events: {
-        'loginBtn': { method: 'login' }
-    },
-
-    fields: [ {
-        name: "email",
-        label: 'Email',
-        type: 'text',
-        error: "Please enter a valid email address.",
-        validate: val => this.emailRegex.test(val)
-    }, {
-        name: "password",
-        label: 'Password',
-        type: 'password',
-        error: "Passwords must be at least 6 characters long.",
-        validate: val => val.length >= 6
-    } ],
-
-    getTemplateOptions() { return { fields: this.fields } },
-
-    initialize() {
-
+    constructor() {
         if( window.location.pathname === "/admin" ) {
             Object.assign( this.fields[0], {
                 label: 'Email or Username',
@@ -34,35 +8,76 @@ Object.assign( Login.prototype, MyView.prototype, {
                 validate: val => val.length >= 6 } )
         }
 
-        MyView.prototype.initialize.call(this)
+        require('./__proto__').constructor.call(this)
     },
 
-    login() { this.submitForm( { resource: "auth" } ) },
+    events: {
+        'registerBtn': { event: 'click', selector: '', method: 'showRegistration' },
+        'loginBtn': { event: 'click', selector: '', method: 'login' }
+    },
+
+    fields: [ {
+        class: 'input-borderless',
+        name: 'email',
+        placeholder: 'Email',
+        type: 'text',
+        error: 'Please enter a valid email address.',
+        validate: function( val ) { return this.emailRegex.test(val) }
+    }, {
+        class: 'input-borderless',
+        name: 'password',
+        placeholder: 'Password',
+        type: 'password',
+        error: "Passwords must be at least 6 characters long.",
+        validate: val => val.length >= 6
+    } ],
+
+    Form: require('./Form'),
+
+    login() { this.formInstance.submitForm( { resource: "auth" } ) },
 
     name: "Login",
 
     onSubmissionResponse( response ) {
-        
         if( Object.keys( response ).length === 0 ) {
             return this.slurpTemplate( { template: this.templates.invalidLoginError( response ), insertion: { $el: this.templateData.container } } )
         }
-        
-        this.$(document).off( 'keyup', this.checkForEnter.bind(this) )
     
-        require('../models/User').set( response );
-        this.emit( "success" );
-        this.hide().done();
+        require('../models/User').set( response )
+        this.emit( "loggedIn" )
+        this.hide()
     },
 
     postRender() {
-        //this.templateData.container.find( 'input' ).on( 'focus', this.removeErrors.bind(this) )
-        this.$(document).on( 'keyup', this.checkForEnter.bind(this) )
+        this.formInstance = Object.create( this.Form, { 
+            fields: { value: this.fields }, 
+            container: { value: this.templateData.form },
+            onSubmissionResponse: { value: this.onSubmissionResponse }
+        } ).constructor()
+
+        return this
     },
+
+    Register: require('./Register'),
 
     requiresLogin: false,
 
-    template: require('./templates/login')
+    showRegistration() { 
+        var form = this.formInstance
+
+        form.templateData.email.val('');
+        form.templateData.password.val('');
+        if ( form.templateData.invalidLoginError ) form.templateData.invalidLoginError.remove();
+        if ( form.templateData.serverError ) form.templateData.serverError.remove();
+        
+        this.hide().then( () => Object.create( this.Register ).constructor() )
+
+    },
+
+    template: require('./templates/login'),
+
+    templates: {
+        invalidLoginError: require('./templates/invalidLoginError')
+    }
 
 } )
-
-module.exports = new Login()
