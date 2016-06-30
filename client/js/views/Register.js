@@ -1,7 +1,9 @@
 module.exports = Object.assign( {}, require('./__proto__'), {
 
     cancel: function() {
-        this.hide().then( () => Object.create( require('./Login') ).constructor() )
+        //this.hide().then( () => this.loginInstance.show() )
+        this.delete()
+        this.loginInstance.show()
     },
 
     events: {
@@ -37,7 +39,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
 
         this.fields.forEach( field => this.templateData[ field.name ].val('') )
 
-        this.hide().then( () => Object.create( require('./Login') ).emit( "loggedIn" ) )
+        this.hide().then( () => this.loginInstance.emit( "loggedIn" ) )
         
     },
 

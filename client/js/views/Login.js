@@ -61,14 +61,20 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     requiresLogin: false,
 
     showRegistration() { 
-        var form = this.formInstance
-
-        form.templateData.email.val('');
-        form.templateData.password.val('');
-        if ( form.templateData.invalidLoginError ) form.templateData.invalidLoginError.remove();
-        if ( form.templateData.serverError ) form.templateData.serverError.remove();
+        var form = this.formInstance,
+            email = form.templateData.email,
+            password = form.templateData.password
         
-        this.hide().then( () => Object.create( this.Register ).constructor() )
+        form.removeError( email )
+        email.val('')
+
+        form.removeError( password )
+        password.val('')
+        
+        if ( form.templateData.invalidLoginError ) form.templateData.invalidLoginError.remove()
+        if ( form.templateData.serverError ) form.templateData.serverError.remove()
+        
+        this.hide().then( () => Object.create( this.Register, { loginInstance: { value: this } } ).constructor() )
 
     },
 

@@ -67,8 +67,6 @@ module.exports = Object.assign( { }, ( require('../../../lib/MyObject') ), ( req
     isHidden: function() { return this.templateData.container.css('display') === 'none' },
 
     onLogin() {
-        console.log('onLogin')
-        console.log(this)
         this.router.header.onUser( this.user )
 
         this[ ( this.hasPrivileges() ) ? 'render' : 'showNoAccess' ]()
