@@ -1,9 +1,22 @@
 module.exports = Object.assign( {}, require('./__proto__'), {
 
     cancel: function() {
-        //this.hide().then( () => this.loginInstance.show() )
-        this.delete()
-        this.loginInstance.show()
+
+        var form = this.formInstance,
+            name = form.templateData.name,
+            email = form.templateData.email
+        
+        form.removeError( name )
+        name.val('')
+
+        form.removeError( email )
+        email.val('')
+        
+        if ( form.templateData.invalidLoginError ) form.templateData.invalidLoginError.remove()
+        if ( form.templateData.serverError ) form.templateData.serverError.remove()
+
+        this.loginInstance[ "registerInstance" ] = this
+        this.hide().then( () => this.loginInstance.show() )
     },
 
     events: {
@@ -12,16 +25,12 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     },
 
     fields: [ {
-        class: 'input-borderless',
         name: 'name',
-        placeholder: 'Name',
         type: 'text',
         error: 'Name is a required field.',
         validate: function( val ) { return this.$.trim(val) !== '' }
     }, {
-        class: 'input-borderless',
         name: 'email',
-        placeholder: 'Email',
         type: 'text',
         error: 'Please enter a valid email address.',
         validate: function( val ) { return this.emailRegex.test(val) }
@@ -44,12 +53,14 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     },
 
     postRender() {
-        this.formInstance = Object.create( this.Form, { 
-            fields: { value: this.fields }, 
+        this.formInstance = Object.create( this.Form, {
+            class: { value: this.class },
+            fields: { value: this.fields },
+            horizontal: { value: this.horizontal }, 
             container: { value: this.templateData.form },
             onSubmissionResponse: { value: this.onSubmissionResponse }
         } ).constructor()
-
+        
         return this
     },
 

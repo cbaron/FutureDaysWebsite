@@ -13,7 +13,7 @@ module.exports = Object.assign( { }, ( require('../../../lib/MyObject') ), ( req
         if( this.size ) this.$(window).resize( this._.throttle( () => this.size(), 500 ) )
 
         if( this.requiresLogin && !this.user.id ) {
-            var loginInstance = Object.create( require('./Login') )
+            var loginInstance = Object.create( require('./Login'), { class: { value: 'input-borderless' } } )
             loginInstance.constructor()
             loginInstance.show().then( () => loginInstance.once( "loggedIn", () => this.onLogin() ) )
  

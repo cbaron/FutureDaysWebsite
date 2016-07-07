@@ -1,6 +1,6 @@
 module.exports = Object.assign( {}, require('./__proto__'), {
 
-    fields: [ {
+    /*fields: [ {
         class: "form-input",
         name: "email",
         label: 'Email',
@@ -37,20 +37,39 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         options: [ "Monster Movie", "Soundtracks", "Tago Mago", "Ege Bamyasi", "Future Days" ],
         error: "Please choose an option.",
         validate: function( val ) { return this.$.trim(val) !== '' }
-    } ],
+    } ],*/
 
     Form: require('./Form'),
     List: require('./List'),
+    Login: require('./Login'),
+    Register: require('./Register'),
 
     postRender() {
-
+        
         this.listInstance = Object.create( this.List, { container: { value: this.templateData.list } } ).constructor()
-        this.formInstance = Object.create( this.Form, { 
+        /*this.formInstance = Object.create( this.Form, { 
             fields: { value: this.fields }, 
             container: { value: this.templateData.form }
-        } ).constructor()
+        } ).constructor()*/
 
-        this.templateData.submitBtn.on( 'click', () => this.formInstance.submitForm( { resource: '' } ) )
+        this.loginExample = Object.create( this.Login, { 
+            container: { value: this.templateData.loginExample },
+            class: { value: 'input-borderless' }
+        } ).constructor()
+        
+        this.registerExample = Object.create( this.Register, { 
+            container: { value: this.templateData.registerExample },
+            class: { value: 'form-input' },
+            horizontal: { value: true }
+        } ).constructor()
+        
+        this.loginExample.templateData.registerBtn.off('click')
+        this.loginExample.templateData.loginBtn.off('click')
+
+        this.registerExample.templateData.cancelBtn.off('click')
+        this.registerExample.templateData.registerBtn.off('click')
+
+        //this.templateData.submitBtn.on( 'click', () => this.formInstance.submitForm( { resource: '' } ) )
 
         return this
     },

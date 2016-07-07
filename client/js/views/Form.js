@@ -2,7 +2,16 @@ module.exports = Object.assign( { }, require('./__proto__'), {
 
     emailRegex: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
 
-    getTemplateOptions() { return { fields: this.fields } },
+    getTemplateOptions() { 
+        this.fields.forEach( field => {
+            var name = field.name.charAt(0).toUpperCase() + field.name.slice(1)
+            field[ 'class' ] = this.class
+            if( this.horizontal ) field[ 'horizontal' ] = true
+            field[ ( this.class === 'form-input' ) ? 'label' : 'placeholder' ] = name
+
+        } )
+
+        return { fields: this.fields } },
 
     fields: [ ],
 
