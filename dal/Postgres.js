@@ -1,6 +1,9 @@
-module.exports = Object.create( Object.assign( {}, require('../lib/MyObject'), {
+module.exports = Object.create( Object.assign( {}, require('../lib/MyObject').prototype, {
 
-    query( query, args, opts = { } ) { return this._factory( opts ).query( query, args ).fail( e => this.Error(e) ) },
+    query( query, args, opts = { } ) {
+        return this._factory( opts ).query( query, args )
+            .catch( e => { throw new Error(`${e.stack || e}\nquery: ${query}\nargs: ${args}`) } )
+    },
 
     querySync( query, args, opts = { } ) {
         var client = new ( require('pg-native') )(), rows
@@ -18,21 +21,16 @@ module.exports = Object.create( Object.assign( {}, require('../lib/MyObject'), {
                 { columns: columnResult.map( columnRow => ( { name: columnRow.column_name, range: this.dataTypeToRange[columnRow.data_type] } ) ) } 
         } )
 
-        this.querySync( "SELECT * FROM tablemeta" ).forEach( row => {
-            if( this.tables[ row.name ] ) this.tables[ row.name ].meta = this._( row ).pick( [ 'label', 'description', 'recorddescriptor' ] )
-        } )
-
         this.querySync( this._queries.selectForeignKeys() ).forEach( row => {
             var match = /FOREIGN KEY \((\w+)\) REFERENCES (\w+)\((\w+)\)/.exec( row.pg_get_constraintdef )
-                column = this.tables[ row.table_from ].columns.find( column => column.name === match[1] )
-           
+                column = this.tables[ row.tablefrom ].columns.find( column => column.name === match[1] )
+            
             column.fk = {
                 table: match[2],
                 column: match[3],
                 recorddescriptor: ( this.tables[ match[2] ].meta ) ? this.tables[ match[2] ].meta.recorddescriptor : null
             }
         } )
-
     },
 
     _factory( data ) {
@@ -93,10 +91,12 @@ module.exports = Object.create( Object.assign( {}, require('../lib/MyObject'), {
     },
 
     dataTypeToRange: {
+        "boolean": "Boolean",
         "character varying": "Text",
         "date": "Date",
         "integer": "Integer",
         "money": "Float",
-        "timestamp with time zone": "DateTime"
+        "timestamp with time zone": "DateTime",
+        "text": "Text"
     }
 } ), { tables: { value: { } } } )

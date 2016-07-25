@@ -20,6 +20,7 @@
     "browserify": "13.0.1",
     "parallelshell": "2.0.0",
     "stylus": "0.54.0",
+    "uglify": "^0.1.5",
     "watch": "0.18.0"
   },
   "license": "BSD-3-Clause",
@@ -30,11 +31,13 @@
   },
   "scripts": {
     "build:css": "stylus -w stylus/main.styl -o static/css/main.css",
-    "build:js": "browserify client/js/main.js -o static/js/debug.js -d -t [ babelify --presets [ es2015 ] ]",
+    "build:js": "browserify client/js/main.js -o static/js/debug.js -t [ babelify --presets [ es2015 ] ] | uglifyjs > static/js/bundle.js && gzip -c static/js/bundle.js > static/js/bundle.js.gz",
+    "build:js-debug": "browserify client/js/main.js -o static/js/debug.js -x backbone -x jquery -x moment -x underscore -d -t [ babelify --presets [ es2015 ] --ignore [ /node_modules/, /vendor/ ] ]",
+    "build:vendor": "browserify -r backbone -r jquery -r moment -r underscore > static/js/vendor.js",
     "build:watch": "parallelshell 'npm run watch:css' 'npm run watch:js'",
     "livereload": "live-reload --port 9091 static/",
     "watch:css": "watch 'npm run build:css' stylus --ignoreDotFiles",
-    "watch:js": "watch 'npm run build:js' client/js --ignoreDotFiles"
+    "watch:js": "watch 'npm run build:js-debug' client/js --ignoreDotFiles"
   },
   "version": "0.0.1"
 }

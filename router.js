@@ -7,27 +7,27 @@ module.exports = Object.create(
 
     Object.assign( {}, require('./lib/MyObject'), {
 
+        FS: require('fs'),
+
         Postgres: require('./dal/Postgres'),
 
         applyResource( request, response, path, parsedUrl, dir, file ) {
+
+            console.log( "AWEAWE" )
         
-            return new Promise( ( resolve, reject ) => {
+            return this.P( this.FS.stat, [ `${__dirname}/${dir}/${file}.js` ] )
+            .catch( e => ( e.code !== "ENOENT" ) ? Promise.reject(e) : Promise.resolve( file = `${dir}/__proto__` ) )
+            .then( () => {
 
-                require('fs').stat( `${__dirname}/${dir}/${file}.js`, err => {
-                    if( err ) { 
-                        if( err.code !== "ENOENT" ) return reject( err )
-                        file = `${dir}/__proto__`
-                    }
+                console.log( `${dir}/${file}` )
+                return Object.create( require(`${dir}/${file}`), {
+                    request: { value: request },
+                    response: { value: response },
+                    path: { value: path },
+                    parsedUrl: { value: parsedUrl },
+                    tables: { value: this.Postgres.tables }
+                } ).apply( request.method )
 
-                    Object.create( require(`${dir}/${file}`), {
-                        callChain: { value: new Promise( resolve => resolve() ) },
-                        request: { value: request },
-                        response: { value: response },
-                        path: { value: path },
-                        parsedUrl: { value: parsedUrl },
-                        tables: { value: this.Postgres.tables }
-                    } ).apply( request.method ).then( resolve ).catch( reject )
-                } )
             } )
         },
 
@@ -36,14 +36,12 @@ module.exports = Object.create(
 
             return this.handler.bind(this)
         },
-    
-        fs: require('fs'),
 
         handleFailure( response, err, code, log ) {
 
             var message = ( process.env.NODE_ENV === "production" ) ? "Unknown Error" : err.stack || err.toString()
 
-            if( log ) console.log( err.stack || err )
+            if( log ) this.Error( err )
 
             response.writeHead( code || 500, {
                 "Content-Length": Buffer.byteLength( message ),
@@ -78,14 +76,12 @@ module.exports = Object.create(
         },
 
         html( request, response, path ) {
-            return new Promise( ( resolve, reject ) => {
-                response.writeHead( 200 )
-                response.end( require('./templates/page')( {
-                    isDev: ( process.env.ENV === 'development' ) ? true : false,
-                    title: 'Future Days'
-                } ) )
-                resolve()
-            } )
+            response.writeHead( 200 )
+            response.end( require('./templates/page')( {
+                isDev: ( process.env.ENV === 'development' ) ? true : false,
+                title: 'Future Days'
+            } ) )
+            return Promise.resolve()
         },
 
         hyper( request, response, path ) { return this.applyResource( request, response, path, parsedUrl, './resources/hyper', path[1] || 'index' ) },
@@ -114,21 +110,18 @@ module.exports = Object.create(
             "PUT": [ RESTHandler ],
         },
 
-        rest( request, response, path, parsedUrl ) { return this.applyResource( request, response, path, parsedUrl, './resources', path[1] ) },
+        rest( request, response, path, parsedUrl ) { console.log("okay"); return this.applyResource( request, response, path, parsedUrl, './resources', path[1] ) },
 
         static( request, response, path ) {
-            var file = this.format( '%s%s', __dirname, path.join('/') )
+            var file = `${__dirname}${path.join('/')}`
 
-            return new Promise( ( resolve, reject ) => {
-                this.fs.stat( file, ( err, stat ) => {
-                    var stream
-                    if( err ) return reject(err) 
-                    stream = this.fs.createReadStream( file )
-                    response.on( 'error', err => { console.log( err ); stream.end() } )
-                    response.writeHead( 200, { 'Connection': 'keep-alive', 'Content-Length': stat.size } )
-                    stream.pipe( response )
-                    resolve()
-                } )
+            return this.P( this.FS.stat, [ file ] )
+            .then( ( [ stat ] ) => {
+                var stream = this.FS.createReadStream( file )
+                response.on( 'error', err => { console.log( err ); stream.end() } )
+                response.writeHead( 200, { 'Connection': 'keep-alive', 'Content-Length': stat.size } )
+                stream.pipe( response )
+                return Promise.resolve()
             } )
         }
 

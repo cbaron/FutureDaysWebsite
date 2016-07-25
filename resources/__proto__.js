@@ -9,34 +9,55 @@ module.exports = Object.assign( { }, require('../lib/MyObject'), {
     Response: Object.create( require('./_util/Response') ),
 
     Validate: Object.create( require('./_util/Validate') ),
-    
+
     apply( method ) { return this.createChain( method ).callChain },
 
-    chains: { },
+    chain( fun ) { this.callChain = this.callChain.then( result => fun( this, result ) ) },
 
     createChain( method ) {
+        var start
+            
+        this.callChain = new Promise( resolve => start = resolve )
 
-        if( ! this.chains[ method ] ) return this.getDefaultChain( method )
- 
-        this.chains[ method ].forEach( fun => this.callChain = this.callChain.then( fun.call(this) ) )
+        if( this[ method ] ) { console.log( this[ method ] ) }
+
+        ( ! this[ method ] )
+            ? [ this.Validate.apply, this.Context.apply, this.Db.apply, this.Response.apply ].forEach( this.chain )
+            : this[ method ]().forEach( this.chain )
+
+        start()
 
         return this
     },
 
-    getDefaultChain( method ) {
+    createCookie() {
+        return new Promise( ( resolve, reject ) => {
+            require('jws').createSign( {
+                header: { "alg": "HS256", "typ": "JWT" },
+                payload: JSON.stringify( this.user ),
+                privateKey: process.env.JWS_SECRET,
+            } )
+            .on( 'done', signature => resolve( signature ) )
+            .on( 'error', e => { this.user = { }; return resolve() } )
+        } )
+    },
 
-        [ this.Validate.apply, this.Context.apply, this.Db.apply, this.Response.apply ].forEach(
-            fun => this.callChain = this.callChain.then( result => fun( this, result ) ) )
-        
-        return this
+    end( data ) {
+        return new Promise( resolve => {
+            data.body = JSON.stringify( data.body )
+            this.response.writeHead( data.code || 200, Object.assign( this.getHeaders( data.body ), data.headers || {} ) )
+            this.response.end( data.body )
+            resolve()
+        } )
     },
 
     getHeaders( body ) { return Object.assign( {}, this.headers, { 'Date': new Date().toISOString(), 'Content-Length': Buffer.byteLength( body ) } ) },
 
     headers: {
+        'Connection': 'Keep-Alive',
         'Content-Type': 'application/json',
         'Cache-Control': 'no-cache, no-store, must-revalidate',
-        'Keep-Alive': 'timeout=50, max=100',
+        'Keep-Alive': 'timeout=50, max=100'
     },
 
     notFound() { this.respond( { code: 404 } ) },

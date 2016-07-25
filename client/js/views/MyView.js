@@ -181,7 +181,7 @@ Object.assign( MyView.prototype, require('events').EventEmitter.prototype, {
         return true;
     },
 
-    requiresLogin: true,
+    requiresLogin: false,
     
     size: () => { this },
 

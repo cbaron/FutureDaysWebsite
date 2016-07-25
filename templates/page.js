@@ -8,7 +8,10 @@ module.exports = ( p ) => `
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         
-        <script src="/static/js/debug.js"></script>
+        ${ ( p.isDev )
+            ? '<script src="/static/js/vendor.js"></script><script src="/static/js/debug.js"></script>'
+            : '<script src="/static/js/bundle.js.gz"></script>'
+        }
         
         <title>${p.title}</title>
     </head>

@@ -1,5 +1,7 @@
 module.exports = Object.assign( { }, ( require('../../../lib/MyObject') ), ( require('events').EventEmitter.prototype ), {
 
+    _: require('underscore'),
+
     $: require('jquery'),
 
     Collection: require('backbone').Collection,

@@ -3,15 +3,15 @@ module.exports = new (
 
         Error: require('../../lib/MyError'),
         
-        Demo: require('./views/Demo'),
+        //Demo: require('./views/Demo'),
 
-        Header: require('./views/Header'),
+        //Header: require('./views/Header'),
         
         Home: require('./views/Home'),
         
+        User: require('./models/User'),
+        
         initialize() {
-
-            this.userPromise = this.user.fetch()
 
             this.views = { }
 
@@ -23,10 +23,10 @@ module.exports = new (
             if( !resource ) return this.navigate( 'home', { trigger: true } )
 
             this.Header.constructor()
-             
-            this.userPromise.done( () => {
+                
+            this.User.fetched.done( () => {
 
-                if( this.user.id ) this.header.onUser( this.user )
+                if( this.User.id ) this.Header.onUser( this.User )
                 
                 Promise.all( Object.keys( this.views ).map( view => this.views[ view ].hide() ) )
                 .then( () => {
@@ -34,7 +34,7 @@ module.exports = new (
                     this.views[ resource ] =
                         Object.create(
                             require( `./views/${resource.charAt(0).toUpperCase() + resource.slice(1)}` ),
-                            { user: { value: this.user }, router: { value: this } }
+                            { user: { value: this.User }, router: { value: this } }
                         ).constructor()
                 } )
                
@@ -45,10 +45,9 @@ module.exports = new (
         },
 
         routes: {
-            '(:resource)': 'handler',
+            '(*request)': 'handler'
         },
         
-        user: require('./models/User'),
 
     } )
 )()
