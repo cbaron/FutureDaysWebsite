@@ -3,7 +3,7 @@ module.exports = new (
 
         Error: require('../../lib/MyError'),
         
-        //Demo: require('./views/Demo'),
+        Demo: require('./views/Demo'),
 
         //Header: require('./views/Header'),
         
