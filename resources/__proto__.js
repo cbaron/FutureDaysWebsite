@@ -23,7 +23,7 @@ module.exports = Object.assign( { }, require('../lib/MyObject'), {
 
         ( ! this[ method ] )
             ? [ this.Validate.apply, this.Context.apply, this.Db.apply, this.Response.apply ].forEach( this.chain )
-            : this[ method ]().forEach( this.chain )
+            : this[ method ]().forEach( fun => this.chain(fun) )
 
         start()
 

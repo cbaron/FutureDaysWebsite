@@ -22,7 +22,7 @@ module.exports = new (
 
             if( !resource ) return this.navigate( 'home', { trigger: true } )
 
-            this.Header.constructor()
+            //this.Header.constructor()
                 
             this.User.fetched.done( () => {
 

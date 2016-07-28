@@ -27,7 +27,7 @@ module.exports = {
         return this.slurpBody( resource ).then( () => this.parseSignature( resource, this.parseCookies( resource.request.headers.cookie ) ) )
     },
     
-    apply( resource ) { return this[ resource.request.method ]( resource ) },
+    apply( resource ) { console.log( this ); console.log( resource ); return this[ resource.request.method ]( resource ) },
 
     parseCookies( cookies ) {
         var rv
