@@ -13,13 +13,10 @@ module.exports = Object.create(
 
         applyResource( request, response, path, parsedUrl, dir, file ) {
 
-            console.log( "AWEAWE" )
-        
             return this.P( this.FS.stat, [ `${__dirname}/${dir}/${file}.js` ] )
             .catch( e => ( e.code !== "ENOENT" ) ? Promise.reject(e) : Promise.resolve( file = `${dir}/__proto__` ) )
             .then( () => {
 
-                console.log( `${dir}/${file}` )
                 return Object.create( require(`${dir}/${file}`), {
                     request: { value: request },
                     response: { value: response },
@@ -110,16 +107,27 @@ module.exports = Object.create(
             "PUT": [ RESTHandler ],
         },
 
-        rest( request, response, path, parsedUrl ) { console.log("okay"); return this.applyResource( request, response, path, parsedUrl, './resources', path[1] ) },
+        rest( request, response, path, parsedUrl ) { return this.applyResource( request, response, path, parsedUrl, './resources', path[1] ) },
 
         static( request, response, path ) {
-            var file = `${__dirname}${path.join('/')}`
+            var fileName = path.pop()
+                filePath = `${__dirname}${path.join('/')}/${fileName}`
+           
+            if( /(\.css|\.js)/.test(fileName) ) filePath += '.gz'
 
-            return this.P( this.FS.stat, [ file ] )
+            return this.P( this.FS.stat, [ filePath ] )
             .then( ( [ stat ] ) => {
-                var stream = this.FS.createReadStream( file )
-                response.on( 'error', err => { console.log( err ); stream.end() } )
-                response.writeHead( 200, { 'Connection': 'keep-alive', 'Content-Length': stat.size } )
+                var stream = this.FS.createReadStream( filePath )
+                response.on( 'error', err => { console.log( err.stack || err ); stream.end() } )
+                response.writeHead(
+                    200,
+                    {
+                        'Connection': 'keep-alive',
+                        'Content-Encoding': /(\.css|\.js)/.test(path[-1]) ? 'gzip' : 'identity',
+                        'Content-Length': stat.size,
+                        'Content-Type': /\.css/.test(fileName) ? 'text/css' : 'text/plain'
+                    }
+                )
                 stream.pipe( response )
                 return Promise.resolve()
             } )

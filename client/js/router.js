@@ -3,13 +3,11 @@ module.exports = new (
 
         Error: require('../../lib/MyError'),
         
-        Demo: require('./views/Demo'),
-
         //Header: require('./views/Header'),
         
-        Home: require('./views/Home'),
-        
         User: require('./models/User'),
+
+        Views: require('./.ViewMap'),
         
         initialize() {
 
@@ -26,28 +24,25 @@ module.exports = new (
                 
             this.User.fetched.done( () => {
 
-                if( this.User.id ) this.Header.onUser( this.User )
+                //this.Header.onUser( this.User )
                 
                 Promise.all( Object.keys( this.views ).map( view => this.views[ view ].hide() ) )
                 .then( () => {
                     if( this.views[ resource ] ) return this.views[ resource ].show()
                     this.views[ resource ] =
                         Object.create(
-                            require( `./views/${resource.charAt(0).toUpperCase() + resource.slice(1)}` ),
-                            { user: { value: this.User }, router: { value: this } }
-                        ).constructor()
+                            this.Views[ `${resource.charAt(0).toUpperCase() + resource.slice(1)}` ],
+                            { user: { value: this.User } } )
+                        .constructor()
+                        .on( 'route', route => this.navigate( route, { trigger: true } ) )
                 } )
+                .catch( this.Error )
                
-                require('jquery')(window).scrollTop(0)
-            
             } ).fail( this.Error )
             
         },
 
-        routes: {
-            '(*request)': 'handler'
-        },
-        
+        routes: { '(*request)': 'handler' }
 
     } )
 )()
