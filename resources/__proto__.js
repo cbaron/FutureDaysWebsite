@@ -17,15 +17,13 @@ module.exports = Object.assign( { }, require('../lib/MyObject'), {
     createChain( method ) {
         var start
             
-        this.callChain = new Promise( resolve => start = resolve )
+        this.callChain = new Promise( resolve => start = resolve );
 
-        if( this[ method ] ) { console.log( this[ method ] ) }
+        ( this[ method ] ) 
+            ? this[ method ]().forEach( fun => this.chain(fun) )
+            : [ this.Validate.apply, this.Context.apply, this.Db.apply, this.Response.apply ].forEach( fun => this.chain(fun) )
 
-        ( ! this[ method ] )
-            ? [ this.Validate.apply, this.Context.apply, this.Db.apply, this.Response.apply ].forEach( this.chain )
-            : this[ method ]().forEach( fun => this.chain(fun) )
-
-        start()
+        start();
 
         return this
     },

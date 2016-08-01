@@ -123,7 +123,7 @@ module.exports = Object.create(
                     200,
                     {
                         'Connection': 'keep-alive',
-                        'Content-Encoding': /(\.css|\.js)/.test(path[-1]) ? 'gzip' : 'identity',
+                        'Content-Encoding': /(\.css|\.js)/.test(fileName) ? 'gzip' : 'identity',
                         'Content-Length': stat.size,
                         'Content-Type': /\.css/.test(fileName) ? 'text/css' : 'text/plain'
                     }

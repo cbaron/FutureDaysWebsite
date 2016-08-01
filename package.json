@@ -1,7 +1,7 @@
 {
   "description": "Site for Future Days",
   "engines": {
-    "node": "6.2.0"
+    "node": "6.3.1"
   },
   "dependencies": {
     "backbone": "^1.3.1",
@@ -30,10 +30,10 @@
     "url": "https://github.com/cbaron/futuredays.git"
   },
   "scripts": {
-    "build:css": "stylus -w stylus/main.styl -o static/css/main.css",
+    "build:css": "stylus stylus/main.styl -o static/css/main.css && gzip -c static/css/main.css > static/css/main.css.gz",
     "build:js": "scripts/writeLoadViews.js && browserify client/js/main.js -o static/js/debug.js -t [ babelify --presets [ es2015 ] ] | uglifyjs > static/js/bundle.js && gzip -c static/js/bundle.js > static/js/bundle.js.gz",
-    "build:js-debug": "scripts/writeLoadViews.js && browserify client/js/main.js -o static/js/debug.js -x backbone -x jquery -x moment -x underscore -d -t [ babelify --presets [ es2015 ] --ignore [ /node_modules/, /vendor/ ] ]",
-    "build:vendor": "browserify -r backbone -r jquery -r moment -r underscore > static/js/vendor.js",
+    "build:js-debug": "scripts/writeLoadViews.js && browserify client/js/main.js -o static/js/debug.js -x backbone -x jquery -x moment -x underscore -d -t [ babelify --presets [ es2015 ] --ignore [ /node_modules/, /vendor/ ] ] && gzip -c static/js/debug.js > static/js/debug.js.gz",
+    "build:vendor": "browserify -r backbone -r jquery -r moment -r underscore > static/js/vendor.js && gzip -c static/js/vendor.js > static/js/vendor.js.gz",
     "build:watch": "parallelshell 'npm run watch:css' 'npm run watch:js'",
     "livereload": "live-reload --port 9091 static/",
     "watch:css": "watch 'npm run build:css' stylus --ignoreDotFiles",

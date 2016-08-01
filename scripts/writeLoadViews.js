@@ -7,7 +7,7 @@ Object.create( Object.assign( require('../lib/MyObject'), {
     constructor( dir ) {
         
         this.P( this.FS.readdir, [ `${dir}/views` ] )
-        .then( ( [ files ] ) => {
+        .then( ( [ files ] ) => 
             this.P(
                 this.FS.writeFile,
                 [
@@ -22,7 +22,26 @@ Object.create( Object.assign( require('../lib/MyObject'), {
                     `\n}`
                 ]
             )
-        } )
+        )
+        .then( () =>
+           this.P( this.FS.readdir, [ `${dir}/views/templates` ] )
+            .then( ( [ files ] ) => 
+                this.P(
+                    this.FS.writeFile,
+                    [
+                        `${dir}/.TemplateMap.js`,
+                        `module.exports={\n\t` +
+                        files.filter( name => !/^[\._]/.test(name) && /\.js/.test(name) )
+                             .map( name => {
+                                 name = name.replace('.js','')
+                                 return `${name}: require('./views/templates/${name}')`
+                             } )
+                             .join(',\n\t') +
+                        `\n}`
+                    ]
+                )
+            )
+        )
         .catch( this.Error )
     }
 

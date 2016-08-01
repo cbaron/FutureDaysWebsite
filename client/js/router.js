@@ -3,28 +3,33 @@ module.exports = new (
 
         Error: require('../../lib/MyError'),
         
-        //Header: require('./views/Header'),
-        
         User: require('./models/User'),
 
         Views: require('./.ViewMap'),
         
+        Templates: require('./.TemplateMap'),
+        
         initialize() {
-
-            this.views = { }
-
-            return this
+            return Object.assign( this, {
+                views: { },
+                header: Object.create( this.Views.Header, { template: { value: this.Templates.header } } ).constructor()
+            } )
         },
+
+        goHome() { this.navigate( 'home', { trigger: true } ) },
 
         handler( resource ) {
 
-            if( !resource ) return this.navigate( 'home', { trigger: true } )
+            if( !resource ) return this.goHome()
 
-            //this.Header.constructor()
-                
             this.User.fetched.done( () => {
 
-                //this.Header.onUser( this.User )
+                this.Views.Header
+                    .onUser( this.User )
+                    .on( 'signout', () => 
+                        Promise.all( Object.keys( this.views ).map( name => this.views[ name ].delete() ) )
+                        .then( this.goHome() )
+                    )
                 
                 Promise.all( Object.keys( this.views ).map( view => this.views[ view ].hide() ) )
                 .then( () => {
@@ -32,7 +37,7 @@ module.exports = new (
                     this.views[ resource ] =
                         Object.create(
                             this.Views[ `${resource.charAt(0).toUpperCase() + resource.slice(1)}` ],
-                            { user: { value: this.User } } )
+                            { user: { value: this.User }, template: { value: this.Templates[ resource ] } } )
                         .constructor()
                         .on( 'route', route => this.navigate( route, { trigger: true } ) )
                 } )

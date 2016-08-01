@@ -1,1 +1,1 @@
-module.exports = ( p ) => `<div></div>`
+module.exports = ( p ) => `<div>Header</div>`

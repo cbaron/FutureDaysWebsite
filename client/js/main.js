@@ -1,3 +1,4 @@
-require('./router')
-
-require('jquery')( () => require('backbone').history.start( { pushState: true } ) )
+require('jquery')( () => {
+    require('./router')
+    require('backbone').history.start( { pushState: true } )
+} )

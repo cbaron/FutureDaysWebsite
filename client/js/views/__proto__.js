@@ -1,4 +1,4 @@
-module.exports = Object.assign( { }, ( require('../../../lib/MyObject') ), ( require('events').EventEmitter.prototype ), {
+module.exports = Object.assign( { }, require('../../../lib/MyObject'), require('events').EventEmitter.prototype, {
 
     _: require('underscore'),
 
@@ -41,9 +41,13 @@ module.exports = Object.assign( { }, ( require('../../../lib/MyObject') ), ( req
         }
     },
 
-    delete: function() {
-        this.templateData.container.remove()
-        this.emit("removed")
+    delete( duration ) {
+        return this.hide( duration )
+        .then( () => {
+            this.templateData.container.remove()
+            this.emit("removed")
+            return Promise.resolve()
+        } )
     },
 
     getFormData: function() {
@@ -99,7 +103,7 @@ module.exports = Object.assign( { }, ( require('../../../lib/MyObject') ), ( req
                 this[ subviewMeta.name ] = new subviewMeta.view( { container: this.templateData[ key ] } ) } ) )
     },
 
-    show: function( duration ) {
+    show( duration ) {
         return new Promise( ( resolve, reject ) => this.templateData.container.show( duration || 10, () => { this.size(); resolve() } ) )
     },
 
@@ -132,7 +136,7 @@ module.exports = Object.assign( { }, ( require('../../../lib/MyObject') ), ( req
 
         return this;
     },
-    
+
     bindEvent: function( elementKey, eventData, el ) {
         var elements = ( el ) ? el : this.templateData[ elementKey ];
 
@@ -163,7 +167,5 @@ module.exports = Object.assign( { }, ( require('../../../lib/MyObject') ), ( req
     size: () => { this },
 
     user: require('../models/User'),
-
-    util: require('util')
 
 } )
