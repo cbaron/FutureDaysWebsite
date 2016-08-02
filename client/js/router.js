@@ -1,6 +1,8 @@
 module.exports = new (
     require('backbone').Router.extend( {
 
+        $: require('jquery'),
+
         Error: require('../../lib/MyError'),
         
         User: require('./models/User'),
@@ -37,7 +39,11 @@ module.exports = new (
                     this.views[ resource ] =
                         Object.create(
                             this.Views[ `${resource.charAt(0).toUpperCase() + resource.slice(1)}` ],
-                            { user: { value: this.User }, template: { value: this.Templates[ resource ] } } )
+                            {
+                                insertionEl: this.$('#content'),
+                                template: { value: this.Templates[ resource ] },
+                                user: { value: this.User }
+                            } )
                         .constructor()
                         .on( 'route', route => this.navigate( route, { trigger: true } ) )
                 } )

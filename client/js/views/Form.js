@@ -13,6 +13,15 @@ module.exports = Object.assign( { }, require('./__proto__'), {
 
         return { fields: this.fields } },
 
+    getFormData() {
+
+        Object.keys( this.templateData, key => {
+            if( /INPUT|TEXTAREAD/.test( this.templateData[ key ].prop("tagName") ) ) this.formData[ key ] = this.templateData[ key ].val()
+        } )
+
+        return this.formData
+    },
+
     fields: [ ],
 
     onFormFail( error ) {
