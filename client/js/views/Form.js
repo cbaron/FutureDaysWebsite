@@ -15,8 +15,8 @@ module.exports = Object.assign( { }, require('./__proto__'), {
 
     getFormData() {
 
-        Object.keys( this.templateData, key => {
-            if( /INPUT|TEXTAREAD/.test( this.templateData[ key ].prop("tagName") ) ) this.formData[ key ] = this.templateData[ key ].val()
+        Object.keys( this.els, key => {
+            if( /INPUT|TEXTAREAD/.test( this.els[ key ].prop("tagName") ) ) this.formData[ key ] = this.els[ key ].val()
         } )
 
         return this.formData
@@ -26,7 +26,7 @@ module.exports = Object.assign( { }, require('./__proto__'), {
 
     onFormFail( error ) {
         console.log( error.stack || error );
-        //this.slurpTemplate( { template: this.templates.serverError( error ), insertion: { $el: this.templateData.buttonRow, method: 'before' } } )
+        //this.slurpTemplate( { template: this.templates.serverError( error ), insertion: { $el: this.els.buttonRow, method: 'before' } } )
     },
 
     onSubmissionResponse() { },
@@ -47,7 +47,7 @@ module.exports = Object.assign( { }, require('./__proto__'), {
 
         var self = this
 
-        this.container.find('input')
+        this.els.container.find('input')
         .on( 'blur', function() {
             var $el = self.$(this),
                 field = self._( self.fields ).find( function( field ) { return field.name === $el.attr('id') } )
@@ -102,10 +102,10 @@ module.exports = Object.assign( { }, require('./__proto__'), {
         
         return Promise.all( this.fields.map( field => {
             return new Promise( ( resolve, reject ) => {
-                var result = field.validate.call(this, this.templateData[ field.name ].val() )                          
+                var result = field.validate.call(this, this.els[ field.name ].val() )                          
                 if( result === false ) {
                     valid = false
-                    this.showError( this.templateData[ field.name ], field.error )                    
+                    this.showError( this.els[ field.name ], field.error )                    
                 }
 
                 resolve()

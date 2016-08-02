@@ -12,9 +12,15 @@ module.exports = new (
         Templates: require('./.TemplateMap'),
         
         initialize() {
+
+            this.contentContainer = this.$('#content')
+
             return Object.assign( this, {
                 views: { },
-                header: Object.create( this.Views.Header, { template: { value: this.Templates.header } } ).constructor()
+                header: Object.create( this.Views.Header, {
+                    insertion: { value: { $el: this.contentContainer, method: 'before' } },
+                    template: { value: this.Templates.header }
+                } ).constructor()
             } )
         },
 
@@ -40,7 +46,7 @@ module.exports = new (
                         Object.create(
                             this.Views[ `${resource.charAt(0).toUpperCase() + resource.slice(1)}` ],
                             {
-                                insertionEl: this.$('#content'),
+                                insertion: { value: { $el: this.contentContainer } },
                                 template: { value: this.Templates[ resource ] },
                                 user: { value: this.User }
                             } )
