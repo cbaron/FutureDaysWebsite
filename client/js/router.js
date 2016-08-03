@@ -42,6 +42,7 @@ module.exports = new (
                 Promise.all( Object.keys( this.views ).map( view => this.views[ view ].hide() ) )
                 .then( () => {
                     if( this.views[ resource ] ) return this.views[ resource ].show()
+                        console.log( this.User )
                     this.views[ resource ] =
                         Object.create(
                             this.Views[ `${resource.charAt(0).toUpperCase() + resource.slice(1)}` ],

@@ -29,6 +29,7 @@ module.exports = Object.create(
         },
 
         constructor() {
+            this.isDev = ( process.env.ENV === 'development' )
             this.Postgres.getTableData()
 
             return this.handler.bind(this)
@@ -75,7 +76,7 @@ module.exports = Object.create(
         html( request, response, path ) {
             response.writeHead( 200 )
             response.end( require('./templates/page')( {
-                isDev: ( process.env.ENV === 'development' ) ? true : false,
+                isDev: this.isDev,
                 title: 'Future Days'
             } ) )
             return Promise.resolve()
