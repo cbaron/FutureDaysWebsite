@@ -1,1 +1,1 @@
-module.exports = ( p ) => `<div>Future Days a</div>`
+module.exports = ( p ) => `<div>Future Days</div>`

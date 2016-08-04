@@ -6,10 +6,10 @@ var fs = require('fs'),
 require('node-env-file')( `${__dirname}/../.env` )
 
 server = require('livereload').createServer( {
-    exclusions: [ '.js' ],
     exts: [ 'gz' ],
+    ignoreExts: [ 'js', 'css' ],
     https: { key: fs.readFileSync( process.env.SSLKEY ), cert: fs.readFileSync( process.env.SSLCERT ) },
     originalPath: `https://${process.env.DOMAIN}.com`
 } )
 
-server.watch( [ `${__dirname}/../static/css`, `${__dirname}/../static/js/bundle.js.gz`, `${__dirname}/../static/js/vendor.js.gz` ] )
+server.watch( `${__dirname}/../static` )
