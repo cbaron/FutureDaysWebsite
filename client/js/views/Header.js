@@ -4,8 +4,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         signoutBtn: { method: 'signout' }
     },
 
-    onUser( user ) {
-        this.user = user
+    onUser() {
         return this
     },
     

@@ -91,15 +91,7 @@ module.exports = Object.assign( { }, require('../../../lib/MyObject'), require('
     renderSubviews() {
         Object.keys( this.Views || [ ] ).forEach( key => {
             if( this.Views[ key ].el ) {
-                this.views[ key ] =
-                    Object.create(
-                        this.Views[ key ].view,
-                        {
-                            insertion: { value: { $el: this.Views[ key ].el, method: 'before' } },
-                            template: { value: this.Views[ key ].template }
-                        }
-                    ).constructor()
-                
+                this.views[ key ] = this.factory.create( key, { insertion: { value: { $el: this.Views[ key ].el, method: 'before' } } } )
                 this.Views[ key ].el.remove()
                 this.Views[ key ].el = undefined
             }

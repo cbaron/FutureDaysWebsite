@@ -7,20 +7,15 @@ module.exports = new (
         
         User: require('./models/User'),
 
-        Views: require('./.ViewMap'),
-        
-        Templates: require('./.TemplateMap'),
-        
+        ViewFactory: require('./factory/View'),
+
         initialize() {
 
             this.contentContainer = this.$('#content')
 
             return Object.assign( this, {
                 views: { },
-                header: Object.create( this.Views.Header, {
-                    insertion: { value: { $el: this.contentContainer, method: 'before' } },
-                    template: { value: this.Templates.header }
-                } ).constructor()
+                header: this.ViewFactory.create( 'header', { insertion: { value: { $el: this.contentContainer, method: 'before' } } } )
             } )
         },
 
@@ -32,8 +27,7 @@ module.exports = new (
 
             this.User.fetched.done( () => {
 
-                this.Views.Header
-                    .onUser( this.User )
+                this.header.onUser()
                     .on( 'signout', () => 
                         Promise.all( Object.keys( this.views ).map( name => this.views[ name ].delete() ) )
                         .then( this.goHome() )
@@ -42,17 +36,9 @@ module.exports = new (
                 Promise.all( Object.keys( this.views ).map( view => this.views[ view ].hide() ) )
                 .then( () => {
                     if( this.views[ resource ] ) return this.views[ resource ].show()
-                        console.log( this.User )
                     this.views[ resource ] =
-                        Object.create(
-                            this.Views[ `${resource.charAt(0).toUpperCase() + resource.slice(1)}` ],
-                            {
-                                insertion: { value: { $el: this.contentContainer } },
-                                template: { value: this.Templates[ resource ] },
-                                user: { value: this.User }
-                            } )
-                        .constructor()
-                        .on( 'route', route => this.navigate( route, { trigger: true } ) )
+                        this.ViewFactory.create( resource, { insertion: { value: { $el: this.contentContainer } } } )
+                            .on( 'route', route => this.navigate( route, { trigger: true } ) )
                 } )
                 .catch( this.Error )
                
