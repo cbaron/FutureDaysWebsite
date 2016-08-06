@@ -50,7 +50,8 @@ module.exports = Object.assign( { }, require('../../../lib/MyObject'), require('
     getTemplateOptions: () => ({}),
 
     handleLogin() {
-        Object.create( require('./Login'), { class: { value: 'input-borderless' } } ).constructor().once( "loggedIn", () => this.onLogin() )
+        this.factory.create( 'login', { insertion: { value: { $el: this.$('#content') } } } )
+            .once( "loggedIn", () => this.onLogin() )
 
         return this
     },
