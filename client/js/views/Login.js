@@ -1,8 +1,12 @@
 module.exports = Object.assign( {}, require('./__proto__'), {
 
+    Views: {
+        form: { opts:
+    },
+
     events: {
-        'registerBtn': { event: 'click', selector: '', method: 'showRegistration' },
-        'loginBtn': { event: 'click', selector: '', method: 'login' }
+        registerBtn: 'click',
+        loginBtn: 'click'
     },
 
     fields: [ {        
@@ -47,7 +51,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
 
     requiresLogin: false,
 
-    showRegistration() { 
+    onRegisterBtnClick() {
 
         var form = this.formInstance,
             email = form.els.email,

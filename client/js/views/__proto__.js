@@ -80,7 +80,6 @@ module.exports = Object.assign( { }, require('../../../lib/MyObject'), require('
     postRender() { return this },
 
     render() {
-        if( !this.insertion ) { console.log( this ) }
         this.slurpTemplate( { template: this.template( this.getTemplateOptions() ), insertion: this.insertion } )
 
         if( this.size ) this.size()
@@ -92,7 +91,15 @@ module.exports = Object.assign( { }, require('../../../lib/MyObject'), require('
     renderSubviews() {
         Object.keys( this.Views || [ ] ).forEach( key => {
             if( this.Views[ key ].el ) {
-                this.views[ key ] = this.factory.create( key, { insertion: { value: { $el: this.Views[ key ].el, method: 'before' } } } )
+                let opts = this.Views[ key ].opts
+                
+                opts = ( opts )
+                    ? typeof opts === "object"
+                        ? opts
+                        : opts()
+                    : {}
+
+                this.views[ key ] = this.factory.create( key, Object.assign( { insertion: { value: { $el: this.Views[ key ].el, method: 'before' } } }, opts ) )
                 this.Views[ key ].el.remove()
                 this.Views[ key ].el = undefined
             }
@@ -107,6 +114,8 @@ module.exports = Object.assign( { }, require('../../../lib/MyObject'), require('
 
     slurpEl( el ) {
         var key = el.attr( this.slurp.attr ) || 'container'
+
+        if( key === 'container' ) el.addClass( this.name )
 
         this.els[ key ] = this.els[ key ] ? this.els[ key ].add( el ) : el
 
