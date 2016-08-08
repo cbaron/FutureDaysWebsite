@@ -1,42 +1,49 @@
 module.exports = Object.assign( {}, require('./__proto__'), {
 
-    cancel: function() {
+    Views: {
+        form: {
+            opts: {
+                fields: {
+                    value: [ {
+                        name: 'name',
+                        type: 'text',
+                        error: 'Name is a required field.',
+                        validate: function( val ) { return val.trim().length > 0 }
+                    }, {
+                        name: 'email',
+                        type: 'text',
+                        error: 'Please enter a valid email address.',
+                        validate: function( val ) { return this.emailRegex.test(val) }
+                    }, {
+                        name: 'password',
+                        type: 'text',
+                        error: 'Passwords must be at least 6 characters long.',
+                        validate: function( val ) { return val.trim().length > 5 }
+                    }, {
+                        label: 'Repeat Password',
+                        name: 'repeatPassword',
+                        type: 'text',
+                        error: 'Passwords must match.',
+                        validate: function( val ) { return this.els.password.val() === val }
+                    } ]
+                },
 
-        var form = this.formInstance,
-            name = form.els.name,
-            email = form.els.email
-        
-        form.removeError( name )
-        name.val('')
+                resource: { value: 'person' }
+            }
+        }
+    },
 
-        form.removeError( email )
-        email.val('')
-        
-        if ( form.els.invalidLoginError ) form.els.invalidLoginError.remove()
-        if ( form.els.serverError ) form.els.serverError.remove()
+    onCancelBtnClick() {
 
-        this.loginInstance[ "registerInstance" ] = this
-        this.hide().then( () => this.loginInstance.show() )
+        this.views.form.clear()
+
+        this.hide().then( () => this.emit('cancelled') )
     },
 
     events: {
-        'registerBtn': { event: 'click', selector: '', method: 'register' },
-        'cancelBtn': { event: 'click', selector: '', method: 'cancel' }
+        cancelBtn: 'click',
+        registerBtn: 'click'
     },
-
-    fields: [ {
-        name: 'name',
-        type: 'text',
-        error: 'Name is a required field.',
-        validate: function( val ) { return this.$.trim(val) !== '' }
-    }, {
-        name: 'email',
-        type: 'text',
-        error: 'Please enter a valid email address.',
-        validate: function( val ) { return this.emailRegex.test(val) }
-    } ],
-
-    Form: require('./Form'),
 
     onSubmissionResponse: function( response ) {
 
@@ -52,28 +59,14 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         
     },
 
-    postRender() {
-        this.formInstance = Object.create( this.Form, {
-            class: { value: this.class },
-            fields: { value: this.fields },
-            horizontal: { value: this.horizontal }, 
-            insertion: { value: { $el: this.els.form } },
-            onSubmissionResponse: { value: this.onSubmissionResponse }
-        } ).constructor()
-        
-        return this
-    },
-
-    requiresLogin: false,
-
-    register() { this.formInstance.submitForm( { resource: "member" } ) },
-    
-    requiresLogin: false,
-
-    template: require('./templates/register'),
-
-    templates: {
-        invalidLoginError: require('./templates/invalidLoginError')
+    onRegisterBtnClick() {
+        this.views.form.submit()
+        .then( response => {
+            if( response.invalid ) return
+            //show static, "success" modal telling them they can login once they have verified their email
+            console.log('Great Job')
+        } )
+        .catch( this.somethingWentWrong )
     }
-
+    
 } )

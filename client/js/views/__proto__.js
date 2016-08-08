@@ -61,7 +61,7 @@ module.exports = Object.assign( { }, require('../../../lib/MyObject'), require('
     },
 
     hide( duration ) {
-        return new Promise( ( resolve, reject ) => this.els.container.hide( duration || 10, resolve ) )
+        return new Promise( resolve => this.els.container.hide( duration || 10, resolve ) )
     },
     
     isHidden() { return this.els.container.css('display') === 'none' },
@@ -165,5 +165,11 @@ module.exports = Object.assign( { }, require('../../../lib/MyObject'), require('
         return true
     },
 
-    requiresLogin: false
+    requiresLogin: false,
+
+    somethingWentWrong( e ) {
+        //show general error Modal
+    },
+
+    //__toDo: html.replace(/>\s+</g,'><')
 } )
