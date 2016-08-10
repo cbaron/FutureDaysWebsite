@@ -45,20 +45,6 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         registerBtn: 'click'
     },
 
-    onSubmissionResponse: function( response ) {
-
-        if ( response.success === false ) {
-            return this.slurpTemplate( { template: this.templates.invalidLoginError( response ), insertion: { $el: this.els.buttonRow, method: 'before' } } )
-        }
-
-        this.user.set( response.result.member )
-
-        this.fields.forEach( field => this.els[ field.name ].val('') )
-
-        this.hide().then( () => this.loginInstance.emit( "loggedIn" ) )
-        
-    },
-
     onRegisterBtnClick() {
         this.views.form.submit()
         .then( response => {

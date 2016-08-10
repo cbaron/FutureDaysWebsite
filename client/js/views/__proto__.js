@@ -109,7 +109,12 @@ module.exports = Object.assign( { }, require('../../../lib/MyObject'), require('
     },
 
     show( duration ) {
-        return new Promise( ( resolve, reject ) => this.els.container.show( duration || 10, () => { this.size(); resolve() } ) )
+        return new Promise( ( resolve, reject ) =>
+            this.els.container.show(
+                duration || 10,
+                () => { if( this.size ) { this.size(); } resolve() }
+            )
+        )
     },
 
     slurpEl( el ) {
@@ -168,7 +173,7 @@ module.exports = Object.assign( { }, require('../../../lib/MyObject'), require('
     requiresLogin: false,
 
     somethingWentWrong( e ) {
-        //show general error Modal
+        console.log( e.stack || e )
     },
 
     //__toDo: html.replace(/>\s+</g,'><')

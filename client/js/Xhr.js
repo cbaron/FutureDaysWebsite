@@ -19,9 +19,10 @@ module.exports = Object.create( Object.assign( {}, require('../../lib/MyObject')
               req.send(null)
             } else {
               /* method is POST */
-              oAjaxReq.open( data.method, `/${data.resource}`, true)
-                req.setRequestHeader("Content-Type", 'text/plain' )
-                req.send( data.data )
+              req.open( data.method, `/${data.resource}`, true)
+              req.setRequestHeader("Accept", 'application/json' )
+              req.setRequestHeader("Content-Type", 'text/plain' )
+              req.send( data.data )
             }
             
             return new Promise( resolve => resolver = resolve )
@@ -35,7 +36,7 @@ module.exports = Object.create( Object.assign( {}, require('../../lib/MyObject')
     },
 
     _factory( data ) {
-        return Object.create( this.Request, { data: { value: data } } ).constructor()
+        return Object.create( this.Request, { } ).constructor( data )
     },
 
     constructor() {
@@ -50,7 +51,7 @@ module.exports = Object.create( Object.assign( {}, require('../../lib/MyObject')
           };
         }
 
-        return this._factory
+        return this._factory.bind(this)
     }
 
 } ), { } ).constructor()

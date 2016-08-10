@@ -1,5 +1,5 @@
 var RESTHandler = {
-    condition( request, path ) { return /application\/json/.test( request.headers.accept ) && ( this.routes.REST[ path[1] ] || this.Postgres.tables[ path[1] ] ) },
+    condition( request, path ) { return /application\/json/.test( request.headers.accept ) && ( this.routes.REST[ path[0] ] || this.Postgres.tables[ path[0] ] ) },
     method: 'rest'
 }
 
@@ -37,13 +37,17 @@ module.exports = Object.create(
             return this.handler.bind(this)
         },
 
-        handleFailure( response, err, code, log ) {
+        handleFailure( response, err, log ) {
 
-            var message = ( process.env.NODE_ENV === "production" ) ? "Unknown Error" : err.stack || err.toString()
+            var message
+
+            if( err.message === "Handled" ) return
+            
+            message = process.env.NODE_ENV === "production" ? "Unknown Error" : err.stack || err.toString()
 
             if( log ) this.Error( err )
 
-            response.writeHead( code || 500, {
+            response.writeHead( err.statusCode || 500, {
                 "Content-Length": Buffer.byteLength( message ),
                 'Content-Type': 'text/plain',
                 'Cache-Control': 'no-cache, no-store, must-revalidate'
@@ -55,24 +59,25 @@ module.exports = Object.create(
         handler( request, response ) {
             var parsedUrl,
                 path,
-                routeFound
+                routeFound,
+                notFound = { body: "Not Found", statusCode: 404 }
 
-            if( ! this.resources[ request.method ] ) return this.handleFailure( response, new Error("Not Found"), 404, false )
+            if( ! this.resources[ request.method ] ) return this.handleFailure( response, notFound, false )
 
             request.setEncoding('utf8')
 
             parsedUrl = require('url').parse( request.url )
-            path = parsedUrl.pathname.split("/")
+            path = parsedUrl.pathname.split("/").slice(1)
 
             routeFound = this.resources[ request.method ].find( resource => {
                 if( ! resource.condition.call( this, request, path ) ) return false
             
                 this[ resource.method ]( request, response, path, parsedUrl )
-                .catch( err => this.handleFailure( response, err, 500, true ) )
+                .catch( err => this.handleFailure( response, err, true ) )
                 return true
             } )
 
-            if( ! routeFound ) return this.handleFailure( response, new Error("Not Found"), 404, false )
+            if( ! routeFound ) return this.handleFailure( response, { body: "Not Found", statusCode: 404 }, false )
         },
 
         html( request, response, path ) {
@@ -84,14 +89,14 @@ module.exports = Object.create(
             return Promise.resolve()
         },
 
-        hyper( request, response, path ) { return this.applyResource( request, response, path, parsedUrl, './resources/hyper', path[1] || 'index' ) },
+        hyper( request, response, path ) { return this.applyResource( request, response, path, parsedUrl, './resources/hyper', path[0] || 'index' ) },
 
         resources: {
             "DELETE": [ RESTHandler ],
 
             "GET": [
                 {
-                    condition: ( request, path ) => ( path[1] === "static" ) || path[1] === "favicon.ico",
+                    condition: ( request, path ) => ( path[0] === "static" ) || path[0] === "favicon.ico",
                     method: 'static'
                 }, {
                     condition: ( request, path ) => /text\/html/.test( request.headers.accept ),
@@ -110,11 +115,11 @@ module.exports = Object.create(
             "PUT": [ RESTHandler ],
         },
 
-        rest( request, response, path, parsedUrl ) { return this.applyResource( request, response, path, parsedUrl, './resources', path[1] ) },
+        rest( request, response, path, parsedUrl ) { return this.applyResource( request, response, path, parsedUrl, './resources', path[0] ) },
 
         static( request, response, path ) {
             var fileName = path.pop()
-                filePath = `${__dirname}${path.join('/')}/${fileName}`
+                filePath = `${__dirname}/${path.join('/')}/${fileName}`
            
             return this.P( this.FS.stat, [ filePath ] )
             .then( ( [ stat ] ) => {
@@ -134,5 +139,5 @@ module.exports = Object.create(
             } )
         }
 
-    } ), { routes: { value: { REST: { user: true } } } }
+    } ), { routes: { value: { REST: { user: true, verify: true } } } }
 ).constructor()

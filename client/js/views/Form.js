@@ -20,7 +20,7 @@ module.exports = Object.assign( { }, require('./__proto__'), {
     getFormData() {
         var data = { }
 
-        Object.keys( this.els, key => {
+        Object.keys( this.els ).forEach( key => {
             if( /INPUT|TEXTAREA|SELECT/.test( this.els[ key ].prop("tagName") ) ) data[ key ] = this.els[ key ].val()
         } )
 
@@ -38,26 +38,22 @@ module.exports = Object.assign( { }, require('./__proto__'), {
         return this.Xhr( {
             data: JSON.stringify( this.getFormData() ),
             method: 'post',
-            resource: 'person'
+            resource: this.resource
         } )
     },
 
     postRender() {
 
-        var self = this
-
-        this.els.container.find('input')
-        .on( 'blur', function() {
-            var $el = self.$(this),
-                field = self._( self.fields ).find( function( field ) { return field.name === $el.attr('id') } )
-                  
-            return new Promise( ( resolve, reject ) => resolve( field.validate.call( self, $el.val() ) ) )
-            .then( valid => {
-                if( valid ) { self.showValid( $el ) }
-                else { self.showError( $el, field.error ) }
-            } )
+        this.fields.forEach( field => {
+            var $el = this.els[ field.name ]
+            $el.on( 'blur', () => {
+                var rv = field.validate.call( this, $el.val() )
+                if( typeof rv === "boolean" ) return rv ? this.showValid($el) : this.showError( $el, field.error )
+                rv.then( () => this.showValid($el) )
+                 .catch( () => this.showError( $el, field.error ) )
+             } )
+            .on( 'focus', () => this.removeError( $el ) )
         } )
-        .on( 'focus', function() { self.removeError( self.$(this) ) } )
 
         return this
     },
@@ -81,15 +77,10 @@ module.exports = Object.assign( { }, require('./__proto__'), {
         $el.siblings('.feedback').remove()
     },
 
-    //undelete disabled member -- error submitted modal
-    //after notification is sent to ios, message does not show up in application until they relog --
-    //broadcast image messages ( only some people getting message )
-    //update prod
-    //update rackspace
-
     submit() {
         return this.validate()
         .then( result => result === false ? Promise.resolve( { invalid: true } ) : this.postForm() )
+        .catch( this.somethingWentWrong )
     },
 
     template: require('./templates/form'),
@@ -99,21 +90,23 @@ module.exports = Object.assign( { }, require('./__proto__'), {
     },
 
     validate() {
-        var valid = true
-        
-        return Promise.all( this.fields.map( field => {
-            return new Promise( ( resolve, reject ) => {
-                var result = field.validate.call(this, this.els[ field.name ].val() )                          
-                if( result === false ) {
-                    valid = false
-                    this.showError( this.els[ field.name ], field.error )                    
-                }
+        var valid = true,
+            promises = [ ]
+                
+        this.fields.forEach( field => {
+            var $el = this.els[ field.name ],
+                rv = field.validate.call( this, $el.val() )
+            if( typeof rv === "boolean" ) {
+                if( rv ) { this.showValid($el) } else { this.showError( $el, field.error ); valid = false }
+            } else {
+                promises.push(
+                    rv.then( () => Promise.resolve( this.showValid($el) ) )
+                     .catch( () => { this.showError( $el, field.error ); return Promise.resolve( valid = false ) } )
+                )
+            }
+        } )
 
-                resolve()
-            } )
-        } ) )
-        .then( () => valid )
-        .catch( e => { console.log( e.stack || e ); return false } )
+        return Promise.all( promises ).then( () => valid )
     }
 
 } )

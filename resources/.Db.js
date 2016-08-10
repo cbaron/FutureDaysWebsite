@@ -1,6 +1,6 @@
-module.exports = {
+module.exports = Object.create( {
 
-    Postgres: require('../../dal/Postgres'),
+    Postgres: require('../dal/Postgres'),
 
     apply( resource ) { return this[ resource.request.method ]( resource ) },
 
@@ -31,11 +31,14 @@ module.exports = {
     POST( resource ) {
         var bodyKeys = Object.keys( resource.body ),
             name = resource.path[1]
-            
+               
         return this.Postgres.query(
-            `INSERT INTO ${name} ( ${bodyKeys.join(', ')} ) VALUES ( ${ bodyKeys.map( ( key, i ) => "$"+(i+1) ).join(', ') } ) RETURNING ${this._getColumns(name)}`,
+            `INSERT INTO ${name} ( ${this._wrapKeys(bodyKeys)} ) VALUES ( ${ bodyKeys.map( ( key, i ) => "$"+(i+1) ).join(', ') } ) RETURNING ${this._getColumns(name)}`,
             bodyKeys.map( key => resource.body[key] ) )
     },
 
-    _getColumns( name ) { this.Postgres.tables[ name ].columns.map( column => `${name}.${column.name}` ).join(', ') },
-}
+    _getColumns( name ) { return this.Postgres.tables[ name ].columns.map( column => `${name}."${column.name}"` ).join(', ') },
+
+    _wrapKeys: keys => keys.map( key => `"${key}"` ).join(', ')
+
+}, { } )

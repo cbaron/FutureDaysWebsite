@@ -1,20 +1,20 @@
-module.exports = {
+module.exports = Object.create( {
 
     DELETE( resource ) {
-        if( resource.path.length !== 3 || Number.isNaN( parseInt( resource.path[2], 10 ) ) ) this.throwInvalid()
+        if( resource.path.length !== 2 || Number.isNaN( parseInt( resource.path[1], 10 ) ) ) this.throwInvalid()
 
         return this.parseSignature( resource, this.parseCookies( resource.request.headers.cookie ) )
     },
 
     GET( resource ) {
-        if( resource.path.length > 2 && Number.isNaN( parseInt( resource.path[2], 10 ) ) ) this.throwInvalid()
+        if( resource.path.length > 1 && Number.isNaN( parseInt( resource.path[1], 10 ) ) ) this.throwInvalid()
         
         return this.parseSignature( resource, this.parseCookies( resource.request.headers.cookie ) )
     },
 
     PATCH( resource ) {
 
-        if( resource.path.length !== 3 || Number.isNaN( parseInt( resource.path[2], 10 ) ) ) this.throwInvalid()
+        if( resource.path.length !== 2 || Number.isNaN( parseInt( resource.path[1], 10 ) ) ) this.throwInvalid()
 
         return this.slurpBody( resource ).then( () => this.parseSignature( resource, this.parseCookies( resource.request.headers.cookie ) ) )
     },
@@ -22,7 +22,7 @@ module.exports = {
     POST( resource ) {
         if( /(auth)/.test(resource.path[1]) ) return
         
-        if( this.path.length !== 2 ) this.throwInvalid()
+        if( resource.path.length !== 1 ) this.throwInvalid()
         
         return this.slurpBody( resource ).then( () => this.parseSignature( resource, this.parseCookies( resource.request.headers.cookie ) ) )
     },
@@ -64,7 +64,7 @@ module.exports = {
             var body = ''
             
             resource.request.on( "data", data => {
-                body += someData
+                body += data
 
                 if( body.length > 1e10 ) {
                     response.request.connection.destroy()
@@ -73,7 +73,7 @@ module.exports = {
             } )
 
             resource.request.on( "end", () => {
-                try { body = JSON.parse( body ) }
+                try { resource.body = JSON.parse( body ) }
                 catch( e ) { reject( 'Unable to parse request : ' + e ) }
                 resolve()
             } )
@@ -81,4 +81,4 @@ module.exports = {
     },
 
     throwInvalid() { throw new Error("Invalid request") }
-}
+}, { } )

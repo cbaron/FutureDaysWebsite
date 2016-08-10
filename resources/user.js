@@ -1,11 +1,11 @@
 module.exports = Object.assign( { }, require('./__proto__'), {
 
-    DELETE: [ this.notFound ],
+    DELETE: [ function() { return this.notFound() } ],
 
-    GET() { return [ this.Validate.apply.bind( this.Validate ), function( resource ) { resource.respond( { body: resource.user } ) } ] },
+    GET: [ function() { return this.Validate.apply( this ) }, function() { return this.respond( { body: this.user } ) } ],
 
-    PATCH: [ function() { this.notFound() } ],
+    PATCH: [ function() { return this.notFound() }, ],
 
-    POST: [ function() { this.notFound() } ]
+    POST: [ function() { return this.notFound() } ]
 
 } )

@@ -1,4 +1,4 @@
-module.exports = {
+module.exports = Object.create( {
 
     apply( resource ) { return this[ resource.request.method ]( resource ) },
 
@@ -23,4 +23,4 @@ module.exports = {
     PATCH( resource ) { [ 'id' ].forEach( key => { if( resource.body[ key ] ) delete resource.body[key] } ) },
 
     POST(){}   
-}
+}, { } )
