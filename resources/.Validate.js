@@ -20,14 +20,25 @@ module.exports = Object.create( {
     },
 
     POST( resource ) {
-        if( /(auth)/.test(resource.path[1]) ) return
+        var name = resource.path[0]
+        
+        if( /(auth)/.test( name ) ) return
         
         if( resource.path.length !== 1 ) this.throwInvalid()
         
-        return this.slurpBody( resource ).then( () => this.parseSignature( resource, this.parseCookies( resource.request.headers.cookie ) ) )
+        return this.slurpBody( resource )
+            .then( () => {
+                var neededKey
+                resource.Postgres.tables[ name ].columns.forEach( column => {
+                    if( resource.body[ column.name ] === undefined && (!column.isNullable) ) { neededKey = column.name; break; }
+                } )
+                if( neededKey ) return resource.respond( { stopChain: true, code: 500, body: { error: `${neededKey} required` } } )
+                return Promise.resolve()
+            } )
+            .then( () => this.parseSignature( resource, this.parseCookies( resource.request.headers.cookie ) ) )
     },
     
-    apply( resource ) { return this[ resource.request.method ]( resource ) },
+    apply( p ) { return this[ resource.request.method ]( resource ) },
 
     parseCookies( cookies ) {
         var rv

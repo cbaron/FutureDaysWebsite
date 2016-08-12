@@ -2,7 +2,21 @@ module.exports = Object.assign( { }, require('./__proto__'), {
 
     bcrypt: require('bcrypt'),
 
+    getVerificationToken( id, email ) {
+        return new Promise( ( resolve, reject ) => {
+            require('jws').createSign( {
+                header: { "alg": "HS256", "typ": "JWT" },
+                payload: JSON.stringify( { id, email } ),
+                privateKey: process.env.JWS_SECRET
+            } )
+            .on( 'done', resolve )
+            .on( 'error', reject )
+        } )
+    },
+
     email: require('../lib/Email'),
+
+    jws: require('jws'),
 
     POST: [
         function() {
@@ -22,8 +36,8 @@ module.exports = Object.assign( { }, require('./__proto__'), {
             .then( ( [ hash ] ) => Promise.resolve( this.body.password = hash ) )
             .then( () => this.Db.apply(this) )
             .then( result => 
-                this.P( this.bcrypt.hash, [ this.body.email, parseInt( process.env.SALT ) ] )
-                .then( ( [ hash ] ) =>
+                this.getVerificationToken()
+                .then( token =>
                     this.email.send( {
                         to: this.body.email,
                         from: process.env.EMAIL_FROM,
@@ -40,3 +54,6 @@ module.exports = Object.assign( { }, require('./__proto__'), {
         }
     ]
 } )
+
+
+

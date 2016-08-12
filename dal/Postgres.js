@@ -18,7 +18,11 @@ module.exports = Object.create( Object.assign( {}, require('../lib/MyObject').pr
         this.querySync( this._queries.selectAllTables() ).forEach( row => {
              var columnResult = this.querySync( this._queries.selectTableColumns( row.table_name ) )
              this.tables[ row.table_name ] =
-                { columns: columnResult.map( columnRow => ( { name: columnRow.column_name, range: this.dataTypeToRange[columnRow.data_type] } ) ) } 
+                { columns: columnResult.map( columnRow => ( {
+                    isNullable: columnRow.is_nullable,
+                    name: columnRow.column_name,
+                    range: this.dataTypeToRange[columnRow.data_type]
+                } ) ) } 
         } )
 
         this.querySync( this._queries.selectForeignKeys() ).forEach( row => {
@@ -82,7 +86,7 @@ module.exports = Object.create( Object.assign( {}, require('../lib/MyObject').pr
 
         selectTableColumns( tableName ) {
             return [
-                'SELECT column_name, data_type',
+                'SELECT column_name, data_type, is_nullable',
                 'FROM information_schema.columns',
                 `WHERE table_name = '${tableName}'`
             ].join(' ')
