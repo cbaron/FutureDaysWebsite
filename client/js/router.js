@@ -24,6 +24,8 @@ module.exports = new (
         handler( resource ) {
 
             if( !resource ) return this.goHome()
+            
+            resource = resource.split('/').shift()
 
             this.User.fetched.done( () => {
 

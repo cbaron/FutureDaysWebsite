@@ -7,5 +7,6 @@ module.exports={
 	List: require('./views/List'),
 	Login: require('./views/Login'),
 	MyView: require('./views/MyView'),
-	Register: require('./views/Register')
+	Register: require('./views/Register'),
+	Verify: require('./views/Verify')
 }

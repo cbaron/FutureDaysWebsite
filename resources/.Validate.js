@@ -57,6 +57,7 @@ module.exports = Object.create( {
     },
 
     parseSignature( resource, signature ) {
+        console.log(signature)
         return new Promise( ( resolve, reject ) => {
             if( ! signature ) { resource.user = { }; return resolve() }
             require('jws').createVerify( {
@@ -65,6 +66,7 @@ module.exports = Object.create( {
                 signature,
             } ).on( 'done', ( verified, obj ) => {
                 if( ! verified ) reject( 'Invalid Signature' )
+                    console.log( obj )
                 resource.user = obj.payload
                 resolve()
             } ).on( 'error', e => { resource.user = { }; return resolve() } )
