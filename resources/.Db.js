@@ -4,12 +4,12 @@ module.exports = Object.create( {
 
     apply( resource ) { return this[ resource.request.method ]( resource ) },
 
-    DELETE() { return this.Postgres.query( `DELETE FROM ${resource.path[1]} WHERE id = ${resource.path[2]} RETURNING id` ) },
+    DELETE() { return this.Postgres.query( `DELETE FROM ${resource.path[0]} WHERE id = ${resource.path[1]} RETURNING id` ) },
 
     GET( resource ) {
         var paramCtr = 1,
-            name = resource.path[1],
-            queryKeys = ( resource.path.length > 2 ) ? { id: resource.path[2] } : Object.keys( resource.query ),
+            name = resource.path[0],
+            queryKeys = ( resource.path.length > 1 ) ? { id: resource.path[1] } : Object.keys( resource.query ),
             where = ( queryKeys.length ) ? 'WHERE' : ''
 
         queryKeys.forEach( key => where += ` ${name}.${key} = $${paramCtr++}` )
@@ -19,18 +19,18 @@ module.exports = Object.create( {
 
     PATCH( resource ) { 
         var paramCtr = 1,
-            name = resource.path[1],
+            name = resource.path[0],
             bodyKeys = Object.keys( resource.body ),
             set = 'SET ' + bodyKeys.map( key => `${key} = $${paramCtr++}` ).join(', ')
 
         return this.Postgres.query(
             `UPDATE ${name} ${set} WHERE id = ${paramCtr} RETURNING ${this._getColumns(name)}`,
-            bodyKeys.map( key => this.body[key] ).concat( resource.path[2] ) )
+            bodyKeys.map( key => this.body[key] ).concat( resource.path[1] ) )
     },
 
     POST( resource ) {
         var bodyKeys = Object.keys( resource.body ),
-            name = resource.path[1]
+            name = resource.path[0]
                
         return this.Postgres.query(
             `INSERT INTO ${name} ( ${this._wrapKeys(bodyKeys)} ) VALUES ( ${ bodyKeys.map( ( key, i ) => "$"+(i+1) ).join(', ') } ) RETURNING ${this._getColumns(name)}`,

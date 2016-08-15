@@ -29,8 +29,9 @@ module.exports = Object.create( {
         return this.slurpBody( resource )
             .then( () => {
                 var neededKey
-                resource.Postgres.tables[ name ].columns.forEach( column => {
-                    if( resource.body[ column.name ] === undefined && (!column.isNullable) ) { neededKey = column.name; break; }
+                resource.Postgres.tables[ name ].columns.every( column => {
+                    if( resource.body[ column.name ] === undefined && (!column.isNullable) ) { neededKey = column.name; return false }
+                    return true
                 } )
                 if( neededKey ) return resource.respond( { stopChain: true, code: 500, body: { error: `${neededKey} required` } } )
                 return Promise.resolve()
@@ -38,7 +39,7 @@ module.exports = Object.create( {
             .then( () => this.parseSignature( resource, this.parseCookies( resource.request.headers.cookie ) ) )
     },
     
-    apply( p ) { return this[ resource.request.method ]( resource ) },
+    apply( resource ) { return this[ resource.request.method ]( resource ) },
 
     parseCookies( cookies ) {
         var rv

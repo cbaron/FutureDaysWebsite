@@ -45,7 +45,7 @@ module.exports = Object.assign( { }, require('./__proto__'), {
                         body:
                             `${this.body.name}, welcome to ${process.env.NAME}! ` +
                             `Click the link to verify your email : ` +
-                            `https://${process.env.DOMAIN}:${process.env.PORT}/verify/${result.rows[0].id}/${hash}`
+                            `https://${process.env.DOMAIN}:${process.env.PORT}/verify/${result.rows[0].id}/${token}`
 
                     } )
                 )
