@@ -1,10 +1,18 @@
 module.exports = Object.assign( {}, require('./__proto__'), {
 
     events: {
-        signoutBtn: { method: 'signout' }
+        'links': { event: 'click', selector: 'li', method: 'navigate' },
+        'signoutBtn': { method: 'signout' }
     },
 
     insertionMethod: 'before',
+
+    navigate( e ) {
+        var id = this.$( e.currentTarget ).attr( 'data-id' )
+        console.log(id)
+        console.log(this)        
+        this.router.navigate( id, { trigger: true } )
+    },
 
     onUser( user ) {
         this.user = user

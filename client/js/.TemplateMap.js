@@ -1,4 +1,5 @@
 module.exports={
+	contact: require('./views/templates/contact'),
 	demo: require('./views/templates/demo'),
 	fieldError: require('./views/templates/fieldError'),
 	form: require('./views/templates/form'),
@@ -7,5 +8,8 @@ module.exports={
 	invalidLoginError: require('./views/templates/invalidLoginError'),
 	list: require('./views/templates/list'),
 	login: require('./views/templates/login'),
-	register: require('./views/templates/register')
+	register: require('./views/templates/register'),
+	services: require('./views/templates/services'),
+	sidebar: require('./views/templates/sidebar'),
+	staff: require('./views/templates/staff')
 }

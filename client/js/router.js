@@ -19,7 +19,8 @@ module.exports = new (
         goHome() { this.navigate( 'home', { trigger: true } ) },
 
         handler( resource ) {
-
+            console.log(resource)
+            
             if( !resource ) return this.goHome()
 
             this.User.fetched.done( () => {
@@ -30,6 +31,11 @@ module.exports = new (
                         Promise.all( Object.keys( this.views ).map( name => this.views[ name ].delete() ) )
                         .then( this.goHome() )
                     )
+
+                if( resource === 'home' ) {
+                    console.log(this.header)
+                    this.header.hide()
+                }
                 
                 Promise.all( Object.keys( this.views ).map( view => this.views[ view ].hide() ) )
                 .then( () => {

@@ -1,0 +1,31 @@
+.site-header
+    display: flex
+    align-items: center
+    width: auto
+    background-color: black
+
+    .logo
+        font-family: 'Michroma'
+        color: #30746a
+        font-size: 1.3rem
+        font-weight: bold
+        padding: .75rem 1rem
+        margin-right: 1rem
+        cursor: pointer     
+
+    .nav-links        
+        display: flex       
+        align-items: center
+
+        li
+            color: #fbfbfb
+            font-size: 1.1rem
+            padding: .85rem 1rem
+            border-left: 2px solid #30746a
+            &:last-child
+                border-right: 2px solid #30746a
+            transition: all .2s ease-out
+            &:hover
+                cursor: pointer
+                background-color: #30746a
+

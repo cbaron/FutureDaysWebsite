@@ -65,7 +65,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         this.hide().then( () => ( this.registerInstance ) ? this.registerInstance.show()
             : Object.create( this.Register, {
                 loginInstance: { value: this },
-                class: { value: 'input-flat' } 
+                class: { value: 'input-borderless' } 
             } ).constructor() )
 
     },

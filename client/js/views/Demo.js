@@ -43,8 +43,11 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     List: require('./List'),
     Login: require('./Login'),
     Register: require('./Register'),
+    Sidebar: require('./Sidebar'),
 
     postRender() {
+
+        this.sidebar = Object.create( this.Sidebar, { container: { value: this.templateData.sidebar } } ).constructor()
         
         this.listInstance = Object.create( this.List, { container: { value: this.templateData.list } } ).constructor()
 
