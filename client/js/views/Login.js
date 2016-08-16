@@ -15,7 +15,8 @@ module.exports = Object.assign( {}, require('./__proto__'), {
                         error: 'Passwords must be at least 6 characters long.',
                         validate: val => val.length >= 6
                     } ]
-                }
+                },
+                resource: { value: 'auth' }
             }
         }
     },
@@ -35,6 +36,10 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         require('../models/User').set( response )
         this.emit( "loggedIn" )
         this.hide()
+    },
+
+    onLoginBtnClick() {
+        this.views.form.submit()
     },
 
     onRegisterBtnClick() {

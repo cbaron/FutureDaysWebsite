@@ -139,5 +139,5 @@ module.exports = Object.create(
             } )
         }
 
-    } ), { routes: { value: { REST: { user: true, verify: true } } } }
+    } ), { routes: { value: { REST: { auth: true, user: true, verify: true } } } }
 ).constructor()

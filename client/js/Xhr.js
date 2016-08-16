@@ -7,22 +7,18 @@ module.exports = Object.create( Object.assign( {}, require('../../lib/MyObject')
                 resolver
 
             req.onload = function() {
-                console.log( this )
-                console.log(this.responseText);
-                /* you can get the serialized data through the "submittedData" custom property: */
-                console.log(JSON.stringify(this.submittedData));
-                resolver()
+                resolver(JSON.parse(this.response))
             }
 
             if( data.method === "get" ) {
-              req.open( data.method, `/${data.resource}?${data.qs}`, true )
-              req.send(null)
+                let qs = data.qs ? `?${data.qs}` : '' 
+                req.open( data.method, `/${data.resource}${qs}` )
+                this.setHeaders(req)
+                req.send(null)
             } else {
-              /* method is POST */
-              req.open( data.method, `/${data.resource}`, true)
-              req.setRequestHeader("Accept", 'application/json' )
-              req.setRequestHeader("Content-Type", 'text/plain' )
-              req.send( data.data )
+                req.open( data.method, `/${data.resource}`, true)
+                this.setHeaders(req)
+                req.send( data.data )
             }
             
             return new Promise( resolve => resolver = resolve )
@@ -33,6 +29,11 @@ module.exports = Object.create( Object.assign( {}, require('../../lib/MyObject')
             /* "4\3\7 - Einstein said E=mc2" ----> "4\\3\\7\ -\ Einstein\ said\ E\=mc2" */
             return sText.replace(/[\s\=\\]/g, "\\$&");
         },
+
+        setHeaders( req ) {
+            req.setRequestHeader("Accept", 'application/json' )
+            req.setRequestHeader("Content-Type", 'text/plain' )
+        }
     },
 
     _factory( data ) {

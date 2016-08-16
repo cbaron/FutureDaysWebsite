@@ -29,6 +29,7 @@ module.exports = Object.create( {
         return this.slurpBody( resource )
             .then( () => {
                 var neededKey
+                if( ! resource.Postgres.tables[ name ] ) return Promise.resolve()
                 resource.Postgres.tables[ name ].columns.every( column => {
                     if( resource.body[ column.name ] === undefined && (!column.isNullable) ) { neededKey = column.name; return false }
                     return true
@@ -57,7 +58,6 @@ module.exports = Object.create( {
     },
 
     parseSignature( resource, signature ) {
-        console.log(signature)
         return new Promise( ( resolve, reject ) => {
             if( ! signature ) { resource.user = { }; return resolve() }
             require('jws').createVerify( {

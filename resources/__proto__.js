@@ -1,4 +1,6 @@
 module.exports = Object.assign( { }, require('../lib/MyObject'), {
+    
+    JWS: require('jws'),
 
     Context: require('./.Context'),
     
@@ -27,18 +29,6 @@ module.exports = Object.assign( { }, require('../lib/MyObject'), {
         return this
     },
 
-    createCookie() {
-        return new Promise( ( resolve, reject ) => {
-            require('jws').createSign( {
-                header: { "alg": "HS256", "typ": "JWT" },
-                payload: JSON.stringify( this.user ),
-                privateKey: process.env.JWS_SECRET,
-            } )
-            .on( 'done', signature => resolve( signature ) )
-            .on( 'error', e => { this.user = { }; return resolve() } )
-        } )
-    },
-
     end( data ) {
         return new Promise( resolve => {
             data.body = JSON.stringify( data.body )
@@ -55,6 +45,18 @@ module.exports = Object.assign( { }, require('../lib/MyObject'), {
         'Content-Type': 'application/json',
         'Cache-Control': 'no-cache, no-store, must-revalidate',
         'Keep-Alive': 'timeout=50, max=100'
+    },
+
+    makeToken( obj ) {
+        return new Promise( ( resolve, reject ) =>
+            this.JWS.createSign( {
+                header: { "alg": "HS256", "typ": "JWT" },
+                payload: JSON.stringify( obj ),
+                privateKey: process.env.JWS_SECRET
+            } )
+            .on( 'done', resolve )
+            .on( 'error', reject )
+        )
     },
 
     notFound( stopChain=false ) { return this.respond( { stopChain, code: 404 } ) },
