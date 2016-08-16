@@ -18,9 +18,9 @@ module.exports = Object.assign( { }, require('../../../lib/MyObject'), require('
 
         if( this.size ) this.$(window).resize( this._.throttle( () => this.size(), 500 ) )
 
-        if( this.requiresLogin && !this.user.id ) return this.handleLogin()
+        if( this.requiresLogin && (!this.user.data || !this.user.data.id ) ) return this.handleLogin()
 
-        if( this.user && this.user.id && this.requiresRole && !this.hasPrivileges() ) return this.showNoAccess()
+        if( this.user.data && this.user.data.id && this.requiresRole && !this.hasPrivileges() ) return this.showNoAccess()
         
         return Object.assign( this, { els: { }, slurp: { attr: 'data-js', view: 'data-view' }, views: { } } ).render()
     },
@@ -50,7 +50,8 @@ module.exports = Object.assign( { }, require('../../../lib/MyObject'), require('
     getTemplateOptions: () => ({}),
 
     handleLogin() {
-        Object.create( require('./Login'), { class: { value: 'input-borderless' } } ).constructor().once( "loggedIn", () => this.onLogin() )
+        this.factory.create( 'login', { insertion: { value: { $el: this.$('#content') } } } )
+            .once( "loggedIn", () => this.onLogin() )
 
         return this
     },
@@ -60,7 +61,7 @@ module.exports = Object.assign( { }, require('../../../lib/MyObject'), require('
     },
 
     hide( duration ) {
-        return new Promise( ( resolve, reject ) => this.els.container.hide( duration || 10, resolve ) )
+        return new Promise( resolve => this.els.container.hide( duration || 10, resolve ) )
     },
     
     isHidden() { return this.els.container.css('display') === 'none' },
@@ -79,7 +80,6 @@ module.exports = Object.assign( { }, require('../../../lib/MyObject'), require('
     postRender() { return this },
 
     render() {
-        if( !this.insertion ) { console.log( this ) }
         this.slurpTemplate( { template: this.template( this.getTemplateOptions() ), insertion: this.insertion } )
 
         if( this.size ) this.size()
@@ -91,7 +91,15 @@ module.exports = Object.assign( { }, require('../../../lib/MyObject'), require('
     renderSubviews() {
         Object.keys( this.Views || [ ] ).forEach( key => {
             if( this.Views[ key ].el ) {
-                this.views[ key ] = this.factory.create( key, { insertion: { value: { $el: this.Views[ key ].el, method: 'before' } } } )
+                let opts = this.Views[ key ].opts
+                
+                opts = ( opts )
+                    ? typeof opts === "object"
+                        ? opts
+                        : opts()
+                    : {}
+
+                this.views[ key ] = this.factory.create( key, Object.assign( { insertion: { value: { $el: this.Views[ key ].el, method: 'before' } } }, opts ) )
                 this.Views[ key ].el.remove()
                 this.Views[ key ].el = undefined
             }
@@ -101,11 +109,18 @@ module.exports = Object.assign( { }, require('../../../lib/MyObject'), require('
     },
 
     show( duration ) {
-        return new Promise( ( resolve, reject ) => this.els.container.show( duration || 10, () => { this.size(); resolve() } ) )
+        return new Promise( ( resolve, reject ) =>
+            this.els.container.show(
+                duration || 10,
+                () => { if( this.size ) { this.size(); } resolve() }
+            )
+        )
     },
 
     slurpEl( el ) {
         var key = el.attr( this.slurp.attr ) || 'container'
+
+        if( key === 'container' ) el.addClass( this.name )
 
         this.els[ key ] = this.els[ key ] ? this.els[ key ].add( el ) : el
 
@@ -155,5 +170,11 @@ module.exports = Object.assign( { }, require('../../../lib/MyObject'), require('
         return true
     },
 
-    requiresLogin: false
+    requiresLogin: false,
+
+    somethingWentWrong( e ) {
+        console.log( e.stack || e )
+    },
+
+    //__toDo: html.replace(/>\s+</g,'><')
 } )

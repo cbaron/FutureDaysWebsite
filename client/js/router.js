@@ -24,8 +24,10 @@ module.exports = new (
         handler( resource ) {
 
             if( !resource ) return this.goHome()
+            
+            resource = resource.split('/').shift()
 
-            this.User.fetched.done( () => {
+            this.User.get().then( () => {
 
                 this.header.onUser()
                     .on( 'signout', () => 
@@ -42,7 +44,7 @@ module.exports = new (
                 } )
                 .catch( this.Error )
                
-            } ).fail( this.Error )
+            } ).catch( this.Error )
             
         },
 

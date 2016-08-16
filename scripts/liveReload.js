@@ -5,7 +5,7 @@ var fs = require('fs'),
 
 require('node-env-file')( `${__dirname}/../.env` )
 
-server = require('livereload').createServer( {
+server = require('../lib/livereload').createServer( {
     exts: [ 'gz' ],
     ignoreExts: [ 'js', 'css' ],
     https: { key: fs.readFileSync( process.env.SSLKEY ), cert: fs.readFileSync( process.env.SSLCERT ) },

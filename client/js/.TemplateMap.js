@@ -8,5 +8,6 @@ module.exports={
 	invalidLoginError: require('./views/templates/invalidLoginError'),
 	list: require('./views/templates/list'),
 	login: require('./views/templates/login'),
-	register: require('./views/templates/register')
+	register: require('./views/templates/register'),
+	verify: require('./views/templates/verify')
 }

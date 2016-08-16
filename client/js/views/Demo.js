@@ -1,9 +1,9 @@
 module.exports = Object.assign( {}, require('./__proto__'), {
 
     Views: {
-        list: { view: require('./List'), template: require('./templates/list')  },
-        login: { view: require('./Login'), template: require('./templates/login')  },
-        register: { view: require('./Register'), template: require('./templates/register')  }
+        list: { },
+        login: { },
+        register: { }
     },
 
     /*fields: [ {

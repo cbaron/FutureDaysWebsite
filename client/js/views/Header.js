@@ -12,7 +12,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
 
         document.cookie = 'patchworkjwt=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
 
-        this.user.clear()
+        this.user.data = { }
 
         this.emit('signout')
 

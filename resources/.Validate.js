@@ -1,30 +1,43 @@
-module.exports = {
+module.exports = Object.create( {
 
     DELETE( resource ) {
-        if( resource.path.length !== 3 || Number.isNaN( parseInt( resource.path[2], 10 ) ) ) this.throwInvalid()
+        if( resource.path.length !== 2 || Number.isNaN( parseInt( resource.path[1], 10 ) ) ) this.throwInvalid()
 
         return this.parseSignature( resource, this.parseCookies( resource.request.headers.cookie ) )
     },
 
     GET( resource ) {
-        if( resource.path.length > 2 && Number.isNaN( parseInt( resource.path[2], 10 ) ) ) this.throwInvalid()
+        if( resource.path.length > 1 && Number.isNaN( parseInt( resource.path[1], 10 ) ) ) this.throwInvalid()
         
         return this.parseSignature( resource, this.parseCookies( resource.request.headers.cookie ) )
     },
 
     PATCH( resource ) {
 
-        if( resource.path.length !== 3 || Number.isNaN( parseInt( resource.path[2], 10 ) ) ) this.throwInvalid()
+        if( resource.path.length !== 2 || Number.isNaN( parseInt( resource.path[1], 10 ) ) ) this.throwInvalid()
 
         return this.slurpBody( resource ).then( () => this.parseSignature( resource, this.parseCookies( resource.request.headers.cookie ) ) )
     },
 
     POST( resource ) {
-        if( /(auth)/.test(resource.path[1]) ) return
+        var name = resource.path[0]
         
-        if( this.path.length !== 2 ) this.throwInvalid()
+        if( /(auth)/.test( name ) ) return
         
-        return this.slurpBody( resource ).then( () => this.parseSignature( resource, this.parseCookies( resource.request.headers.cookie ) ) )
+        if( resource.path.length !== 1 ) this.throwInvalid()
+        
+        return this.slurpBody( resource )
+            .then( () => {
+                var neededKey
+                if( ! resource.Postgres.tables[ name ] ) return Promise.resolve()
+                resource.Postgres.tables[ name ].columns.every( column => {
+                    if( resource.body[ column.name ] === undefined && (!column.isNullable) ) { neededKey = column.name; return false }
+                    return true
+                } )
+                if( neededKey ) return resource.respond( { stopChain: true, code: 500, body: { error: `${neededKey} required` } } )
+                return Promise.resolve()
+            } )
+            .then( () => this.parseSignature( resource, this.parseCookies( resource.request.headers.cookie ) ) )
     },
     
     apply( resource ) { return this[ resource.request.method ]( resource ) },
@@ -64,7 +77,7 @@ module.exports = {
             var body = ''
             
             resource.request.on( "data", data => {
-                body += someData
+                body += data
 
                 if( body.length > 1e10 ) {
                     response.request.connection.destroy()
@@ -73,7 +86,7 @@ module.exports = {
             } )
 
             resource.request.on( "end", () => {
-                try { body = JSON.parse( body ) }
+                try { resource.body = JSON.parse( body ) }
                 catch( e ) { reject( 'Unable to parse request : ' + e ) }
                 resolve()
             } )
@@ -81,4 +94,4 @@ module.exports = {
     },
 
     throwInvalid() { throw new Error("Invalid request") }
-}
+}, { } )

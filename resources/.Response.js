@@ -1,4 +1,4 @@
-module.exports = {
+module.exports = Object.create( {
 
     apply( resource, result ) { return this[ resource.request.method ]( resource, result ) },
 
@@ -11,4 +11,4 @@ module.exports = {
     PATCH( resource, result ) { resource.respond( { body: result.rows[0] } ) },
 
     POST( resource, result ) { resource.respond( { body: result.rows[0] } ) }
-}
+}, { } )

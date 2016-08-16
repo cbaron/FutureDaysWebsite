@@ -1,25 +1,30 @@
 module.exports = Object.assign( { }, require('./__proto__'), {
 
+    Xhr: require('../Xhr'),
+
+    clear() {
+        this.fields.forEach( field => {
+            this.removeError( this.els[ field.name ] )
+            this.els[ field.name ].val('')
+        } )
+
+        if( this.els.error ) { this.els.error.remove(); this.else.error = undefined }
+    },
+
     emailRegex: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
 
     getTemplateOptions() { 
-        this.fields.forEach( field => {
-            var name = field.name.charAt(0).toUpperCase() + field.name.slice(1)
-            field[ 'class' ] = this.class
-            if( this.horizontal ) field[ 'horizontal' ] = true
-            field[ ( this.class === 'form-input' ) ? 'label' : 'placeholder' ] = name
-
-        } )
-
-        return { fields: this.fields } },
+        return { fields: this.fields }
+    },
 
     getFormData() {
+        var data = { }
 
-        Object.keys( this.els, key => {
-            if( /INPUT|TEXTAREAD/.test( this.els[ key ].prop("tagName") ) ) this.formData[ key ] = this.els[ key ].val()
+        Object.keys( this.els ).forEach( key => {
+            if( /INPUT|TEXTAREA|SELECT/.test( this.els[ key ].prop("tagName") ) ) data[ key ] = this.els[ key ].val()
         } )
 
-        return this.formData
+        return data
     },
 
     fields: [ ],
@@ -28,37 +33,27 @@ module.exports = Object.assign( { }, require('./__proto__'), {
         console.log( error.stack || error );
         //this.slurpTemplate( { template: this.templates.serverError( error ), insertion: { $el: this.els.buttonRow, method: 'before' } } )
     },
-
-    onSubmissionResponse() { },
-
-    postForm( data ) {
-        
-        return new Promise( ( resolve, reject ) => {
-            this.$.ajax( {
-                data: JSON.stringify( data.values ) || JSON.stringify( this.getFormData() ),
-                headers: { token: ( this.user ) ? this.user.get('token') : '' },
-                type: "POST",
-                url: `/${ data.resource }`
-            } )
+    
+    postForm() {
+        return this.Xhr( {
+            data: JSON.stringify( this.getFormData() ),
+            method: 'post',
+            resource: this.resource
         } )
     },
 
     postRender() {
 
-        var self = this
-
-        this.els.container.find('input')
-        .on( 'blur', function() {
-            var $el = self.$(this),
-                field = self._( self.fields ).find( function( field ) { return field.name === $el.attr('id') } )
-                  
-            return new Promise( ( resolve, reject ) => resolve( field.validate.call( self, $el.val() ) ) )
-            .then( valid => {
-                if( valid ) { self.showValid( $el ) }
-                else { self.showError( $el, field.error ) }
-            } )
+        this.fields.forEach( field => {
+            var $el = this.els[ field.name ]
+            $el.on( 'blur', () => {
+                var rv = field.validate.call( this, $el.val() )
+                if( typeof rv === "boolean" ) return rv ? this.showValid($el) : this.showError( $el, field.error )
+                rv.then( () => this.showValid($el) )
+                 .catch( () => this.showError( $el, field.error ) )
+             } )
+            .on( 'focus', () => this.removeError( $el ) )
         } )
-        .on( 'focus', function() { self.removeError( self.$(this) ) } )
 
         return this
     },
@@ -82,13 +77,10 @@ module.exports = Object.assign( { }, require('./__proto__'), {
         $el.siblings('.feedback').remove()
     },
 
-    submitForm( resource ) {
-        this.validate().then( result => {
-            if( result === false ) return
-            this.postForm( resource )
-            .then( () => this.onSubmissionResponse() )
-            .catch( e => this.onFormFail( e ) )
-        } )    
+    submit() {
+        return this.validate()
+        .then( result => result === false ? Promise.resolve( { invalid: true } ) : this.postForm() )
+        .catch( this.somethingWentWrong )
     },
 
     template: require('./templates/form'),
@@ -98,21 +90,23 @@ module.exports = Object.assign( { }, require('./__proto__'), {
     },
 
     validate() {
-        var valid = true
-        
-        return Promise.all( this.fields.map( field => {
-            return new Promise( ( resolve, reject ) => {
-                var result = field.validate.call(this, this.els[ field.name ].val() )                          
-                if( result === false ) {
-                    valid = false
-                    this.showError( this.els[ field.name ], field.error )                    
-                }
+        var valid = true,
+            promises = [ ]
+                
+        this.fields.forEach( field => {
+            var $el = this.els[ field.name ],
+                rv = field.validate.call( this, $el.val() )
+            if( typeof rv === "boolean" ) {
+                if( rv ) { this.showValid($el) } else { this.showError( $el, field.error ); valid = false }
+            } else {
+                promises.push(
+                    rv.then( () => Promise.resolve( this.showValid($el) ) )
+                     .catch( () => { this.showError( $el, field.error ); return Promise.resolve( valid = false ) } )
+                )
+            }
+        } )
 
-                resolve()
-            } )
-        } ) )
-        .then( () => valid )
-        .catch( e => { console.log( e.stack || e ); return false } )
+        return Promise.all( promises ).then( () => valid )
     }
 
 } )
