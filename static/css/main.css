@@ -106,28 +106,35 @@ button:focus {
 .contact {
   display: flex;
   height: 100vh;
-  background-color: #fbfbfb;
 }
 .contact .fd-info {
   flex: 0 1 50%;
-  padding: 4em;
+  padding: 2rem;
 }
-.contact .fd-info h2 {
+.contact .fd-info .info-box {
+  padding: 1rem 1.5rem;
+}
+.contact .fd-info .info-box h2 {
+  font-family: 'Michroma';
   font-size: 2rem;
   font-weight: bold;
+  color: #30746a;
+  border-bottom: 5px solid #30746a;
+  padding-bottom: 0.75rem;
+  margin-bottom: 2rem;
 }
-.contact .fd-info p {
+.contact .fd-info .info-box p {
   font-size: 1.1rem;
 }
-.contact .fd-info .contact-details {
+.contact .fd-info .info-box .contact-details {
   font-size: 0.9rem;
   text-transform: uppercase;
   margin-top: 1.5rem;
 }
-.contact .fd-info .contact-details dt {
+.contact .fd-info .info-box .contact-details dt {
   font-weight: bold;
 }
-.contact .fd-info .contact-details dd {
+.contact .fd-info .info-box .contact-details dd {
   margin-bottom: 0.5rem;
 }
 .contact .contact-form {
@@ -322,7 +329,7 @@ button:focus {
   color: #30746a;
   font-size: 1.3rem;
   font-weight: bold;
-  padding: 0.75rem 1rem;
+  padding: 0.75rem 1rem 0.85rem;
   margin-right: 1rem;
   cursor: pointer;
 }
@@ -331,9 +338,13 @@ button:focus {
   align-items: center;
 }
 .site-header .nav-links li {
+  font-family: 'Michroma';
   color: #fbfbfb;
-  font-size: 1.1rem;
-  padding: 0.85rem 1rem;
+  font-size: 0.9rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+  padding: 0.75rem 1rem;
+  line-height: 2.2;
   border-left: 2px solid #30746a;
   transition: all 0.2s ease-out;
 }
@@ -374,12 +385,15 @@ button:focus {
   align-items: center;
   justify-content: center;
   width: 100%;
-  margin-top: 1rem;
+  margin-top: 1.5rem;
   border-bottom: 2px solid #30746a;
 }
 .home .link-block li {
+  font-family: 'Michroma';
+  font-weight: bold;
+  letter-spacing: 1px;
   border-left: 2px solid #30746a;
-  padding: 0.5rem 1.25rem;
+  padding: 0.5rem 1.25rem 0.75rem;
   transition: background-color 0.2s ease-out;
 }
 .home .link-block li:last-child {
@@ -403,10 +417,16 @@ button:focus {
   .home .logo-block .logo {
     font-size: 4rem;
   }
+  .home .text-block p {
+    font-size: 1.1rem;
+  }
 }
 @media only screen and (max-width: 825px) {
   .home .logo-block .logo {
     font-size: 3rem;
+  }
+  .home .text-block p {
+    font-size: 1rem;
   }
 }
 .list {
@@ -442,6 +462,28 @@ button:focus {
   width: 200px;
   margin: auto;
 }
+.services {
+  padding: 1rem;
+}
+.services h2 {
+  font-family: 'Michroma';
+  font-size: 2rem;
+  font-weight: bold;
+  color: #30746a;
+  border-bottom: 5px solid #30746a;
+  padding-bottom: 0.75rem;
+  margin-bottom: 1rem;
+}
+.services p {
+  width: 50%;
+}
+.services .services-list {
+  margin-bottom: 2rem;
+}
+.services .services-list li {
+  font-weight: bold;
+  list-style: disc inside none;
+}
 .sidebar-links {
   color: #eee;
   background-color: #363636;
@@ -449,16 +491,13 @@ button:focus {
 }
 .sidebar-links li {
   font-family: 'Michroma';
-  padding: 0.75rem;
+  padding: 0.5rem;
   border: 1px solid #000;
   box-shadow: 0 1px 5px rgba(255,255,255,0.7);
 }
 .sidebar-links li:hover {
   background-color: #262626;
   cursor: pointer;
-}
-.staff {
-  background-color: #fbfbfb;
 }
 .staff .staff-block {
   display: flex;

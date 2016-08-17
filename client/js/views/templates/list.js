@@ -1,4 +1,4 @@
-module.exports = ( options ) => `
+module.exports = ( p ) => `
 
 <ul class="list">
     <li class="list-item">for</li>

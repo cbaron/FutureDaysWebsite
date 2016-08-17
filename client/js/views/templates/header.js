@@ -1,11 +1,11 @@
 module.exports = ( p ) => `
-    <header data-js="container" class="site-header">
-        <div class="logo">Future Days</div>
+    <header class="site-header">
+        <div data-js="logo" class="logo">Future Days</div>
         <nav>
-            <ul data-js="links" class="nav-links">
-                <li data-js="services" data-id="services">Our Services</li>
-                <li data-id="staff">Our Team</li>
-                <li data-id="demo">Code Demo</li>
+            <ul data-js="navLinks" class="nav-links">
+                <li data-id="services" data-id="services">Services</li>
+                <li data-id="staff">Staff</li>
+                <li data-id="demo">Demo</li>
                 <li data-id="contact">Contact Us</li>
             </ul>
         </nav>

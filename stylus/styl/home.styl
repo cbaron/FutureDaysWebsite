@@ -28,14 +28,17 @@
         align-items: center
         justify-content: center
         width: 100%
-        margin-top: 1rem
+        margin-top: 1.5rem
         border-bottom: 2px solid #30746a
         
         li
+            font-family: 'Michroma'
+            font-weight: bold
+            letter-spacing: 1px
             border-left: 2px solid #30746a
             &:last-child
                 border-right: 2px solid #30746a
-            padding: .5rem 1.25rem
+            padding: .5rem 1.25rem .75rem
             transition: background-color .2s ease-out
             &:hover
                 background-color: #30746a
@@ -57,7 +60,13 @@
         .logo-block .logo
             font-size: 4rem
             
+        .text-block p
+            font-size: 1.1rem
+            
     @media only screen and (max-width: 825px)
         
         .logo-block .logo
             font-size: 3rem
+            
+        .text-block p
+            font-size: 1rem

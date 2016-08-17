@@ -1,50 +1,49 @@
 module.exports = new (
     require('backbone').Router.extend( {
 
+        $: require('jquery'),
+
         Error: require('../../lib/MyError'),
         
         User: require('./models/User'),
 
-        Views: require('./.ViewMap'),
-        
-        Templates: require('./.TemplateMap'),
-        
+        ViewFactory: require('./factory/View'),
+
         initialize() {
+            
+            this.contentContainer = this.$('#content')
+
             return Object.assign( this, {
                 views: { },
-                header: Object.create( this.Views.Header, { template: { value: this.Templates.header } } ).constructor()
+                header: this.ViewFactory.create( 'header', { insertion: { value: { $el: this.contentContainer, method: 'before' } } } )
+                    .on( 'route', route => this.navigate( route, { trigger: true } ) )
             } )
         },
 
         goHome() { this.navigate( 'home', { trigger: true } ) },
 
         handler( resource ) {
-            console.log(resource)
             
             if( !resource ) return this.goHome()
 
-            this.User.fetched.done( () => {
+            if( resource === 'home' ) {
+                this.header.hide()
+            } else { if( this.header.isHidden() ) this.header.show() }
 
-                this.Views.Header
-                    .onUser( this.User )
+            this.User.fetched.done( () => {
+            
+                this.header.onUser()
                     .on( 'signout', () => 
                         Promise.all( Object.keys( this.views ).map( name => this.views[ name ].delete() ) )
                         .then( this.goHome() )
                     )
-
-                if( resource === 'home' ) {
-                    console.log(this.header)
-                    this.header.hide()
-                }
                 
                 Promise.all( Object.keys( this.views ).map( view => this.views[ view ].hide() ) )
                 .then( () => {
                     if( this.views[ resource ] ) return this.views[ resource ].show()
                     this.views[ resource ] =
-                        Object.create(
-                            this.Views[ `${resource.charAt(0).toUpperCase() + resource.slice(1)}` ],
-                            { user: { value: this.User }, template: { value: this.Templates[ resource ] } } )
-                        .constructor()
+                        this.ViewFactory.create( resource, { insertion: { value: { $el: this.contentContainer } } } )
+                    if( resource === 'home' ) this.views[ resource ]
                         .on( 'route', route => this.navigate( route, { trigger: true } ) )
                 } )
                 .catch( this.Error )

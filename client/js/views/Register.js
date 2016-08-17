@@ -3,8 +3,8 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     cancel: function() {
 
         var form = this.formInstance,
-            name = form.templateData.name,
-            email = form.templateData.email
+            name = form.els.name,
+            email = form.els.email
         
         form.removeError( name )
         name.val('')
@@ -12,8 +12,8 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         form.removeError( email )
         email.val('')
         
-        if ( form.templateData.invalidLoginError ) form.templateData.invalidLoginError.remove()
-        if ( form.templateData.serverError ) form.templateData.serverError.remove()
+        if ( form.els.invalidLoginError ) form.els.invalidLoginError.remove()
+        if ( form.els.serverError ) form.els.serverError.remove()
 
         this.loginInstance[ "registerInstance" ] = this
         this.hide().then( () => this.loginInstance.show() )
@@ -41,12 +41,12 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     onSubmissionResponse: function( response ) {
 
         if ( response.success === false ) {
-            return this.slurpTemplate( { template: this.templates.invalidLoginError( response ), insertion: { $el: this.templateData.buttonRow, method: 'before' } } )
+            return this.slurpTemplate( { template: this.templates.invalidLoginError( response ), insertion: { $el: this.els.buttonRow, method: 'before' } } )
         }
 
         this.user.set( response.result.member )
 
-        this.fields.forEach( field => this.templateData[ field.name ].val('') )
+        this.fields.forEach( field => this.els[ field.name ].val('') )
 
         this.hide().then( () => this.loginInstance.emit( "loggedIn" ) )
         
@@ -57,7 +57,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
             class: { value: this.class },
             fields: { value: this.fields },
             horizontal: { value: this.horizontal }, 
-            container: { value: this.templateData.form },
+            insertion: { value: { $el: this.els.form } },
             onSubmissionResponse: { value: this.onSubmissionResponse }
         } ).constructor()
         

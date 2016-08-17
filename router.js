@@ -9,6 +9,8 @@ module.exports = Object.create(
 
         FS: require('fs'),
 
+        Path: require('path'),
+
         Postgres: require('./dal/Postgres'),
 
         applyResource( request, response, path, parsedUrl, dir, file ) {
@@ -29,6 +31,7 @@ module.exports = Object.create(
         },
 
         constructor() {
+            this.isDev = ( process.env.ENV === 'development' )
             this.Postgres.getTableData()
 
             return this.handler.bind(this)
@@ -75,7 +78,7 @@ module.exports = Object.create(
         html( request, response, path ) {
             response.writeHead( 200 )
             response.end( require('./templates/page')( {
-                isDev: ( process.env.ENV === 'development' ) ? true : false,
+                isDev: this.isDev,
                 title: 'Future Days'
             } ) )
             return Promise.resolve()
@@ -113,8 +116,6 @@ module.exports = Object.create(
             var fileName = path.pop()
                 filePath = `${__dirname}${path.join('/')}/${fileName}`
            
-            if( /(\.css|\.js)/.test(fileName) ) filePath += '.gz'
-
             return this.P( this.FS.stat, [ filePath ] )
             .then( ( [ stat ] ) => {
                 var stream = this.FS.createReadStream( filePath )
@@ -123,7 +124,7 @@ module.exports = Object.create(
                     200,
                     {
                         'Connection': 'keep-alive',
-                        'Content-Encoding': /(\.css|\.js)/.test(fileName) ? 'gzip' : 'identity',
+                        'Content-Encoding': this.Path.extname( filePath ) === ".gz" ? 'gzip' : 'identity',
                         'Content-Length': stat.size,
                         'Content-Type': /\.css/.test(fileName) ? 'text/css' : 'text/plain'
                     }

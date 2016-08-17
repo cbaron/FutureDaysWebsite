@@ -1,4 +1,5 @@
 module.exports={
+	Admin: require('./views/Admin'),
 	Contact: require('./views/Contact'),
 	Demo: require('./views/Demo'),
 	Form: require('./views/Form'),
