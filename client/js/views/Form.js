@@ -7,6 +7,7 @@ module.exports = Object.assign( { }, require('./__proto__'), {
             var name = field.name.charAt(0).toUpperCase() + field.name.slice(1)
             field[ 'class' ] = this.class
             if( this.horizontal ) field[ 'horizontal' ] = true
+            if( field.textarea ) field[ 'textarea' ] = true
             field[ ( this.class === 'form-input' ) ? 'label' : 'placeholder' ] = name
 
         } )
@@ -47,7 +48,7 @@ module.exports = Object.assign( { }, require('./__proto__'), {
 
         var self = this
 
-        this.els.container.find('input')
+        this.els.container.find('input, textarea')
         .on( 'blur', function() {
             var $el = self.$(this),
                 field = self._( self.fields ).find( function( field ) { return field.name === $el.attr('id') } )

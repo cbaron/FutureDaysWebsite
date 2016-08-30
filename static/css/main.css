@@ -56,6 +56,7 @@ textarea {
   border-radius: 0;
 }
 input:focus,
+textarea:focus,
 select:focus,
 button:focus {
   outline: 0;
@@ -72,7 +73,7 @@ button:focus {
   border: 1px solid transparent;
   border-radius: 0.3rem;
   box-shadow: 0 2px 3px #999;
-  transition: all 0.3s ease-out;
+  transition: all 0.2s ease-out;
 }
 .btn-default:hover,
 .btn-default:focus {
@@ -88,10 +89,10 @@ button:focus {
   padding: 0.5rem;
   color: #444;
   background-color: #fff;
-  border: 3px solid #444;
+  border: 2px solid #444;
   text-align: center;
   cursor: pointer;
-  transition: all 0.3s ease-out;
+  transition: all 0.2s ease-out;
 }
 .btn-ghost:hover,
 .btn-ghost:focus {
@@ -101,21 +102,19 @@ button:focus {
 .btn-ghost:active {
   background-color: #737373;
   color: #fff;
-  border: 3px solid #737373;
+  border: 2px solid #737373;
 }
 .contact {
   display: flex;
   height: 100vh;
+  width: 100%;
 }
 .contact .fd-info {
   flex: 0 1 50%;
   padding: 2rem;
 }
-.contact .fd-info .info-box {
-  padding: 1rem 1.5rem;
-}
 .contact .fd-info .info-box h2 {
-  font-family: 'Michroma';
+  font-family: Michroma;
   font-size: 2rem;
   font-weight: bold;
   color: #30746a;
@@ -139,6 +138,22 @@ button:focus {
 }
 .contact .contact-form {
   flex: 0 1 50%;
+  padding: 2rem;
+}
+.contact .contact-form .form-group {
+  width: 100%;
+}
+.contact .contact-form .form-group input,
+.contact .contact-form .form-group textarea {
+  width: 75%;
+}
+.contact .contact-form button {
+  color: #30746a;
+  border-color: #30746a;
+}
+.contact .contact-form button:hover {
+  color: #fff;
+  background-color: #30746a;
 }
 .demo {
   display: flex;
@@ -325,7 +340,7 @@ button:focus {
   background-color: #000;
 }
 .site-header .logo {
-  font-family: 'Michroma';
+  font-family: Michroma;
   color: #30746a;
   font-size: 1.3rem;
   font-weight: bold;
@@ -338,18 +353,18 @@ button:focus {
   align-items: center;
 }
 .site-header .nav-links li {
-  font-family: 'Michroma';
+  font-family: Michroma;
   color: #fbfbfb;
   font-size: 0.9rem;
   font-weight: bold;
   letter-spacing: 1px;
-  padding: 0.75rem 1rem;
+  padding: 0.75rem 1.25rem;
   line-height: 2.2;
-  border-left: 2px solid #30746a;
+  border-left: 1px solid #30746a;
   transition: all 0.2s ease-out;
 }
 .site-header .nav-links li:last-child {
-  border-right: 2px solid #30746a;
+  border-right: 1px solid #30746a;
 }
 .site-header .nav-links li:hover {
   cursor: pointer;
@@ -370,36 +385,37 @@ button:focus {
   justify-content: center;
 }
 .home .logo-block .logo {
-  font-family: 'Michroma';
+  font-family: Michroma;
   font-size: 5rem;
   color: #30746a;
-  text-shadow: #c2e6e0 1px 1px 2px;
+  text-shadow: #c2e6e0 2px 2px 5px;
+  animation: glow 0.75s ease-out;
 }
-.home .logo-block .slogan {
-  color: #999;
-  font-weight: bold;
-  font-style: italic;
+.home .link-container {
+  overflow: hidden;
+  width: 100%;
 }
-.home .link-block {
+.home .link-container .link-block {
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
-  margin-top: 1.5rem;
-  border-bottom: 2px solid #30746a;
+  margin-top: 2rem;
+  border-bottom: 1px solid #30746a;
+  animation: slidein 0.75s ease-out;
 }
-.home .link-block li {
-  font-family: 'Michroma';
+.home .link-container .link-block li {
+  font-family: Michroma;
   font-weight: bold;
   letter-spacing: 1px;
-  border-left: 2px solid #30746a;
+  border-left: 1px solid #30746a;
   padding: 0.5rem 1.25rem 0.75rem;
   transition: background-color 0.2s ease-out;
 }
-.home .link-block li:last-child {
-  border-right: 2px solid #30746a;
+.home .link-container .link-block li:last-child {
+  border-right: 1px solid #30746a;
 }
-.home .link-block li:hover {
+.home .link-container .link-block li:hover {
   background-color: #30746a;
   cursor: pointer;
 }
@@ -427,6 +443,106 @@ button:focus {
   }
   .home .text-block p {
     font-size: 1rem;
+  }
+}
+@-moz-keyframes slidein {
+  0% {
+    margin-left: 100%;
+  }
+  100% {
+    margin-left: none;
+  }
+}
+@-webkit-keyframes slidein {
+  0% {
+    margin-left: 100%;
+  }
+  100% {
+    margin-left: none;
+  }
+}
+@-o-keyframes slidein {
+  0% {
+    margin-left: 100%;
+  }
+  100% {
+    margin-left: none;
+  }
+}
+@keyframes slidein {
+  0% {
+    margin-left: 100%;
+  }
+  100% {
+    margin-left: none;
+  }
+}
+@-moz-keyframes glow {
+  0% {
+    text-shadow: none;
+  }
+  25% {
+    text-shadow: #c2e6e0 0.5px 0.5px 2px;
+  }
+  50% {
+    text-shadow: #c2e6e0 1px 1px 4px;
+  }
+  75% {
+    text-shadow: #c2e6e0 1.5px 1.5px 6px;
+  }
+  90% {
+    text-shadow: #c2e6e0 2px 2px 6px;
+  }
+}
+@-webkit-keyframes glow {
+  0% {
+    text-shadow: none;
+  }
+  25% {
+    text-shadow: #c2e6e0 0.5px 0.5px 2px;
+  }
+  50% {
+    text-shadow: #c2e6e0 1px 1px 4px;
+  }
+  75% {
+    text-shadow: #c2e6e0 1.5px 1.5px 6px;
+  }
+  90% {
+    text-shadow: #c2e6e0 2px 2px 6px;
+  }
+}
+@-o-keyframes glow {
+  0% {
+    text-shadow: none;
+  }
+  25% {
+    text-shadow: #c2e6e0 0.5px 0.5px 2px;
+  }
+  50% {
+    text-shadow: #c2e6e0 1px 1px 4px;
+  }
+  75% {
+    text-shadow: #c2e6e0 1.5px 1.5px 6px;
+  }
+  90% {
+    text-shadow: #c2e6e0 2px 2px 6px;
+  }
+}
+@keyframes glow {
+  0% {
+    text-shadow: none;
+  }
+  25% {
+    text-shadow: #c2e6e0 0.5px 0.5px 2px;
+  }
+  50% {
+    text-shadow: #c2e6e0 1px 1px 4px;
+  }
+  75% {
+    text-shadow: #c2e6e0 1.5px 1.5px 6px;
+  }
+  90% {
+    text-shadow: #c2e6e0 2px 2px 6px;
   }
 }
 .list {
@@ -466,13 +582,14 @@ button:focus {
   padding: 1rem;
 }
 .services h2 {
-  font-family: 'Michroma';
+  font-family: Michroma;
   font-size: 2rem;
   font-weight: bold;
   color: #30746a;
   border-bottom: 5px solid #30746a;
   padding-bottom: 0.75rem;
   margin-bottom: 1rem;
+  animation: slidein 1s ease-in-out;
 }
 .services p {
   width: 50%;
@@ -484,13 +601,33 @@ button:focus {
   font-weight: bold;
   list-style: disc inside none;
 }
+@-moz-keyframes slidein {
+  0% {
+    margin-left: 100%;
+  }
+}
+@-webkit-keyframes slidein {
+  0% {
+    margin-left: 100%;
+  }
+}
+@-o-keyframes slidein {
+  0% {
+    margin-left: 100%;
+  }
+}
+@keyframes slidein {
+  0% {
+    margin-left: 100%;
+  }
+}
 .sidebar-links {
   color: #eee;
   background-color: #363636;
   letter-spacing: 1px;
 }
 .sidebar-links li {
-  font-family: 'Michroma';
+  font-family: Michroma;
   padding: 0.5rem;
   border: 1px solid #000;
   box-shadow: 0 1px 5px rgba(255,255,255,0.7);

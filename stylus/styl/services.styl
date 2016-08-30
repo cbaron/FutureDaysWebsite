@@ -2,17 +2,17 @@
     padding: 1rem
     
     h2
-        font-family: 'Michroma'
+        font-family: $fd-brand-font
         font-size: 2rem
         font-weight: bold
-        color: #30746a
-        border-bottom: 5px solid #30746a
+        color: $fd-teal
+        border-bottom: 5px solid $fd-teal
         padding-bottom: .75rem
         margin-bottom: 1rem
+        animation: slidein 1s ease-in-out
     
     p
         width: 50%
-
 
     .services-list
         margin-bottom: 2rem
@@ -20,3 +20,7 @@
         li
             font-weight: bold
             list-style: disc inside none
+
+@keyframes slidein
+    0%
+        margin-left: 100%

@@ -1,20 +1,20 @@
 .contact
     display: flex
     height: 100vh
+    width: 100%
     
     .fd-info
         flex: 0 1 50%
         padding: 2rem
         
         .info-box
-            padding: 1rem 1.5rem
         
             h2
-                font-family: 'Michroma'
+                font-family: $fd-brand-font
                 font-size: 2rem
                 font-weight: bold
-                color: #30746a
-                border-bottom: 5px solid #30746a
+                color: $fd-teal
+                border-bottom: 5px solid $fd-teal
                 padding-bottom: .75rem
                 margin-bottom: 2rem
                             
@@ -34,3 +34,17 @@
         
     .contact-form
         flex: 0 1 50%
+        padding: 2rem
+        
+        .form-group
+            width: 100%
+            
+            input, textarea
+                width: 75%
+                
+        button
+            color: $fd-teal
+            border-color: $fd-teal
+            &:hover
+                color: white
+                background-color: $fd-teal

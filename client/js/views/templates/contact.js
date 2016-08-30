@@ -3,7 +3,8 @@ module.exports = ( p ) => `
         <div class="fd-info">
             <div class="info-box">
                 <h2>Interested?</h2>
-                <p>Feel free to contact us with any project ideas or questions.</p>
+                <p>Feel free to contact us by phone or email with any project ideas or questions,
+                or send us a quick message.</p>
                 <div class="contact-details">
                     <dl>
                         <dt>Email</dt>
@@ -14,5 +15,9 @@ module.exports = ( p ) => `
                 </div>
             </div>
         </div>
-        <div data-js="contactForm" class="contact-form"></div>
+        <div class="contact-form">
+            <div data-js="form"></div>
+            <button data-js="sendBtn" class="btn-ghost">Send</button>
+        </div>
+
     </div>`

@@ -13,36 +13,37 @@
         justify-content: center
     
         .logo
-            font-family: 'Michroma'
+            font-family: $fd-brand-font
             font-size: 5rem
-            color: #30746a
-            text-shadow: lighten(#30746a, 75%) 1px 1px 2px
+            color: $fd-teal
+            text-shadow: lighten($fd-teal, 75%) 2px 2px 5px
+            animation: glow .75s ease-out
             
-        .slogan
-            color: #999
-            font-weight: bold
-            font-style: italic
-            
-    .link-block
-        display: flex
-        align-items: center
-        justify-content: center
+    .link-container
+        overflow: hidden
         width: 100%
-        margin-top: 1.5rem
-        border-bottom: 2px solid #30746a
         
-        li
-            font-family: 'Michroma'
-            font-weight: bold
-            letter-spacing: 1px
-            border-left: 2px solid #30746a
-            &:last-child
-                border-right: 2px solid #30746a
-            padding: .5rem 1.25rem .75rem
-            transition: background-color .2s ease-out
-            &:hover
-                background-color: #30746a
-                cursor: pointer
+        .link-block
+            display: flex
+            align-items: center
+            justify-content: center
+            width: 100%
+            margin-top: 2rem
+            border-bottom: 1px solid $fd-teal
+            animation: slidein .75s ease-out
+        
+            li
+                font-family: $fd-brand-font
+                font-weight: bold
+                letter-spacing: 1px
+                border-left: 1px solid $fd-teal
+                &:last-child
+                    border-right: 1px solid $fd-teal
+                padding: .5rem 1.25rem .75rem
+                transition: background-color .2s ease-out
+                &:hover
+                    background-color: $fd-teal
+                    cursor: pointer
     
     .text-block
         text-align: center
@@ -70,3 +71,22 @@
             
         .text-block p
             font-size: 1rem
+            
+@keyframes slidein
+    0%
+        margin-left: 100%
+    100%
+        margin-left: none
+        
+@keyframes glow
+    0%
+        text-shadow: none
+    25%
+        text-shadow: lighten($fd-teal, 75%) .5px .5px 2px
+    50%
+        text-shadow: lighten($fd-teal, 75%) 1px 1px 4px
+    75%
+        text-shadow: lighten($fd-teal, 75%) 1.5px 1.5px 6px
+    90%
+        text-shadow: lighten($fd-teal, 75%) 2px 2px 6px
+        
