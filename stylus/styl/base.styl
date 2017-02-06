@@ -8,18 +8,31 @@ html
 *::after
     box-sizing: inherit
 
-body 
+body
+    background-color: #fbfbfb
     height: 100%
     font-family: $base-font
     font-size: 1rem
     font-weight: 400
     line-height: 1.5
     text-align: left
-    color: #666
+    color: #555
     margin: 0
     padding: 0
+    -webkit-font-smoothing: antialiased
+    -moz-osx-font-smoothing: grayscale
+
+div.container-fluid
+    height: 100%
+    display: flex
+    flex-flow: column
+
+div#content
+    padding-top: 78px
+    flex: 1 1 auto
     
 h1, h2, h3, h4, h5, h6
+    font-family: RalewayRegular
     margin-top: 0
     margin-bottom: .5rem
     font-weight: 500
@@ -27,6 +40,17 @@ h1, h2, h3, h4, h5, h6
     letter-spacing: 1px
     color: #555
     
+h3
+    font-weight: bold
+
+.header
+    text-align: center
+    margin: 2rem 0
+    font-family: RalewayRegular
+    font-weight: 400
+    font-style: normal
+    font-size: 1.8rem
+        
 p
     margin-top: 0
     margin-bottom: 1rem

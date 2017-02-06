@@ -24,3 +24,18 @@ style-placeholder()
     &:-moz-placeholder
         font-size: .9rem
         font-style: italic
+        
+// Buttons
+
+set-btn-color(color=$dark-gray, bg-color=white)
+    color: color
+    background-color: bg-color
+    border-color: color
+    &:hover, &:focus
+        background-color: color
+        color: bg-color
+    &:active
+        background-color: lighten(color, 25%)
+        color: bg-color
+        border-color: lighten(color, 25%)
+    

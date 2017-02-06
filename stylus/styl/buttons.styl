@@ -1,36 +1,23 @@
-.btn-default
-    display: inline-block
-    padding: $btn-default-padding
-    color: $btn-default-color
-    background-color: $btn-default-bg
-    font-size: $btn-default-font-size
-    font-weight: 700
-    text-align: center
-    cursor: pointer
-    border: $btn-default-border $btn-default-border-color
-    border-radius: $btn-default-radius
-    box-shadow: $btn-default-box-shadow $btn-default-box-shadow-color
-    transition: $btn-transition    
-    &:hover, &:focus
-        background-color: $btn-default-hover-bg        
-    &:active
-        background-color: $btn-default-active-bg
-        
 .btn-ghost
+    set-btn-color()
     display: inline-block
-    font-size: $btn-ghost-font-size
-    width: $btn-ghost-width
-    padding: $btn-ghost-padding
-    color: $btn-ghost-color
-    background-color: $btn-ghost-bg
-    border: $btn-ghost-border $btn-ghost-border-color
+    min-width: 15rem
+    font-size: .7rem
+    font-weight: bold
+    text-transform: uppercase
+    letter-spacing: 1px
+    padding: 1rem 2rem
+    //color: //#436B9E//$dark-gray
+    //background-color: white
+    border: 3px solid
+    //border-color: #027188//#436B9E//$dark-gray
     text-align: center
     cursor: pointer
-    transition: $btn-transition
-    &:hover, &:focus
-        background-color: $btn-ghost-hover-bg
-        color: $btn-ghost-hover-color        
+    transition: all .2s ease-out
+    /*&:hover, &:focus
+        background-color: #027188//#436B9E//$dark-gray
+        color: white      
     &:active
-        background-color: $btn-ghost-active-bg
-        color: $btn-ghost-hover-color
-        border: $btn-ghost-border $btn-ghost-active-bg
+        background-color: lighten($dark-gray, 25%)
+        color: white
+        border: 1px solid lighten($dark-gray, 25%)*/

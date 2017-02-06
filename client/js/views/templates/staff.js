@@ -1,17 +1,29 @@
 module.exports = ( p ) => `
     <div class="staff">
+        <div class="staff-intro">
+            <h1>Our Team</h1>
+            <p>Small but nimble.</p>
+        </div>
         <div class="staff-block">
-            <img class="staff-photo">
+            <img class="staff-photo" src="/static/img/hollywood.jpg">
             <div class="bio">
-                <h2>Chris Baron</h2>
-                <p>text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text </p>
+                <h3>Chris Baron</h3>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
+                ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
+                laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
+                velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident,
+                sunt in culpa qui officia deserunt mollit anim id est laborum</p>
             </div>
         </div>
         <div class="staff-block">
-            <img class="staff-photo">
+            <img class="staff-photo" src="/static/img/eno.jpg">
             <div class="bio">
-                <h2>Scott Parton</h2>
-                <p></p>
+                <h3>Scott Parton</h3>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
+                ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
+                laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
+                velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident,
+                sunt in culpa qui officia deserunt mollit anim id est laborum</p>
             </div>
         </div>
     </div>`

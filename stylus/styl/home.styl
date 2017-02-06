@@ -1,92 +1,51 @@
-.home
-    display: flex
-    flex-direction: column
-    align-items: center
-    justify-content: center
-    height: 100vh
-    background-color: black
-    color: #eee
-    
-    .logo-block
+.home-page
+    width: 100%
+    height: 100%
+        
+    .cover-image
         display: flex
         align-items: center
-        justify-content: center
-    
-        .logo
-            font-family: $fd-brand-font
-            font-size: 5rem
-            color: $fd-teal
-            text-shadow: lighten($fd-teal, 75%) 2px 2px 5px
-            animation: glow .75s ease-out
-            
-    .link-container
-        overflow: hidden
-        width: 100%
-        
-        .link-block
-            display: flex
-            align-items: center
-            justify-content: center
-            width: 100%
-            margin-top: 2rem
-            border-bottom: 1px solid $fd-teal
-            animation: slidein .75s ease-out
-        
-            li
-                font-family: $fd-brand-font
-                font-weight: bold
-                letter-spacing: 1px
-                border-left: 1px solid $fd-teal
-                &:last-child
-                    border-right: 1px solid $fd-teal
-                padding: .5rem 1.25rem .75rem
-                transition: background-color .2s ease-out
-                &:hover
-                    background-color: $fd-teal
-                    cursor: pointer
-    
-    .text-block
         text-align: center
-        width: 50%
-        margin: 0 auto
-            
-        p
-            margin-top: 2rem
-            font-size: 1.2rem
-            font-style: italic
-            
+        justify-content: center
+        height: 500px
+        width: 100%
+        background-color: #eee
+        background-image: url("/static/img/f9o7u-cndjk-tony-webster.jpg");
+        background-size: cover
+        background-repeat: no-repeat
+        border-bottom: 1px solid #eee
+        
+        .cover-text
+            color: white
+            font-family: RalewayRegular
+    
+    .intro
+        width: 75%
+        background-color: #e8e8e8
+        padding: 1rem 1rem .5rem
+        margin: 2rem auto 1.5rem
+        text-align: center
+        
+        .intro-text
+            letter-spacing: 1px
+
+    .services
+        display: flex
+        flex-wrap: wrap
+        justify-content: center
+        margin: 0 2rem 1rem
+        
+        .service
+            width: 40%
+            margin: 1rem
+            text-align: center
                 
-    @media only screen and (max-width: 975px)
+    .learn-more
+        margin: 0 30% 2rem
+        text-align: center
+        border-top: 1px solid #ccc
+        padding-top: 1rem
         
-        .logo-block .logo
-            font-size: 4rem
-            
-        .text-block p
-            font-size: 1.1rem
-            
-    @media only screen and (max-width: 825px)
-        
-        .logo-block .logo
-            font-size: 3rem
-            
-        .text-block p
-            font-size: 1rem
-            
-@keyframes slidein
-    0%
-        margin-left: 100%
-    100%
-        margin-left: none
-        
-@keyframes glow
-    0%
-        text-shadow: none
-    25%
-        text-shadow: lighten($fd-teal, 75%) .5px .5px 2px
-    50%
-        text-shadow: lighten($fd-teal, 75%) 1px 1px 4px
-    75%
-        text-shadow: lighten($fd-teal, 75%) 1.5px 1.5px 6px
-    90%
-        text-shadow: lighten($fd-teal, 75%) 2px 2px 6px
+        .btn-ghost
+            set-btn-color(#027188, white)
         

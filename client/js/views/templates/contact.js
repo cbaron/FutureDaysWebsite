@@ -2,7 +2,7 @@ module.exports = ( p ) => `
     <div data-js="container" class="contact">
         <div class="fd-info">
             <div class="info-box">
-                <h2>Interested?</h2>
+                <h2>Let's Get In Touch</h2>
                 <p>Feel free to contact us by phone or email with any project ideas or questions,
                 or send us a quick message.</p>
                 <div class="contact-details">

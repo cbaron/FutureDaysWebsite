@@ -1,7 +1,9 @@
 module.exports={
+	About: require('./views/About'),
 	Admin: require('./views/Admin'),
 	Contact: require('./views/Contact'),
 	Demo: require('./views/Demo'),
+	Footer: require('./views/Footer'),
 	Form: require('./views/Form'),
 	Header: require('./views/Header'),
 	Home: require('./views/Home'),

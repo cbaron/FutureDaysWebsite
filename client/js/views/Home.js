@@ -1,11 +1,11 @@
 module.exports = Object.assign( {}, require('./__proto__'), {
 
     events: {
-        'links': { event: 'click', selector: 'li' }
+        'whyBtn': { event: 'click' }
     },
 
-    onLinksClick( e ) {
-        var resource = this.$( e.currentTarget ).attr( 'data-id' )      
-        this.emit( 'route', resource )
-    },
+    onWhyBtnClick() {
+        this.emit( 'route', 'about' )
+    }
+
 } )

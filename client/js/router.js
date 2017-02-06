@@ -16,7 +16,8 @@ module.exports = new (
             return Object.assign( this, {
                 views: { },
                 header: this.ViewFactory.create( 'header', { insertion: { value: { $el: this.contentContainer, method: 'before' } } } )
-                    .on( 'route', route => this.navigate( route, { trigger: true } ) )
+                    .on( 'route', route => this.navigate( route, { trigger: true } ) ),
+                footer: this.ViewFactory.create( 'footer', { insertion: { value: { $el: this.contentContainer, method: 'after' } } } )
             } )
         },
 
@@ -25,10 +26,6 @@ module.exports = new (
         handler( resource ) {
             
             if( !resource ) return this.goHome()
-
-            if( resource === 'home' ) {
-                this.header.hide()
-            } else { if( this.header.isHidden() ) this.header.show() }
 
             this.User.fetched.done( () => {
             
