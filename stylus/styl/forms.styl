@@ -1,5 +1,5 @@
 .form-group
-    margin-bottom: $input-margin-bottom
+    margin-bottom: 1rem
     &.horizontal
         .form-input
             display: inline-block
@@ -12,19 +12,19 @@
 .form-input
     display: block
     position: relative
-    background-color: $input-bg
+    background-color: #fff
     padding: $input-padding
-    border: $input-border $input-border-color
-    border-radius: $input-border-radius
+    border: 2px solid #666
+    border-radius: .2rem
     transition: $input-transition
     &:focus
-        box-shadow: $input-focus-box-shadow $input-focus-box-shadow-color
+        box-shadow: 0 0 1px 1px #999
     
 .form-label
     display: inline-block
-    font-size: $label-font-size
-    font-weight: $label-font-weight
-    margin-bottom: $label-margin-bottom
+    font-size: .95rem
+    font-weight: 700
+    margin-bottom: .5rem
         
 .input-flat
     display: block
@@ -32,15 +32,15 @@
     border-top: none
     border-left: none
     border-right: none
-    border-bottom: $input-flat-border-bottom
+    border-bottom: 3px solid $dark-gray
     transition: $input-transition
     &:focus
-        background-color: $input-flat-focus-bg
+        background-color: #ddd
     style-placeholder()
         
 .input-borderless
     display: block
-    background-color: $input-borderless-bg
+    background-color: #ddd
     padding: $input-padding
     border: none
     transition: $input-transition
@@ -50,8 +50,8 @@
         
 .feedback
     display: block
-    font-size: $feedback-font-size
-    margin-top: $feedback-margin-top
+    font-size: .9rem
+    margin-top: 2px
   
 .valid
     form-validation($valid-green)

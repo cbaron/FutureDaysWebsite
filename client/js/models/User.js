@@ -1,8 +1,2 @@
-module.exports = new ( require('backbone').Model.extend( {
-    defaults: { state: {} },
-    initialize() {
-        this.fetched = this.fetch()
-        return this
-    },
-    url() { return "/user" }
-} ) )()
+module.exports = Object.create( require('./__proto__.js'), { resource: { value: 'me' } } )
+

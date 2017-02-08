@@ -1,4 +1,4 @@
-module.exports = ( p ) => `
+module.exports = p => `
 
 <header class="site-header">
     <div data-js="logo" class="logo">Future Days</div>

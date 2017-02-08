@@ -1,4 +1,4 @@
-module.exports = ( p ) => `
+module.exports = p => `
     <div data-js="container" class="contact">
         <div class="fd-info">
             <div class="info-box">
@@ -16,8 +16,17 @@ module.exports = ( p ) => `
             </div>
         </div>
         <div class="contact-form">
-            <div data-js="form"></div>
+            <form>
+                <div class="form-group">
+                    <input class="input-borderless" type="email" id="from" placeholder="From">
+                </div>
+                <div class="form-group">
+                    <input class="input-borderless" type="text" id="subject" placeholder="Subject">
+                </div>
+                <div class="form-group">
+                    <textarea rows="10" class="input-borderless" type="email" id="message" placeholder="Message"></textarea>
+                </div>
+            </form>
             <button data-js="sendBtn" class="btn-ghost">Send</button>
         </div>
-
     </div>`

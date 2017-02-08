@@ -5,7 +5,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     },
 
     onWhyBtnClick() {
-        this.emit( 'route', 'about' )
+        this.emit( 'navigate', 'about' )
     }
 
 } )

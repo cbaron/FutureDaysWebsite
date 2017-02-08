@@ -1,4 +1,3 @@
-require('jquery')( () => {
-    require('./router')
-    require('backbone').history.start( { pushState: true } )
-} )
+require('./polyfill')
+window.initMap = () => true
+window.onload = () => require('./router')
