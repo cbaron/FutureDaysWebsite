@@ -1,45 +1,17 @@
 {
-  "description": "Site for Future Days",
-  "engines": {
-    "node": "6.3.1"
-  },
-  "dependencies": {
-    "backbone": "^1.3.1",
-    "bcrypt": "^0.8.7",
-    "email": "^0.2.6",
-    "jquery": "^2.2.4",
-    "jws": "3.1.1",
-    "moment": "^2.12.0",
-    "node-env-file": "^0.1.8",
-    "pg": "4.5.5",
-    "pg-native": "^1.10.0",
-    "underscore": "^1.8.3"
-  },
-  "devDependencies": {
-    "babel-cli": "^6.9.0",
-    "babel-preset-es2015": "^6.9.0",
-    "babelify": "7.3.0",
-    "browserify": "13.0.1",
-    "parallelshell": "2.0.0",
-    "stylus": "0.54.0",
-    "uglify": "^0.1.5",
-    "watch": "0.18.0"
-  },
-  "license": "BSD-3-Clause",
-  "name": "FutureDays",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/cbaron/futuredays.git"
-  },
+  "name": "FutureDaysSoftware",
+  "license": "UNLICENSED",
+  "private": true,
+  "version": "0.0.1",
+  "description": "FutureDays Software repo",
+  "workspaces": [
+    "apps/**/*",
+    "packages/*"
+  ],
+  "dependencies": {},
+  "devDependencies": {},
   "scripts": {
-    "build:css": "stylus stylus/main.styl -o static/css/main.css && gzip -c static/css/main.css > static/css/main.css.gz",
-    "build:js": "scripts/writeLoadViews.js && browserify client/js/main.js -o static/js/debug.js -t [ babelify --presets [ es2015 ] ] | uglifyjs > static/js/bundle.js && gzip -c static/js/bundle.js > static/js/bundle.js.gz",
-    "build:js-debug": "scripts/writeLoadViews.js && browserify client/js/main.js -o static/js/debug.js -x backbone -x jquery -x moment -x underscore -d -t [ babelify --presets [ es2015 ] --ignore [ /node_modules/, /vendor/ ] ] && gzip -c static/js/debug.js > static/js/debug.js.gz",
-    "build:vendor": "browserify -r backbone -r jquery -r moment -r underscore > static/js/vendor.js && gzip -c static/js/vendor.js > static/js/vendor.js.gz",
-    "build:watch": "parallelshell 'npm run watch:css' 'npm run watch:js' 'npm run livereload'",
-    "livereload": "scripts/liveReload.js",
-    "watch:css": "watch 'npm run build:css' stylus --ignoreDotFiles",
-    "watch:js": "watch 'npm run build:js-debug' client/js --ignoreDotFiles --interval=0.5"
-  },
-  "version": "0.0.1"
+    "startWebClient": "cd apps/webClient && yarn start",
+    "buildWebClient": "cd apps/webClient && yarn build"
+  }
 }
