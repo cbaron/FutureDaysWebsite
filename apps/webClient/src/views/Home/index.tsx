@@ -1,10 +1,7 @@
 import React from "react";
 import { makeStyles } from "@material-ui/styles";
-import { useTheme } from "@material-ui/core/styles";
-import useMediaQuery from "@material-ui/core/useMediaQuery";
 import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
-import Link from "@material-ui/core/Link";
 import Typography from "@material-ui/core/Typography";
 import { Theme } from "@material-ui/core/styles/createMuiTheme";
 import Logo from "../../components/Logo";
@@ -12,7 +9,6 @@ import Logo from "../../components/Logo";
 interface Props {}
 
 const backgroundImage = `${process.env.PUBLIC_BUCKET}/fd-home.jpg`;
-const nextToHelloImage = `${process.env.PUBLIC_BUCKET}/next-to-hello.jpg`;
 
 const useStyles = makeStyles((theme: Theme) => ({
   contentWrapper: {
@@ -44,8 +40,6 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 const Home: React.FC<Props> = ({}) => {
   const classes = useStyles();
-  const theme = useTheme();
-  const isXS = useMediaQuery(theme.breakpoints.only("xs"));
   const contentColor = "white";
 
   return (
