@@ -2,10 +2,9 @@ import React from "react";
 
 interface Props {
   fill: string;
-  heightMultiplier: number;
 }
 
-const Logo: React.FC<Props> = ({ fill = "black", heightMultiplier }) => {
+const Logo: React.FC<Props> = ({ fill = "black" }) => {
   return (
     <svg width="100%" height="100%" viewBox="0 0 50 44">
       <title>{"FutureDays Software Logo"}</title>
