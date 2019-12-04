@@ -18,8 +18,7 @@ const useStyles = makeStyles(theme => ({
     width: "100%",
     flexGrow: 1,
     overflowY: "auto",
-    overflowX: "scroll",
-    padding: `${theme.spacing(3)}px 0px`
+    overflowX: "scroll"
   }
 }));
 

@@ -8,7 +8,11 @@ import Home from "./views/Home";
 
 type Props = {};
 
-const theme = createMuiTheme({});
+const theme = createMuiTheme({
+  typography: {
+    fontFamily: ['"Heebo"', "sans-serif"].join(",")
+  }
+});
 
 const App: React.FC<Props> = ({}) => {
   return (
