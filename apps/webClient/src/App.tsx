@@ -5,8 +5,11 @@ import { CssBaseline } from "@material-ui/core";
 import { createMuiTheme } from "@material-ui/core/styles";
 import View from "./components/View";
 import Home from "./views/Home";
+import * as THREE from "three";
 
 type Props = {};
+
+
 
 const theme = createMuiTheme({
   typography: {

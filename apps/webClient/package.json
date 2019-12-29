@@ -16,7 +16,8 @@
     "react": "^16.10.0",
     "react-dom": "^16.11.0",
     "react-router-dom": "^5.1.2",
-    "scss-config-webpack-plugin": "^1.4.0"
+    "scss-config-webpack-plugin": "^1.4.0",
+    "three": "^0.112.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.6.2",
