@@ -38,7 +38,6 @@ const useStyles = makeStyles((theme: Theme) => ({
   }
 }));
 
-
 const Home: React.FC<Props> = ({}) => {
   const classes = useStyles();
   const contentColor = "white";
@@ -57,7 +56,6 @@ const Home: React.FC<Props> = ({}) => {
           </Typography>
         </Box>
       </Grid>
-      
     </Grid>
   );
 };
