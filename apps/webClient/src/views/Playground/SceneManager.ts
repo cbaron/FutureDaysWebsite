@@ -2,7 +2,7 @@ import * as THREE from "three";
 import SceneSubject from "./SceneSubject";
 import GeneralLights from "./GeneralLights";
 
-export default canvas => {
+export default (canvas: any) => {
   const clock = new THREE.Clock();
   const origin = new THREE.Vector3(0, 0, 0);
 
@@ -28,7 +28,7 @@ export default canvas => {
     return scene;
   }
 
-  function buildRender({ width, height }) {
+  function buildRender({ width, height }: any) {
     const renderer = new THREE.WebGLRenderer({
       canvas: canvas,
       antialias: true,
