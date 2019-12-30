@@ -5,7 +5,8 @@ import { CssBaseline } from "@material-ui/core";
 import { createMuiTheme } from "@material-ui/core/styles";
 import View from "./components/View";
 import Home from "./views/Home";
-import { Tester } from "./Model/model";
+import Model from "./components/Model/Threejs/model";
+
 type Props = {};
 
 const theme = createMuiTheme({
@@ -19,6 +20,7 @@ const App: React.FC<Props> = ({}) => {
     <BrowserRouter>
       <ThemeProvider theme={theme}>
         <>
+          <Model></Model>
           <CssBaseline />
           <View>
             <Switch>
