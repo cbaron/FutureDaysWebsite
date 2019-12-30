@@ -5,7 +5,7 @@ import { CssBaseline } from "@material-ui/core";
 import { createMuiTheme } from "@material-ui/core/styles";
 import View from "./components/View";
 import Home from "./views/Home";
-import { Tester } from "./components/Tester";
+import { Tester } from "./Model/model";
 type Props = {};
 
 const theme = createMuiTheme({
