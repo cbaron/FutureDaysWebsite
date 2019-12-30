@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import threeEntryPoint from "./Threejs/threeEntryPoint";
+import threeEntryPoint from "./Model/Threejs/threeEntryPoint";
 import "model.css";
 
 export default class Model extends Component {
