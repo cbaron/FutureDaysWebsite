@@ -5,6 +5,7 @@ import { CssBaseline } from "@material-ui/core";
 import { createMuiTheme } from "@material-ui/core/styles";
 import View from "./components/View";
 import Home from "./views/Home";
+import KCollege from "./views/KCollege";
 
 type Props = {};
 
@@ -22,6 +23,7 @@ const App: React.FC<Props> = ({}) => {
           <CssBaseline />
           <View>
             <Switch>
+              <Route path="/kalamazoo-college" component={KCollege} />
               <Route path="/" component={Home} />
             </Switch>
           </View>
