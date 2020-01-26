@@ -2,6 +2,9 @@ import React, { useEffect, useRef, ReactElement } from "react";
 import { makeStyles } from "@material-ui/styles";
 import * as THREE from "three";
 import { FBXLoader } from "./FBXLoader";
+import { loadModelWithTexture } from "./util";
+import { readdirSync } from "fs";
+import * as path from "path";
 
 require("./inflate.min.js");
 
@@ -25,7 +28,7 @@ function onWindowResize() {
   renderer.setSize(window.innerWidth, window.innerHeight);
 }
 
-const stickItUpYourYeah = (threeJsElement: ReactElement) => {
+const stickItUpYourYeah = async (threeJsElement: ReactElement) => {
   let thing;
   const loader = new FBXLoader();
 
@@ -81,60 +84,161 @@ const stickItUpYourYeah = (threeJsElement: ReactElement) => {
 
   threeJsElement.appendChild(renderer.domElement);
 
-  const textureLoader = new THREE.TextureLoader();
-
-  loader.load(
+  const stadium = await loadModelWithTexture(
     "Models/Buildings/Building_Stadium.fbx",
-    function(object) {
-      //mixer = new THREE.AnimationMixer(object);
-
-      textureLoader.load(
-        "Textures/Building_Stadium.png",
-        function(texture) {
-          //var action = mixer.clipAction(object.animations[0]);
-          //action.play();
-
-          object.traverse(function(child) {
-            if (child.isMesh) {
-              child.castShadow = true;
-              child.receiveShadow = true;
-              child.material.map = texture;
-              child.material.needsUpdate = true;
-            }
-          });
-
-          thing = object;
-          object.position.y = 5;
-          object.position.x = 5;
-          object.position.z = 5;
-          object.scale.y = 0.15;
-          object.scale.x = 0.15;
-          object.scale.z = 0.15;
-          scene.add(object);
-        },
-        undefined,
-        e => console.log(e)
-      );
-    },
-    undefined,
-    function(e) {
-      console.error(e);
-    }
+    "Textures/Building_Stadium.png"
   );
 
-  function animate() {
-    requestAnimationFrame(animate);
+  stadium.position.y = 5;
+  stadium.position.x = 5;
+  stadium.position.z = 5;
+  scene.add(stadium);
 
-    if (thing) {
-      //thing.rotation.x += 0.01;
-      //thing.rotation.y += 0.02;
-    }
+  const roadFiles = [
+    ["Road Concrete Tile Small.fbx", "Road Concrete Tile.png"],
+    ["Road Concrete Tile.fbx", "Road Concrete Tile.png"],
+    ["Road Corner_01.fbx"],
+    ["Road Corner_02.fbx"],
+    ["Road Intersection_01.fbx"],
+    ["Road Intersection_02.fbx"],
+    ["Road Lane Bus Stop.fbx"],
+    ["Road Lane Half.fbx"],
+    ["Road Lane_01.fbx"],
+    ["Road Lane_02.fbx"],
+    ["Road Lane_03.fbx"],
+    ["Road Lane_04.fbx"],
+    ["Road Split Line.fbx"],
+    ["Road T_Intersection_01.fbx"],
+    ["Road T_Intersection_02.fbx"],
+    ["Road Tile Small.fbx"],
+    ["Road Tile.fbx"]
+  ];
 
-    renderer.render(scene, camera);
-  }
+  const natureFiles = [
+    "Natures_Big Tree.fbx",
+    "Natures_Bush_01.fbx",
+    "Natures_Bush_02.fbx",
+    "Natures_Bush_03.fbx",
+    "Natures_Cube Tree.fbx",
+    "Natures_Fir Tree.fbx",
+    "Natures_Grass Bar.fbx",
+    "Natures_Grass Fence.fbx",
+    "Natures_Grass Tile Small.fbx",
+    "Natures_Grass Tile.fbx",
+    "Natures_House Floor.fbx",
+    "Natures_Pot Bush_big.fbx",
+    "Natures_Pot Bush_small.fbx",
+    "Natures_Rock_Big.fbx",
+    "Natures_Rock_small.fbx"
+  ];
+
+  const buildingFiles = [
+    ["Building Sky_big_color01.fbx", "Building Sky_big_color01.png"],
+    ["Building Sky_small_color01.fbx", "Building Sky_small_color01.png"],
+    ["Building_Auto Service.fbx", "Building_Auto Service.png"],
+    ["Building_Bakery.fbx", "Building_Bakery.png"],
+    ["Building_Bar.fbx", "Building_Bar.png"],
+    ["Building_Books Shop.fbx", "Building_Books Shop.png"],
+    ["Building_Chicken Shop.fbx", "Building_Chicken Shop.png"],
+    ["Building_Clothing.fbx", "Building_Clothing.png"],
+    ["Building_Coffee Shop.fbx", "Building_Coffee Shop.png"],
+    ["Building_Drug Store.fbx", "Building_Drug Store.png"],
+    ["Building_Factory.fbx", "Building_Factory.png"],
+    ["Building_Fast Food.fbx", "Building_Fast Food.png"],
+    ["Building_Fruits  Shop.fbx", "Building_Fruits  Shop.png"],
+    ["Building_Gas Station.fbx", "Building_Gas Station.png"],
+    ["Building_Gift Shop.fbx", "Building_Gift Shop.png"],
+    ["Building_House_01_color01.fbx", "Building_House_01_color01.png"]
+  ];
+  /*[    "Building_House_02_color01.fbx",]
+[    "Building_House_03_color01.fbx",]
+[    "Building_House_04_color01.fbx",]
+[    "Building_Music Store.fbx",]
+[    "Building_Pizza.fbx",]
+[    "Building_Residential_color01.fbx",]
+[    "Building_Restaurant.fbx",]
+[    "Building_Shoes Shop.fbx",]
+[    "Building_Stadium.fbx",]
+[    "Building_Super Market.fbx"]
+  ];]
+  */
+
+  const offsets = { x: 5, y: 5, z: 5 };
+
+  await Promise.all(
+    roadFiles.map(async ([modelFile, textureFile], index) => {
+      const object = await loadModelWithTexture(
+        "Models/Road/" + modelFile,
+        "Textures/" + (textureFile || "Road.png")
+      );
+
+      offsets.x = offsets.x + 5;
+      offsets.y = offsets.y + 1;
+      offsets.z = offsets.z + 1;
+      if (index === 2) {
+        offsets.x = -20;
+      }
+      object.position.x = offsets.x;
+      object.position.y = offsets.y;
+      object.position.z = offsets.z;
+      console.log("adding object");
+      scene.add(object);
+    })
+  );
+
+  /*
+  offsets.x = -10;
+  offsets.z = offsets.z - 5;
+  await Promise.all(
+    natureFiles.map(async (modelFile, index) => {
+      const object = await loadModelWithTexture(
+        "Models/Natures/" + modelFile,
+        "Textures/Natures.png"
+      );
+
+      offsets.x = offsets.x + 2;
+      offsets.y = offsets.y + 1;
+      offsets.z = offsets.z + 1;
+      object.position.x = offsets.x;
+      object.position.y = offsets.y;
+      object.position.z = offsets.z;
+      console.log("adding object");
+      scene.add(object);
+    })
+  );*/
+
+  offsets.x = -40;
+  offsets.z = 15;
+  await Promise.all(
+    buildingFiles.map(async ([modelFile, textureFile], index) => {
+      const object = await loadModelWithTexture(
+        "Models/Buildings/" + modelFile,
+        "Textures/" + textureFile
+      );
+
+      offsets.x = offsets.x + 5;
+      offsets.y = offsets.y + 1;
+      offsets.z = offsets.z + 1;
+      object.position.x = offsets.x;
+      object.position.y = offsets.y;
+      object.position.z = offsets.z;
+      console.log("adding object");
+      scene.add(object);
+    })
+  );
+
+  renderer.render(scene, camera);
 
   animate();
 };
+function animate() {
+  requestAnimationFrame(animate);
+
+  //if (thing) {
+  //thing.rotation.x += 0.01;
+  //thing.rotation.y += 0.02;
+  //}
+}
 
 const Playground: React.FC<Props> = ({}) => {
   const classes = useStyles();
@@ -142,7 +246,12 @@ const Playground: React.FC<Props> = ({}) => {
 
   useEffect(() => {
     if (threeJsEl && threeJsEl.current) {
-      stickItUpYourYeah(threeJsEl.current as any);
+      try {
+        stickItUpYourYeah(threeJsEl.current as any);
+      } catch (e) {
+        console.log("You suck son");
+        console.log(e.stack || e);
+      }
     }
   }, [threeJsEl, threeJsEl.current]);
 
