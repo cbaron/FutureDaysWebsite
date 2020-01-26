@@ -35,7 +35,11 @@ const stickItUpYourYeah = (threeJsElement: ReactElement) => {
     1,
     2000
   );
-  camera.position.set(0, 30, 100);
+  camera.position.set(0, 40, 50);
+
+  camera.rotation.y = 0;
+  camera.rotation.x = -0.5;
+  camera.rotation.z = 0;
 
   const scene = new THREE.Scene();
   //scene.background = new THREE.Color(0xa0a0a0);
@@ -77,29 +81,40 @@ const stickItUpYourYeah = (threeJsElement: ReactElement) => {
 
   threeJsElement.appendChild(renderer.domElement);
 
+  const textureLoader = new THREE.TextureLoader();
+
   loader.load(
     "Models/Buildings/Building_Stadium.fbx",
     function(object) {
       //mixer = new THREE.AnimationMixer(object);
 
-      console.log(object);
-      //var action = mixer.clipAction(object.animations[0]);
-      //action.play();
+      textureLoader.load(
+        "Textures/Building_Stadium.png",
+        function(texture) {
+          //var action = mixer.clipAction(object.animations[0]);
+          //action.play();
 
-      object.traverse(function(child) {
-        if (child.isMesh) {
-          child.castShadow = true;
-          child.receiveShadow = true;
-        }
-      });
-      thing = object;
-      object.position.y = 5;
-      object.position.x = 5;
-      object.position.z = 5;
-      object.scale.y = 0.15;
-      object.scale.x = 0.15;
-      object.scale.z = 0.15;
-      scene.add(object);
+          object.traverse(function(child) {
+            if (child.isMesh) {
+              child.castShadow = true;
+              child.receiveShadow = true;
+              child.material.map = texture;
+              child.material.needsUpdate = true;
+            }
+          });
+
+          thing = object;
+          object.position.y = 5;
+          object.position.x = 5;
+          object.position.z = 5;
+          object.scale.y = 0.15;
+          object.scale.x = 0.15;
+          object.scale.z = 0.15;
+          scene.add(object);
+        },
+        undefined,
+        e => console.log(e)
+      );
     },
     undefined,
     function(e) {
@@ -111,8 +126,8 @@ const stickItUpYourYeah = (threeJsElement: ReactElement) => {
     requestAnimationFrame(animate);
 
     if (thing) {
-      thing.rotation.x += 0.01;
-      thing.rotation.y += 0.02;
+      //thing.rotation.x += 0.01;
+      //thing.rotation.y += 0.02;
     }
 
     renderer.render(scene, camera);
