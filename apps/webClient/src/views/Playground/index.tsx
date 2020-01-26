@@ -2,9 +2,7 @@ import React, { useEffect, useRef, ReactElement } from "react";
 import { makeStyles } from "@material-ui/styles";
 import * as THREE from "three";
 import { FBXLoader } from "./FBXLoader";
-import { loadModelWithTexture } from "./util";
-import { readdirSync } from "fs";
-import * as path from "path";
+import { loadModelWithTexture, buildBlock } from "./util";
 
 require("./inflate.min.js");
 
@@ -38,11 +36,11 @@ const stickItUpYourYeah = async (threeJsElement: ReactElement) => {
     1,
     2000
   );
-  camera.position.set(0, 40, 50);
+  camera.position.set(0, 50, 50);
 
-  camera.rotation.y = 0;
-  camera.rotation.x = -0.5;
-  camera.rotation.z = 0;
+  camera.rotation.y = 0.0;
+  camera.rotation.x = -0.7;
+  camera.rotation.z = 0.0;
 
   const scene = new THREE.Scene();
   //scene.background = new THREE.Color(0xa0a0a0);
@@ -52,6 +50,7 @@ const stickItUpYourYeah = async (threeJsElement: ReactElement) => {
   light.position.set(0, 200, 0);
   scene.add(light);
 
+  /*
   const lightTwo = new THREE.DirectionalLight(0xffffff);
   lightTwo.position.set(0, 200, 100);
   lightTwo.castShadow = true;
@@ -60,6 +59,7 @@ const stickItUpYourYeah = async (threeJsElement: ReactElement) => {
   lightTwo.shadow.camera.left = -120;
   lightTwo.shadow.camera.right = 120;
   scene.add(lightTwo);
+  */
 
   var mesh = new THREE.Mesh(
     new THREE.PlaneBufferGeometry(2000, 2000),
@@ -69,7 +69,7 @@ const stickItUpYourYeah = async (threeJsElement: ReactElement) => {
   mesh.receiveShadow = true;
   scene.add(mesh);
 
-  var grid = new THREE.GridHelper(2000, 20, 0x000000, 0x000000);
+  var grid = new THREE.GridHelper(200, 20, 0x000000, 0x000000);
   grid.material.opacity = 0.2;
   grid.material.transparent = true;
   scene.add(grid);
@@ -84,6 +84,7 @@ const stickItUpYourYeah = async (threeJsElement: ReactElement) => {
 
   threeJsElement.appendChild(renderer.domElement);
 
+  /*
   const stadium = await loadModelWithTexture(
     "Models/Buildings/Building_Stadium.fbx",
     "Textures/Building_Stadium.png"
@@ -93,6 +94,7 @@ const stickItUpYourYeah = async (threeJsElement: ReactElement) => {
   stadium.position.x = 5;
   stadium.position.z = 5;
   scene.add(stadium);
+  */
 
   const roadFiles = [
     ["Road Concrete Tile Small.fbx", "Road Concrete Tile.png"],
@@ -113,6 +115,8 @@ const stickItUpYourYeah = async (threeJsElement: ReactElement) => {
     ["Road Tile Small.fbx"],
     ["Road Tile.fbx"]
   ];
+
+  await buildBlock(scene);
 
   const natureFiles = [
     "Natures_Big Tree.fbx",
@@ -165,6 +169,7 @@ const stickItUpYourYeah = async (threeJsElement: ReactElement) => {
 
   const offsets = { x: 5, y: 5, z: 5 };
 
+  /*
   await Promise.all(
     roadFiles.map(async ([modelFile, textureFile], index) => {
       const object = await loadModelWithTexture(
@@ -185,6 +190,7 @@ const stickItUpYourYeah = async (threeJsElement: ReactElement) => {
       scene.add(object);
     })
   );
+  */
 
   /*
   offsets.x = -10;
@@ -207,6 +213,7 @@ const stickItUpYourYeah = async (threeJsElement: ReactElement) => {
     })
   );*/
 
+  /*
   offsets.x = -40;
   offsets.z = 15;
   await Promise.all(
@@ -226,6 +233,7 @@ const stickItUpYourYeah = async (threeJsElement: ReactElement) => {
       scene.add(object);
     })
   );
+  */
 
   renderer.render(scene, camera);
 
