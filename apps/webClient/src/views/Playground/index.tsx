@@ -1,54 +1,54 @@
-import React, { useEffect, useRef, ReactElement } from "react";
-import { makeStyles } from "@material-ui/styles";
-import * as THREE from "three";
-import { FBXLoader } from "./FBXLoader";
-import { loadModelWithTexture, buildBlock } from "./util";
+import React, { useEffect, useRef, ReactElement } from 'react'
+import { makeStyles } from '@material-ui/styles'
+import * as THREE from 'three'
+import { FBXLoader } from './FBXLoader'
+import { loadModelWithTexture, buildBlock } from './util'
 
-require("./inflate.min.js");
+require('./inflate.min.js')
 
 interface Props {}
 
 const useStyles = makeStyles(() => ({
   root: {
-    position: "fixed",
-    width: "100vw",
-    height: "100vh"
+    position: 'fixed',
+    width: '100vw',
+    height: '100vh'
   }
-}));
+}))
 
-let camera;
-let renderer;
+let camera
+let renderer
 
 function onWindowResize() {
-  camera.aspect = window.innerWidth / window.innerHeight;
-  camera.updateProjectionMatrix();
+  camera.aspect = window.innerWidth / window.innerHeight
+  camera.updateProjectionMatrix()
 
-  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setSize(window.innerWidth, window.innerHeight)
 }
 
 const stickItUpYourYeah = async (threeJsElement: ReactElement) => {
-  let thing;
-  const loader = new FBXLoader();
+  let thing
+  const loader = new FBXLoader()
 
   camera = new THREE.PerspectiveCamera(
-    45,
+    115,
     window.innerWidth / window.innerHeight,
     1,
     2000
-  );
-  camera.position.set(0, 50, 50);
+  )
+  camera.position.set(130, 70, 50)
 
-  camera.rotation.y = 0.0;
-  camera.rotation.x = -0.7;
-  camera.rotation.z = 0.0;
+  camera.rotation.y = 0.0
+  camera.rotation.x = -0.7
+  camera.rotation.z = 0.0
 
-  const scene = new THREE.Scene();
+  const scene = new THREE.Scene()
   //scene.background = new THREE.Color(0xa0a0a0);
   //scene.fog = new THREE.Fog(0xa0a0a0, 200, 1000);
 
-  const light = new THREE.HemisphereLight(0xffffff, 0x444444);
-  light.position.set(0, 200, 0);
-  scene.add(light);
+  const light = new THREE.HemisphereLight(0xffffff, 0x444444)
+  light.position.set(0, 200, 0)
+  scene.add(light)
 
   /*
   const lightTwo = new THREE.DirectionalLight(0xffffff);
@@ -64,25 +64,25 @@ const stickItUpYourYeah = async (threeJsElement: ReactElement) => {
   var mesh = new THREE.Mesh(
     new THREE.PlaneBufferGeometry(2000, 2000),
     new THREE.MeshPhongMaterial({ color: 0x999999, depthWrite: false })
-  );
-  mesh.rotation.x = -Math.PI / 2;
-  mesh.receiveShadow = true;
-  scene.add(mesh);
+  )
+  mesh.rotation.x = -Math.PI / 2
+  mesh.receiveShadow = true
+  scene.add(mesh)
 
-  var grid = new THREE.GridHelper(200, 20, 0x000000, 0x000000);
-  grid.material.opacity = 0.2;
-  grid.material.transparent = true;
-  scene.add(grid);
+  var grid = new THREE.GridHelper(400, 40, 0x000000, 0x000000)
+  grid.material.opacity = 0.2
+  grid.material.transparent = true
+  scene.add(grid)
 
-  renderer = new THREE.WebGLRenderer({ antialias: true });
-  renderer.setPixelRatio(window.devicePixelRatio);
-  renderer.setSize(window.innerWidth, window.innerHeight);
-  renderer.shadowMap.enabled = true;
-  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer = new THREE.WebGLRenderer({ antialias: true })
+  renderer.setPixelRatio(window.devicePixelRatio)
+  renderer.setSize(window.innerWidth, window.innerHeight)
+  renderer.shadowMap.enabled = true
+  renderer.setSize(window.innerWidth, window.innerHeight)
 
-  window.addEventListener("resize", onWindowResize, false);
+  window.addEventListener('resize', onWindowResize, false)
 
-  threeJsElement.appendChild(renderer.domElement);
+  threeJsElement.appendChild(renderer.domElement)
 
   /*
   const stadium = await loadModelWithTexture(
@@ -97,63 +97,67 @@ const stickItUpYourYeah = async (threeJsElement: ReactElement) => {
   */
 
   const roadFiles = [
-    ["Road Concrete Tile Small.fbx", "Road Concrete Tile.png"],
-    ["Road Concrete Tile.fbx", "Road Concrete Tile.png"],
-    ["Road Corner_01.fbx"],
-    ["Road Corner_02.fbx"],
-    ["Road Intersection_01.fbx"],
-    ["Road Intersection_02.fbx"],
-    ["Road Lane Bus Stop.fbx"],
-    ["Road Lane Half.fbx"],
-    ["Road Lane_01.fbx"],
-    ["Road Lane_02.fbx"],
-    ["Road Lane_03.fbx"],
-    ["Road Lane_04.fbx"],
-    ["Road Split Line.fbx"],
-    ["Road T_Intersection_01.fbx"],
-    ["Road T_Intersection_02.fbx"],
-    ["Road Tile Small.fbx"],
-    ["Road Tile.fbx"]
-  ];
+    ['Road Concrete Tile Small.fbx', 'Road Concrete Tile.png'],
+    ['Road Concrete Tile.fbx', 'Road Concrete Tile.png'],
+    ['Road Corner_01.fbx'],
+    ['Road Corner_02.fbx'],
+    ['Road Intersection_01.fbx'],
+    ['Road Intersection_02.fbx'],
+    ['Road Lane Bus Stop.fbx'],
+    ['Road Lane Half.fbx'],
+    ['Road Lane_01.fbx'],
+    ['Road Lane_02.fbx'],
+    ['Road Lane_03.fbx'],
+    ['Road Lane_04.fbx'],
+    ['Road Split Line.fbx'],
+    ['Road T_Intersection_01.fbx'],
+    ['Road T_Intersection_02.fbx'],
+    ['Road Tile Small.fbx'],
+    ['Road Tile.fbx']
+  ]
 
-  await buildBlock(scene);
+  // pass down the X and Z offset for each new tile
+  await buildBlock(scene, 1, 0)
+  await buildBlock(scene, 2, 0)
+  await buildBlock(scene, 1, 1)
+  await buildBlock(scene, 2, 1)
 
   const natureFiles = [
-    "Natures_Big Tree.fbx",
-    "Natures_Bush_01.fbx",
-    "Natures_Bush_02.fbx",
-    "Natures_Bush_03.fbx",
-    "Natures_Cube Tree.fbx",
-    "Natures_Fir Tree.fbx",
-    "Natures_Grass Bar.fbx",
-    "Natures_Grass Fence.fbx",
-    "Natures_Grass Tile Small.fbx",
-    "Natures_Grass Tile.fbx",
-    "Natures_House Floor.fbx",
-    "Natures_Pot Bush_big.fbx",
-    "Natures_Pot Bush_small.fbx",
-    "Natures_Rock_Big.fbx",
-    "Natures_Rock_small.fbx"
-  ];
+    'Natures_Big Tree.fbx',
+    'Natures_Bush_01.fbx',
+    'Natures_Bush_02.fbx',
+    'Natures_Bush_03.fbx',
+    'Natures_Cube Tree.fbx',
+    'Natures_Fir Tree.fbx',
+    'Natures_Grass Bar.fbx',
+    'Natures_Grass Fence.fbx',
+    'Natures_Grass Tile Small.fbx',
+    'Natures_Grass Tile.fbx',
+    'Natures_House Floor.fbx',
+    'Natures_Pot Bush_big.fbx',
+    'Natures_Pot Bush_small.fbx',
+    'Natures_Rock_Big.fbx',
+    'Natures_Rock_small.fbx'
+  ]
 
   const buildingFiles = [
-    ["Building Sky_big_color01.fbx", "Building Sky_big_color01.png"],
-    ["Building Sky_small_color01.fbx", "Building Sky_small_color01.png"],
-    ["Building_Auto Service.fbx", "Building_Auto Service.png"],
-    ["Building_Bakery.fbx", "Building_Bakery.png"],
-    ["Building_Bar.fbx", "Building_Bar.png"],
-    ["Building_Books Shop.fbx", "Building_Books Shop.png"],
-    ["Building_Chicken Shop.fbx", "Building_Chicken Shop.png"],
-    ["Building_Clothing.fbx", "Building_Clothing.png"],
-    ["Building_Coffee Shop.fbx", "Building_Coffee Shop.png"],
-    ["Building_Drug Store.fbx", "Building_Drug Store.png"],
-    ["Building_Factory.fbx", "Building_Factory.png"],
-    ["Building_Fast Food.fbx", "Building_Fast Food.png"],
-    ["Building_Fruits  Shop.fbx", "Building_Fruits  Shop.png"],
-    ["Building_Gas Station.fbx", "Building_Gas Station.png"],
-    ["Building_Gift Shop.fbx", "Building_Gift Shop.png"],
-    ["Building_House_01_color01.fbx", "Building_House_01_color01.png"]
-  ];
+    ['Building Sky_big_color01.fbx', 'Building Sky_big_color01.png'],
+    ['Building Sky_small_color01.fbx', 'Building Sky_small_color01.png'],
+    ['Building_Auto Service.fbx', 'Building_Auto Service.png'],
+    ['Building_Bakery.fbx', 'Building_Bakery.png'],
+    ['Building_Bar.fbx', 'Building_Bar.png'],
+    ['Building_Books Shop.fbx', 'Building_Books Shop.png'],
+    ['Building_Chicken Shop.fbx', 'Building_Chicken Shop.png'],
+    ['Building_Clothing.fbx', 'Building_Clothing.png'],
+    ['Building_Coffee Shop.fbx', 'Building_Coffee Shop.png'],
+    ['Building_Drug Store.fbx', 'Building_Drug Store.png'],
+    ['Building_Factory.fbx', 'Building_Factory.png'],
+    ['Building_Fast Food.fbx', 'Building_Fast Food.png'],
+    ['Building_Fruits  Shop.fbx', 'Building_Fruits  Shop.png'],
+    ['Building_Gas Station.fbx', 'Building_Gas Station.png'],
+    ['Building_Gift Shop.fbx', 'Building_Gift Shop.png'],
+    ['Building_House_01_color01.fbx', 'Building_House_01_color01.png']
+  ]
   /*[    "Building_House_02_color01.fbx",]
 [    "Building_House_03_color01.fbx",]
 [    "Building_House_04_color01.fbx",]
@@ -167,7 +171,7 @@ const stickItUpYourYeah = async (threeJsElement: ReactElement) => {
   ];]
   */
 
-  const offsets = { x: 5, y: 5, z: 5 };
+  const offsets = { x: 5, y: 5, z: 5 }
 
   /*
   await Promise.all(
@@ -235,12 +239,12 @@ const stickItUpYourYeah = async (threeJsElement: ReactElement) => {
   );
   */
 
-  renderer.render(scene, camera);
+  renderer.render(scene, camera)
 
-  animate();
-};
+  animate()
+}
 function animate() {
-  requestAnimationFrame(animate);
+  requestAnimationFrame(animate)
 
   //if (thing) {
   //thing.rotation.x += 0.01;
@@ -249,21 +253,21 @@ function animate() {
 }
 
 const Playground: React.FC<Props> = ({}) => {
-  const classes = useStyles();
-  const threeJsEl = useRef(null);
+  const classes = useStyles()
+  const threeJsEl = useRef(null)
 
   useEffect(() => {
     if (threeJsEl && threeJsEl.current) {
       try {
-        stickItUpYourYeah(threeJsEl.current as any);
+        stickItUpYourYeah(threeJsEl.current as any)
       } catch (e) {
-        console.log("You suck son");
-        console.log(e.stack || e);
+        console.log('You suck son')
+        console.log(e.stack || e)
       }
     }
-  }, [threeJsEl, threeJsEl.current]);
+  }, [threeJsEl, threeJsEl.current])
 
-  return <div ref={threeJsEl} className={classes.root} />;
-};
+  return <div ref={threeJsEl} className={classes.root} />
+}
 
-export default Playground;
+export default Playground
