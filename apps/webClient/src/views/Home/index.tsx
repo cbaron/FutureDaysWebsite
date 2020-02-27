@@ -1,61 +1,45 @@
 import React from "react";
 import { makeStyles } from "@material-ui/styles";
-import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import { Theme } from "@material-ui/core/styles/createMuiTheme";
-import Logo from "../../components/Logo";
 
 interface Props {}
 
-const backgroundImage = `${process.env.PUBLIC_BUCKET}/fd-home.jpg`;
+const logo = `${process.env.PUBLIC_BUCKET}/fd-logo.png`;
 
 const useStyles = makeStyles((theme: Theme) => ({
-  contentWrapper: {
-    paddingBottom: 0,
-    width: 176
+  bodyText: {
+    color: theme.palette.secondary.main,
   },
-  top: {
-    backgroundImage: `url("${backgroundImage}")`,
-    height: "100%",
-    backgroundRepeat: "no-repeat",
-    backgroundPosition: "center",
-    backgroundColor: "black"
+  logo: {
+    height: "100px",
   },
-  futuredays: {
-    color: "white",
-    lineHeight: 1
-  },
-  titleContent: {
-    alignSelf: "flex-end",
-    marginBottom: theme.spacing(2),
-    marginRight: theme.spacing(2),
-    [theme.breakpoints.only("xs")]: {
-      backgroundColor: "black",
-      borderRadius: theme.spacing(2),
-      marginRight: 0
-    }
-  }
 }));
 
 const Home: React.FC<Props> = ({}) => {
   const classes = useStyles();
-  const contentColor = "white";
 
   return (
-    <Grid container direction="row-reverse" className={classes.top}>
-      <Grid item className={classes.titleContent} sm={3}>
-        <Box pb={2} className={classes.contentWrapper}>
-          <Logo fill={contentColor} />
-          <Typography
-            className={classes.futuredays}
-            align="center"
-            variant="h5"
-          >
-            FutureDays
-          </Typography>
-        </Box>
+    <Grid container>
+      <Grid item md xs></Grid>
+      <Grid item md={6} xs={10}>
+        <img src={logo} alt="Future Days" className={classes.logo} />
+        <Typography variant="h4">ABOUT US</Typography>
+        <Typography variant="body1" className={classes.bodyText}>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+          eiusmod tempor incididunt ut labore et dolore magna aliqua. Auctor
+          elit sed vulputate mi. Orci eu lobortis elementum nibh tellus molestie
+          nunc non blandit. Mi in nulla posuere sollicitudin aliquam ultrices
+          sagittis. Interdum posuere lorem ipsum dolor sit. Nunc sed blandit
+          libero volutpat sed cras. Pharetra vel turpis nunc eget lorem dolor.
+          Ullamcorper dignissim cras tincidunt lobortis feugiat vivamus at.
+          Magna fermentum iaculis eu non diam phasellus vestibulum. Nulla
+          pellentesque dignissim enim sit. In aliquam sem fringilla ut morbi
+          tincidunt augue interdum.
+        </Typography>
       </Grid>
+      <Grid item md xs></Grid>
     </Grid>
   );
 };
