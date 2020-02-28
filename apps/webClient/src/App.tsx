@@ -15,20 +15,14 @@ const LibreBaskerville = {
   fontWeight: 400,
 };
 
+const BLACK = "#000000";
+const DARK_GREY = "#373733";
+
 const theme = createMuiTheme({
   palette: {
-    background: {
-      default: "#4CBFFE",
-    },
-    primary: {
-      light: "#cfaa67",
-      main: "#4CBFFE",
-      dark: "#89682e",
-    },
-    secondary: {
-      light: "#4f4b4c",
-      main: "#373733",
-      dark: "#181516",
+    text: {
+      primary: BLACK,
+      secondary: DARK_GREY,
     },
   },
   typography: {
