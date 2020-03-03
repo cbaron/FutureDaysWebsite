@@ -16,8 +16,9 @@ const useStyles = makeStyles((theme: Theme) => ({
     maxWidth: 300,
     textAlign: "center",
   },
-  white: {
+  contrastHeader: {
     color: "white",
+    textTransform: "uppercase",
   },
 }));
 
@@ -32,17 +33,19 @@ const Home: React.FC<Props> = ({}) => {
       <Box mt={12}>
         <Grid container>
           <Grid item container sm={3} justify="flex-start">
-            <NavButton type="about" text="OUR WORK" />
+            <NavButton route="ourwork" text="our work" />
           </Grid>
           <Grid item container sm={6} justify="center">
             <Container maxWidth="xs">
               <Grid container justify="center" alignItems="center">
                 <Typography variant="body1">03.</Typography>
-                <Box mb={1}>
-                  <Typography variant="h4" className={classes.white}>
-                    ABOUT US
-                  </Typography>
-                </Box>
+                <Typography
+                  gutterBottom
+                  variant="h4"
+                  className={classes.contrastHeader}
+                >
+                  about us
+                </Typography>
               </Grid>
               <Typography variant="body1" align="center" color="textSecondary">
                 <i>
@@ -56,18 +59,21 @@ const Home: React.FC<Props> = ({}) => {
             </Container>
           </Grid>
           <Grid item container sm={3} justify="flex-end">
-            <NavButton type="ourWork" text="ABOUT US" />
+            <NavButton route="about" text="about us" />
           </Grid>
         </Grid>
       </Box>
       <Box mt={12}>
         <Grid container justify="space-around">
           <Container maxWidth="xs">
-            <Box mb={1}>
-              <Typography variant="h5" align="center" className={classes.white}>
-                PARTNER NAME
-              </Typography>
-            </Box>
+            <Typography
+              variant="h5"
+              align="center"
+              className={classes.contrastHeader}
+              gutterBottom
+            >
+              partner name
+            </Typography>
             <Typography variant="body1" align="center" color="textSecondary">
               <i>
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
@@ -76,11 +82,14 @@ const Home: React.FC<Props> = ({}) => {
             </Typography>
           </Container>
           <Container maxWidth="xs">
-            <Box mb={1}>
-              <Typography variant="h5" align="center" className={classes.white}>
-                PARTNER NAME
-              </Typography>
-            </Box>
+            <Typography
+              variant="h5"
+              align="center"
+              className={classes.contrastHeader}
+              gutterBottom
+            >
+              partner name
+            </Typography>
             <Typography variant="body1" align="center" color="textSecondary">
               <i>
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do

@@ -5,18 +5,18 @@ import Typography from "@material-ui/core/Typography";
 import { Theme } from "@material-ui/core/styles/createMuiTheme";
 
 interface Props {
-  type: string;
+  route: string;
   text: string;
 }
 
 const useStyles = makeStyles((theme: Theme) => ({
-  aboutUs: {
+  ourWork: {
     backgroundColor: "white",
     borderRadius: 0,
     width: 60,
     height: 200,
   },
-  ourWork: {
+  aboutUs: {
     backgroundColor: "transparent",
     borderRadius: 0,
     border: "solid 4px white",
@@ -27,14 +27,15 @@ const useStyles = makeStyles((theme: Theme) => ({
     writingMode: "vertical-rl",
     textOrientation: "sideways",
     fontSize: 20,
+    textTransform: "uppercase",
   },
 }));
 
-const NavButton: React.FC<Props> = ({ type, text }) => {
+const NavButton: React.FC<Props> = ({ route, text }) => {
   const classes = useStyles();
   return (
     <Button
-      className={type === "about" ? classes.aboutUs : classes.ourWork}
+      className={route === "about" ? classes.aboutUs : classes.ourWork}
       classes={{ label: classes.buttonLabel }}
     >
       <strong>{text}</strong>
