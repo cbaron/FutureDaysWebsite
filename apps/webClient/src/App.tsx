@@ -9,10 +9,51 @@ import KCollege from "./views/KCollege";
 
 type Props = {};
 
+const Monsterrat = { fontFamily: "Montserrat, sans-serif", fontWeight: 400 };
+const LibreBaskerville = {
+  fontFamily: "Libre Baskerville, sans-serif",
+  fontWeight: 400,
+};
+
+const BLACK = "#000000";
+const DARK_GREY = "#373733";
+
 const theme = createMuiTheme({
+  palette: {
+    text: {
+      primary: BLACK,
+      secondary: DARK_GREY,
+    },
+  },
   typography: {
-    fontFamily: ['"Heebo"', "sans-serif"].join(",")
-  }
+    h1: {
+      ...Monsterrat,
+    },
+    h2: {
+      ...Monsterrat,
+    },
+    h3: {
+      ...Monsterrat,
+    },
+    h4: {
+      ...Monsterrat,
+    },
+    h5: {
+      ...Monsterrat,
+    },
+    h6: {
+      ...Monsterrat,
+    },
+    body1: {
+      ...LibreBaskerville,
+    },
+    body2: {
+      ...LibreBaskerville,
+    },
+    subtitle1: {
+      ...Monsterrat,
+    },
+  },
 });
 
 const App: React.FC<Props> = ({}) => {
