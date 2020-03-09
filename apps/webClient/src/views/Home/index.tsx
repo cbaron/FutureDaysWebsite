@@ -2,7 +2,7 @@ import React from "react";
 import { makeStyles } from "@material-ui/styles";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
-import Button from "@material-ui/core/Button";
+import FlareIcon from "@material-ui/icons/Flare";
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import { Theme } from "@material-ui/core/styles/createMuiTheme";
@@ -33,7 +33,7 @@ const Home: React.FC<Props> = ({}) => {
       <Box mt={12}>
         <Grid container>
           <Grid item container sm={3} justify="flex-start">
-            <NavButton route="ourwork" text="our work" />
+            <NavButton route="our-work" text="our work" vertical={true} />
           </Grid>
           <Grid item container sm={6} justify="center">
             <Container maxWidth="xs">
@@ -44,7 +44,7 @@ const Home: React.FC<Props> = ({}) => {
                   variant="h4"
                   className={classes.contrastHeader}
                 >
-                  about us
+                  oh hello
                 </Typography>
               </Grid>
               <Typography variant="body1" align="center" color="textSecondary">
@@ -56,47 +56,21 @@ const Home: React.FC<Props> = ({}) => {
                   sollicitudin aliquam ultrices sagittis.
                 </i>
               </Typography>
+              <Box mt={2}>
+                <Grid container justify="center">
+                  <FlareIcon fontSize="large" />
+                </Grid>
+              </Box>
             </Container>
           </Grid>
           <Grid item container sm={3} justify="flex-end">
-            <NavButton route="about" text="about us" />
+            <NavButton route="about" text="about us" vertical={true} />
           </Grid>
         </Grid>
       </Box>
-      <Box mt={12}>
-        <Grid container justify="space-around">
-          <Container maxWidth="xs">
-            <Typography
-              variant="h5"
-              align="center"
-              className={classes.contrastHeader}
-              gutterBottom
-            >
-              partner name
-            </Typography>
-            <Typography variant="body1" align="center" color="textSecondary">
-              <i>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                sitame etel
-              </i>
-            </Typography>
-          </Container>
-          <Container maxWidth="xs">
-            <Typography
-              variant="h5"
-              align="center"
-              className={classes.contrastHeader}
-              gutterBottom
-            >
-              partner name
-            </Typography>
-            <Typography variant="body1" align="center" color="textSecondary">
-              <i>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                sitame etel
-              </i>
-            </Typography>
-          </Container>
+      <Box mt={6}>
+        <Grid container justify="center">
+          <NavButton route="lets-talk" text="lets talk" vertical={false} />
         </Grid>
       </Box>
     </Box>

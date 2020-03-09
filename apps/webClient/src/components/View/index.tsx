@@ -7,7 +7,10 @@ interface Props {
   children: React.ReactNode;
 }
 
-const LIGHT_BLUE = "#4CBFFE";
+// placholder, should dynamically change via useLocation
+const LIGHT_BLUE = "rgb(28,85,119)";
+const GRADIENT =
+  "linear-gradient(45deg, rgba(28,85,119,1) 0%, rgba(46,192,209,1) 100%)";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -26,6 +29,7 @@ const useStyles = makeStyles(theme => ({
   },
   pageWrapper: {
     backgroundColor: LIGHT_BLUE,
+    background: GRADIENT,
     height: "100%",
   },
   pageContainer: {
