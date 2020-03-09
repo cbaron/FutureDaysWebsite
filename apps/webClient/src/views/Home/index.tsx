@@ -2,8 +2,7 @@ import React from "react";
 import { makeStyles } from "@material-ui/styles";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
-import Button from "@material-ui/core/Button";
-import Container from "@material-ui/core/Container";
+import FlareIcon from "@material-ui/icons/Flare";
 import Typography from "@material-ui/core/Typography";
 import { Theme } from "@material-ui/core/styles/createMuiTheme";
 import Logo from "../../components/Logo/";
@@ -32,21 +31,31 @@ const Home: React.FC<Props> = ({}) => {
       </Grid>
       <Box mt={12}>
         <Grid container>
-          <Grid item container sm={3} justify="flex-start">
-            <NavButton route="ourwork" text="our work" />
+          <Grid
+            item
+            container
+            sm={4}
+            justify="flex-start"
+            alignItems="flex-end"
+          >
+            <NavButton
+              route="our-work"
+              text="our work"
+              isVertical={true}
+              isLeft={true}
+            />
           </Grid>
-          <Grid item container sm={6} justify="center">
-            <Container maxWidth="xs">
-              <Grid container justify="center" alignItems="center">
-                <Typography variant="body1">03.</Typography>
-                <Typography
-                  gutterBottom
-                  variant="h4"
-                  className={classes.contrastHeader}
-                >
-                  about us
-                </Typography>
-              </Grid>
+          <Grid item container sm={4} justify="center">
+            <Grid item>
+              <Typography
+                gutterBottom
+                variant="h4"
+                className={classes.contrastHeader}
+              >
+                oh hello
+              </Typography>
+            </Grid>
+            <Grid item>
               <Typography variant="body1" align="center" color="textSecondary">
                 <i>
                   Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
@@ -56,47 +65,23 @@ const Home: React.FC<Props> = ({}) => {
                   sollicitudin aliquam ultrices sagittis.
                 </i>
               </Typography>
-            </Container>
+            </Grid>
+            <Grid item>
+              <Box mt={2}>
+                <Grid container item justify="center">
+                  <FlareIcon fontSize="large" />
+                </Grid>
+              </Box>
+            </Grid>
           </Grid>
-          <Grid item container sm={3} justify="flex-end">
-            <NavButton route="about" text="about us" />
+          <Grid item container sm={4} justify="flex-end" alignItems="flex-end">
+            <NavButton route="about" text="about us" isVertical={true} />
           </Grid>
         </Grid>
       </Box>
       <Box mt={12}>
-        <Grid container justify="space-around">
-          <Container maxWidth="xs">
-            <Typography
-              variant="h5"
-              align="center"
-              className={classes.contrastHeader}
-              gutterBottom
-            >
-              partner name
-            </Typography>
-            <Typography variant="body1" align="center" color="textSecondary">
-              <i>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                sitame etel
-              </i>
-            </Typography>
-          </Container>
-          <Container maxWidth="xs">
-            <Typography
-              variant="h5"
-              align="center"
-              className={classes.contrastHeader}
-              gutterBottom
-            >
-              partner name
-            </Typography>
-            <Typography variant="body1" align="center" color="textSecondary">
-              <i>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                sitame etel
-              </i>
-            </Typography>
-          </Container>
+        <Grid container justify="center">
+          <NavButton route="lets-talk" text="let's talk" />
         </Grid>
       </Box>
     </Box>
