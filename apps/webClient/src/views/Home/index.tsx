@@ -32,45 +32,47 @@ const Home: React.FC<Props> = ({}) => {
       </Grid>
       <Box mt={12}>
         <Grid container>
-          <Grid item container sm={3} justify="flex-start">
-            <NavButton route="our-work" text="our work" vertical={true} />
+          <Grid item container sm={4} justify="flex-start">
+            <NavButton
+              route="our-work"
+              text="our work"
+              vertical={true}
+              isLeft={true}
+            />
           </Grid>
-          <Grid item container sm={6} justify="center">
-            <Container maxWidth="xs">
-              <Grid container justify="center" alignItems="center">
-                <Typography variant="body1">03.</Typography>
-                <Typography
-                  gutterBottom
-                  variant="h4"
-                  className={classes.contrastHeader}
-                >
-                  oh hello
-                </Typography>
-              </Grid>
-              <Typography variant="body1" align="center" color="textSecondary">
-                <i>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                  Auctor elit sed vulputate mi. Orci eu lobortis elementum nibh
-                  tellus molestie nunc non blandit. Mi in nulla posuere
-                  sollicitudin aliquam ultrices sagittis.
-                </i>
+          <Grid item container sm={4} justify="center">
+            <Grid item container justify="center" alignItems="center">
+              <Typography
+                gutterBottom
+                variant="h4"
+                className={classes.contrastHeader}
+              >
+                oh hello
               </Typography>
-              <Box mt={2}>
-                <Grid container justify="center">
-                  <FlareIcon fontSize="large" />
-                </Grid>
-              </Box>
-            </Container>
+            </Grid>
+            <Typography variant="body1" align="center" color="textSecondary">
+              <i>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+                eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                Auctor elit sed vulputate mi. Orci eu lobortis elementum nibh
+                tellus molestie nunc non blandit. Mi in nulla posuere
+                sollicitudin aliquam ultrices sagittis.
+              </i>
+            </Typography>
+            <Box mt={2}>
+              <Grid container item justify="center">
+                <FlareIcon fontSize="large" />
+              </Grid>
+            </Box>
           </Grid>
-          <Grid item container sm={3} justify="flex-end">
+          <Grid item container sm={4} justify="flex-end">
             <NavButton route="about" text="about us" vertical={true} />
           </Grid>
         </Grid>
       </Box>
       <Box mt={6}>
         <Grid container justify="center">
-          <NavButton route="lets-talk" text="lets talk" vertical={false} />
+          <NavButton route="lets-talk" text="let's talk" />
         </Grid>
       </Box>
     </Box>

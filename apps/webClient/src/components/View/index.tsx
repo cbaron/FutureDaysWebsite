@@ -8,9 +8,9 @@ interface Props {
 }
 
 // placholder, should dynamically change via useLocation
-const LIGHT_BLUE = "rgb(28,85,119)";
+const LIGHT_BLUE = "rgb(177,32,41)";
 const GRADIENT =
-  "linear-gradient(45deg, rgba(28,85,119,1) 0%, rgba(46,192,209,1) 100%)";
+  "linear-gradient(45deg, rgba(177,32,41,1) 0%, rgba(244,121,32,1) 100%)";
 
 const useStyles = makeStyles(theme => ({
   root: {
