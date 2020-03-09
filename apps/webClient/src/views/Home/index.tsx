@@ -65,6 +65,8 @@ const Home: React.FC<Props> = ({}) => {
                   sollicitudin aliquam ultrices sagittis.
                 </i>
               </Typography>
+            </Grid>
+            <Grid item>
               <Box mt={2}>
                 <Grid container item justify="center">
                   <FlareIcon fontSize="large" />
