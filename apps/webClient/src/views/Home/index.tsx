@@ -3,7 +3,6 @@ import { makeStyles } from "@material-ui/styles";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
 import FlareIcon from "@material-ui/icons/Flare";
-import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import { Theme } from "@material-ui/core/styles/createMuiTheme";
 import Logo from "../../components/Logo/";
@@ -32,7 +31,13 @@ const Home: React.FC<Props> = ({}) => {
       </Grid>
       <Box mt={12}>
         <Grid container>
-          <Grid item container sm={4} justify="flex-start">
+          <Grid
+            item
+            container
+            sm={4}
+            justify="flex-start"
+            alignItems="flex-end"
+          >
             <NavButton
               route="our-work"
               text="our work"
@@ -65,12 +70,12 @@ const Home: React.FC<Props> = ({}) => {
               </Grid>
             </Box>
           </Grid>
-          <Grid item container sm={4} justify="flex-end">
+          <Grid item container sm={4} justify="flex-end" alignItems="flex-end">
             <NavButton route="about" text="about us" vertical={true} />
           </Grid>
         </Grid>
       </Box>
-      <Box mt={6}>
+      <Box mt={12}>
         <Grid container justify="center">
           <NavButton route="lets-talk" text="let's talk" />
         </Grid>
