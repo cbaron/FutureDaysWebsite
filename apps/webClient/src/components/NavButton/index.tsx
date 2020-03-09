@@ -7,33 +7,29 @@ import { Theme } from "@material-ui/core/styles/createMuiTheme";
 interface Props {
   route: string;
   text: string;
-  vertical?: boolean;
+  isVertical?: boolean;
   isLeft?: boolean;
 }
 
 const useStyles = makeStyles((theme: Theme) => ({
-  verticalBtn: {
+  baseBurron: {
     backgroundColor: "transparent",
     borderRadius: 0,
     border: "solid 3px white",
-    width: 60,
-    height: 200,
-    padding: "30px 10px",
-    textTransform: "uppercase",
-  },
-  horizontalBtn: {
-    backgroundColor: "transparent",
-    borderRadius: 0,
-    border: "solid 3px white",
-    width: 200,
-    height: 60,
     textTransform: "uppercase",
     fontSize: 18,
+  },
+  verticalBtn: {
+    width: 60,
+    height: 200,
+  },
+  horizontalBtn: {
+    width: 200,
+    height: 60,
   },
   verticalLabel: {
     writingMode: "vertical-rl",
     textOrientation: "sideways",
-    fontSize: 18,
   },
   verticalLabelLeft: {
     transform: "rotate(-180deg)",
@@ -43,20 +39,23 @@ const useStyles = makeStyles((theme: Theme) => ({
 const NavButton: React.FC<Props> = ({
   route,
   text,
-  vertical = false,
+  isVertical = false,
   isLeft = false,
 }) => {
   const classes = useStyles();
 
-  const deriveButtonLabel = (vertical: boolean, isLeft: boolean) => {
+  const deriveButtonClassOverrides = (vertical: boolean, isLeft: boolean) => {
     if (!vertical) return {};
     const labelOverride = [classes.verticalLabel];
     if (isLeft) labelOverride.push(classes.verticalLabelLeft);
     return { label: clsx(labelOverride) };
   };
 
-  const buttonClass = vertical ? classes.verticalBtn : classes.horizontalBtn;
-  const buttonLabelOverride = deriveButtonLabel(vertical, isLeft);
+  const horizontalButton = clsx([classes.baseBurron, classes.horizontalBtn]);
+  const verticalButton = clsx([classes.baseBurron, classes.verticalBtn]);
+
+  const buttonClass = isVertical ? verticalButton : horizontalButton;
+  const buttonLabelOverride = deriveButtonClassOverrides(isVertical, isLeft);
 
   return (
     <Button className={buttonClass} classes={buttonLabelOverride}>

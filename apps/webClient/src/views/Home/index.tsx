@@ -41,12 +41,12 @@ const Home: React.FC<Props> = ({}) => {
             <NavButton
               route="our-work"
               text="our work"
-              vertical={true}
+              isVertical={true}
               isLeft={true}
             />
           </Grid>
           <Grid item container sm={4} justify="center">
-            <Grid item container justify="center" alignItems="center">
+            <Grid item>
               <Typography
                 gutterBottom
                 variant="h4"
@@ -55,23 +55,25 @@ const Home: React.FC<Props> = ({}) => {
                 oh hello
               </Typography>
             </Grid>
-            <Typography variant="body1" align="center" color="textSecondary">
-              <i>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                Auctor elit sed vulputate mi. Orci eu lobortis elementum nibh
-                tellus molestie nunc non blandit. Mi in nulla posuere
-                sollicitudin aliquam ultrices sagittis.
-              </i>
-            </Typography>
-            <Box mt={2}>
-              <Grid container item justify="center">
-                <FlareIcon fontSize="large" />
-              </Grid>
-            </Box>
+            <Grid item>
+              <Typography variant="body1" align="center" color="textSecondary">
+                <i>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                  Auctor elit sed vulputate mi. Orci eu lobortis elementum nibh
+                  tellus molestie nunc non blandit. Mi in nulla posuere
+                  sollicitudin aliquam ultrices sagittis.
+                </i>
+              </Typography>
+              <Box mt={2}>
+                <Grid container item justify="center">
+                  <FlareIcon fontSize="large" />
+                </Grid>
+              </Box>
+            </Grid>
           </Grid>
           <Grid item container sm={4} justify="flex-end" alignItems="flex-end">
-            <NavButton route="about" text="about us" vertical={true} />
+            <NavButton route="about" text="about us" isVertical={true} />
           </Grid>
         </Grid>
       </Box>
