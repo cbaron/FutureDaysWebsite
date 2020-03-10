@@ -18,8 +18,49 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-const Home: React.FC<Props> = ({}) => {
+const OurWork: React.FC<Props> = ({}) => {
   const classes = useStyles();
+
+  const ServiceType = () => (
+    <Grid container justify="center" spacing={2}>
+      <Grid item>
+        <Typography
+          align="center"
+          gutterBottom
+          variant="h5"
+          className={classes.contrastHeader}
+        >
+          service type
+        </Typography>
+      </Grid>
+      <Grid item>
+        <Typography variant="body1" color="textSecondary" gutterBottom>
+          <i>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+            eiusmod tempor incididunt ut labore et dolore magna aliqua. Auctor
+            elit sed vulputate mi. Orci eu lobortis elementum nibh tellus
+            molestie nunc non blandit.
+          </i>
+        </Typography>
+      </Grid>
+      <Grid item>
+        <Typography variant="body1" color="textSecondary" gutterBottom>
+          <i>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+            eiusmod tempor incididunt ut labore et dolore magna aliqua. Auctor
+            elit sed vulputate mi.
+          </i>
+        </Typography>
+      </Grid>
+      <Grid item>
+        <Box mt={2}>
+          <Grid container item justify="center">
+            <FlareIcon fontSize="large" />
+          </Grid>
+        </Box>
+      </Grid>
+    </Grid>
+  );
 
   return (
     <Box pt={16}>
@@ -51,7 +92,7 @@ const Home: React.FC<Props> = ({}) => {
                 variant="h5"
                 className={classes.contrastHeader}
               >
-                oh hello
+                our work
               </Typography>
             </Grid>
             <Grid item container justify="center">
@@ -78,6 +119,17 @@ const Home: React.FC<Props> = ({}) => {
                 </Grid>
               </Box>
             </Grid>
+            <Grid item>
+              <Box mt={8}>
+                <ServiceType />
+              </Box>
+              <Box mt={8}>
+                <ServiceType />
+              </Box>
+              <Box mt={8} mb={8}>
+                <ServiceType />
+              </Box>
+            </Grid>
           </Grid>
           <Grid
             item
@@ -90,13 +142,8 @@ const Home: React.FC<Props> = ({}) => {
           </Grid>
         </Grid>
       </Box>
-      <Box mt={12}>
-        <Grid container justify="center">
-          <NavButton route="/lets-talk" text="let's talk" />
-        </Grid>
-      </Box>
     </Box>
   );
 };
 
-export default Home;
+export default OurWork;

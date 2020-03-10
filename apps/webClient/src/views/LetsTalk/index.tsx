@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-const Home: React.FC<Props> = ({}) => {
+const LetsTalk: React.FC<Props> = ({}) => {
   const classes = useStyles();
 
   return (
@@ -51,24 +51,55 @@ const Home: React.FC<Props> = ({}) => {
                 variant="h5"
                 className={classes.contrastHeader}
               >
-                oh hello
+                let's talk
               </Typography>
             </Grid>
             <Grid item container justify="center">
               <Box width="50%">
-                <Typography
-                  variant="body1"
-                  align="center"
-                  color="textSecondary"
-                >
-                  <i>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                    do eiusmod tempor incididunt ut labore et dolore magna
-                    aliqua. Auctor elit sed vulputate mi. Orci eu lobortis
-                    elementum nibh tellus molestie nunc non blandit. Mi in nulla
-                    posuere sollicitudin aliquam ultrices sagittis.
-                  </i>
-                </Typography>
+                <Box>
+                  <Typography
+                    variant="body1"
+                    align="center"
+                    color="textSecondary"
+                  >
+                    <i>
+                      Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                      sed consectetuer adipscing
+                    </i>
+                  </Typography>
+                </Box>
+                <Box mt={2}>
+                  <Typography
+                    variant="body1"
+                    align="center"
+                    color="textSecondary"
+                  >
+                    <i>Phone (888) -222-3333</i>
+                  </Typography>
+                </Box>
+                <Box mt={2}>
+                  <Typography
+                    variant="body1"
+                    align="center"
+                    color="textSecondary"
+                  >
+                    <i>Chat@FutureDays.com</i>
+                  </Typography>
+                </Box>
+                <Box mt={2}>
+                  <Typography
+                    variant="body1"
+                    align="center"
+                    color="textSecondary"
+                  >
+                    <i>
+                      FutureDaysHQ <br />
+                      222 Main Street, City, State
+                      <br />
+                      ZIP CODE
+                    </i>
+                  </Typography>
+                </Box>
               </Box>
             </Grid>
             <Grid item>
@@ -90,7 +121,7 @@ const Home: React.FC<Props> = ({}) => {
           </Grid>
         </Grid>
       </Box>
-      <Box mt={12}>
+      <Box mt={6}>
         <Grid container justify="center">
           <NavButton route="/lets-talk" text="let's talk" />
         </Grid>
@@ -99,4 +130,4 @@ const Home: React.FC<Props> = ({}) => {
   );
 };
 
-export default Home;
+export default LetsTalk;
