@@ -8,7 +8,6 @@ interface Props {
   children: React.ReactNode;
 }
 
-// placholder, should dynamically change via useLocation
 const RED = "rgb(177,32,41)";
 const RED_GRADIENT =
   "linear-gradient(45deg, rgba(177,32,41,1) 0%, rgba(244,121,32,1) 100%)";
