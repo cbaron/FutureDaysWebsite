@@ -26,7 +26,7 @@ const YELLOW_GRADIENT =
 const useStyles = makeStyles(theme => ({
   root: {
     width: "100vw",
-    height: "100vh",
+    height: "100%",
     zIndex: 1,
     overflow: "hidden",
     display: "flex",
@@ -35,8 +35,6 @@ const useStyles = makeStyles(theme => ({
   main: {
     width: "100%",
     flexGrow: 1,
-    overflowY: "auto",
-    overflowX: "scroll",
   },
   redPageWrapper: {
     height: "100%",
