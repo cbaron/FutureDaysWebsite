@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-const Home: React.FC<Props> = ({}) => {
+const About: React.FC<Props> = ({}) => {
   const classes = useStyles();
 
   return (
@@ -51,7 +51,7 @@ const Home: React.FC<Props> = ({}) => {
                 variant="h5"
                 className={classes.contrastHeader}
               >
-                oh hello
+                about us
               </Typography>
             </Grid>
             <Grid item container justify="center">
@@ -78,6 +78,52 @@ const Home: React.FC<Props> = ({}) => {
                 </Grid>
               </Box>
             </Grid>
+            <Grid item>
+              <Box mt={12}>
+                <Grid container spacing={8}>
+                  <Grid item xs={6}>
+                    <Box>
+                      <Typography
+                        gutterBottom
+                        variant="h5"
+                        align="center"
+                        className={classes.contrastHeader}
+                      >
+                        partner name
+                      </Typography>
+                      <Typography
+                        variant="body1"
+                        align="center"
+                        color="textSecondary"
+                      >
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                        sed do
+                      </Typography>
+                    </Box>
+                  </Grid>
+                  <Grid item xs={6}>
+                    <Box>
+                      <Typography
+                        gutterBottom
+                        variant="h5"
+                        align="center"
+                        className={classes.contrastHeader}
+                      >
+                        partner name
+                      </Typography>
+                      <Typography
+                        variant="body1"
+                        align="center"
+                        color="textSecondary"
+                      >
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                        sed do
+                      </Typography>
+                    </Box>
+                  </Grid>
+                </Grid>
+              </Box>
+            </Grid>
           </Grid>
           <Grid
             item
@@ -90,13 +136,8 @@ const Home: React.FC<Props> = ({}) => {
           </Grid>
         </Grid>
       </Box>
-      <Box mt={12}>
-        <Grid container justify="center">
-          <NavButton route="/lets-talk" text="let's talk" />
-        </Grid>
-      </Box>
     </Box>
   );
 };
 
-export default Home;
+export default About;
