@@ -49,7 +49,7 @@ const NavButton: React.FC<Props> = ({
   isLeft = false,
 }) => {
   const classes = useStyles();
-  let location = useLocation();
+  let { pathname } = useLocation();
 
   const deriveButtonClassOverrides = (vertical: boolean, isLeft: boolean) => {
     if (!vertical) return {};
@@ -60,7 +60,7 @@ const NavButton: React.FC<Props> = ({
 
   const deriveButtonClassName = (vertical: boolean, path: string) => {
     const buttonClass = [classes.baseButton];
-    if (path === location.pathname) buttonClass.push(classes.isCurrentPage);
+    if (path === pathname) buttonClass.push(classes.isCurrentPage);
     if (vertical) {
       buttonClass.push(classes.verticalBtn);
     } else {

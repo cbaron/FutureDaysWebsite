@@ -22,21 +22,15 @@ const About: React.FC<Props> = ({}) => {
   const classes = useStyles();
 
   return (
-    <Box pt={16} height="100vh">
-      <Grid container justify="center">
+    <>
+      <Grid container item justify="center">
         <Link to="/">
           <Logo />
         </Link>
       </Grid>
       <Box mt={12}>
         <Grid container>
-          <Grid
-            item
-            container
-            sm={2}
-            justify="flex-start"
-            alignItems="flex-start"
-          >
+          <Grid item sm={2}>
             <NavButton
               route="/our-work"
               text="our work"
@@ -136,7 +130,7 @@ const About: React.FC<Props> = ({}) => {
           </Grid>
         </Grid>
       </Box>
-    </Box>
+    </>
   );
 };
 

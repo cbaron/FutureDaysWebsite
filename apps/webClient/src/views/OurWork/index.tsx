@@ -63,8 +63,8 @@ const OurWork: React.FC<Props> = ({}) => {
   );
 
   return (
-    <Box pt={16}>
-      <Grid container justify="center">
+    <Box>
+      <Grid container item justify="center">
         <Link to="/">
           <Logo />
         </Link>

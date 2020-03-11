@@ -1,8 +1,8 @@
 import React from "react";
+import clsx from "clsx";
 import { useLocation } from "react-router-dom";
 import { makeStyles } from "@material-ui/styles";
 import Container from "@material-ui/core/Container";
-import Box from "@material-ui/core/Box";
 
 interface Props {
   children: React.ReactNode;
@@ -26,6 +26,7 @@ const useStyles = makeStyles(theme => ({
   root: {
     width: "100vw",
     height: "100%",
+    minHeight: "100vh",
     zIndex: 1,
     overflow: "hidden",
     display: "flex",
@@ -33,53 +34,47 @@ const useStyles = makeStyles(theme => ({
   },
   main: {
     width: "100%",
+    height: "100%",
     flexGrow: 1,
+    padding: 0,
+    marginTop: 128,
   },
   redPageWrapper: {
-    height: "100%",
     backgroundColor: RED,
     background: RED_GRADIENT,
   },
   greenPageWrapper: {
-    height: "100%",
     backgroundColor: GREEN,
     background: GREEN_GRADIENT,
   },
   bluePageWrapper: {
-    height: "100%",
     backgroundColor: BLUE,
     background: BLUE_GRADIENT,
   },
   yellowPageWrapper: {
-    height: "100%",
     backgroundColor: YELLOW,
     background: YELLOW_GRADIENT,
-  },
-  pageContainer: {
-    padding: 0,
   },
 }));
 
 const View: React.FC<Props> = ({ children }) => {
   const classes = useStyles();
-  let location = useLocation();
+  const { pathname } = useLocation();
 
-  const derivePageBackgroundClass = (path: string) => {
-    if (path === "/") return classes.redPageWrapper;
-    if (path === "/our-work") return classes.greenPageWrapper;
-    if (path === "/about") return classes.bluePageWrapper;
-    if (path === "/lets-talk") return classes.yellowPageWrapper;
+  const derivePageRootBackgroundColor = (path: string) => {
+    let coloredPageRoot = [classes.root];
+    if (path === "/") coloredPageRoot.push(classes.redPageWrapper);
+    if (path === "/our-work") coloredPageRoot.push(classes.greenPageWrapper);
+    if (path === "/about") coloredPageRoot.push(classes.bluePageWrapper);
+    if (path === "/lets-talk") coloredPageRoot.push(classes.yellowPageWrapper);
+    return clsx(coloredPageRoot);
   };
 
   return (
-    <div className={classes.root}>
-      <main className={classes.main}>
-        <Box className={derivePageBackgroundClass(location.pathname)}>
-          <Container maxWidth="md" className={classes.pageContainer}>
-            {children}
-          </Container>
-        </Box>
-      </main>
+    <div className={derivePageRootBackgroundColor(pathname)}>
+      <Container maxWidth="md" className={classes.main}>
+        {children}
+      </Container>
     </div>
   );
 };

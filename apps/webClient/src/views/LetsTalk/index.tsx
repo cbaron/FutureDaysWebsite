@@ -22,7 +22,7 @@ const LetsTalk: React.FC<Props> = ({}) => {
   const classes = useStyles();
 
   return (
-    <Box pt={16} height="100vh">
+    <Box>
       <Grid container justify="center">
         <Link to="/">
           <Logo />
