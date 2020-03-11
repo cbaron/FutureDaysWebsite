@@ -6,6 +6,13 @@ interface Props {
 }
 
 const Logo: React.FC<Props> = ({ height = 80, width }) => {
+  const svgProps = {};
+  if (height) {
+    Object.assign(svgProps, { height });
+  }
+  if (width) {
+    Object.assign(svgProps, { width });
+  }
   return (
     <svg
       id="prefix__Layer_1"
@@ -13,8 +20,7 @@ const Logo: React.FC<Props> = ({ height = 80, width }) => {
       y={0}
       viewBox="0 0 1224 238.13"
       xmlSpace="preserve"
-      width={`${width}px`}
-      height={`${height}px`}
+      {...svgProps}
     >
       <style>{".prefix__st0{fill:#fff}"}</style>
       <path
