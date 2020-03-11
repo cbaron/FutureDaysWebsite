@@ -1,12 +1,10 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import { makeStyles } from "@material-ui/styles";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
 import FlareIcon from "@material-ui/icons/Flare";
 import Typography from "@material-ui/core/Typography";
 import { Theme } from "@material-ui/core/styles/createMuiTheme";
-import Logo from "../../components/Logo/";
 import NavButton from "../../components/NavButton";
 
 interface Props {}
@@ -23,11 +21,6 @@ const Home: React.FC<Props> = ({}) => {
 
   return (
     <>
-      <Grid container item justify="center">
-        <Link to="/">
-          <Logo />
-        </Link>
-      </Grid>
       <Box mt={12}>
         <Grid container>
           <Grid item sm={2}>

@@ -1,8 +1,11 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import clsx from "clsx";
 import { useLocation } from "react-router-dom";
 import { makeStyles } from "@material-ui/styles";
 import Container from "@material-ui/core/Container";
+import Grid from "@material-ui/core/Grid";
+import Logo from "../Logo";
 
 interface Props {
   children: React.ReactNode;
@@ -73,7 +76,14 @@ const View: React.FC<Props> = ({ children }) => {
   return (
     <div className={derivePageRootBackgroundColor(pathname)}>
       <Container maxWidth="md" className={classes.main}>
-        {children}
+        <>
+          <Grid container item justify="center">
+            <Link to="/">
+              <Logo />
+            </Link>
+          </Grid>
+          {children}
+        </>
       </Container>
     </div>
   );

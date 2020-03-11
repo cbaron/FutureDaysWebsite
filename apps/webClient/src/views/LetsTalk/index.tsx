@@ -1,12 +1,10 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import { makeStyles } from "@material-ui/styles";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
 import FlareIcon from "@material-ui/icons/Flare";
 import Typography from "@material-ui/core/Typography";
 import { Theme } from "@material-ui/core/styles/createMuiTheme";
-import Logo from "../../components/Logo/";
 import NavButton from "../../components/NavButton";
 
 interface Props {}
@@ -22,12 +20,7 @@ const LetsTalk: React.FC<Props> = ({}) => {
   const classes = useStyles();
 
   return (
-    <Box>
-      <Grid container justify="center">
-        <Link to="/">
-          <Logo />
-        </Link>
-      </Grid>
+    <>
       <Box mt={12}>
         <Grid container>
           <Grid
@@ -110,13 +103,7 @@ const LetsTalk: React.FC<Props> = ({}) => {
               </Box>
             </Grid>
           </Grid>
-          <Grid
-            item
-            container
-            sm={2}
-            justify="flex-end"
-            alignItems="flex-start"
-          >
+          <Grid item container sm={2} justify="flex-end">
             <NavButton route="/about" text="about us" isVertical={true} />
           </Grid>
         </Grid>
@@ -126,7 +113,7 @@ const LetsTalk: React.FC<Props> = ({}) => {
           <NavButton route="/lets-talk" text="let's talk" />
         </Grid>
       </Box>
-    </Box>
+    </>
   );
 };
 
