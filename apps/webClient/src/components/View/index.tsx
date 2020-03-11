@@ -26,6 +26,16 @@ const YELLOW = "rgb(190,121,42)";
 const YELLOW_GRADIENT =
   "linear-gradient(45deg, rgba(190,121,42,1) 0%, rgba(254,228,104,1) 100%)";
 
+const backgroundTransitionsMap = {
+  home: {
+    about: [
+      //  [intermediateBottomLeftColor, intermediateUupperRightColor],
+      //  [finalBL, finalupperRight ]
+    ],
+    // ourWork: [ .. ]
+  },
+};
+
 const useStyles = makeStyles(theme => ({
   root: {
     width: "100vw",
