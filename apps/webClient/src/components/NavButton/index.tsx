@@ -49,7 +49,7 @@ const NavButton: React.FC<Props> = ({
   isLeft = false,
 }) => {
   const classes = useStyles();
-  let { pathname } = useLocation();
+  const { pathname } = useLocation();
 
   const deriveButtonClassOverrides = (vertical: boolean, isLeft: boolean) => {
     if (!vertical) return {};

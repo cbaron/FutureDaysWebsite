@@ -61,7 +61,7 @@ const OurWork: React.FC<Props> = ({}) => {
   );
 
   return (
-    <Box mt={12}>
+    <>
       <Grid container>
         <Grid
           item
@@ -123,7 +123,7 @@ const OurWork: React.FC<Props> = ({}) => {
           <NavButton route="/about" text="about us" isVertical={true} />
         </Grid>
       </Grid>
-    </Box>
+    </>
   );
 };
 

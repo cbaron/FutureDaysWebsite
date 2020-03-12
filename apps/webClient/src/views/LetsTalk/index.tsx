@@ -21,7 +21,7 @@ const LetsTalk: React.FC<Props> = ({}) => {
 
   return (
     <>
-      <Box mt={12}>
+      <Box>
         <Grid container>
           <Grid
             item

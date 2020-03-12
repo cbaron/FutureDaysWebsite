@@ -4,6 +4,7 @@ import clsx from "clsx";
 import { useLocation } from "react-router-dom";
 import { makeStyles } from "@material-ui/styles";
 import Container from "@material-ui/core/Container";
+import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
 import Logo from "../Logo";
 
@@ -37,10 +38,9 @@ const useStyles = makeStyles(theme => ({
   },
   main: {
     width: "100%",
-    height: "100%",
     flexGrow: 1,
     padding: 0,
-    marginTop: 128,
+    marginTop: theme.spacing(16),
   },
   redPageWrapper: {
     backgroundColor: RED,
@@ -66,24 +66,34 @@ const View: React.FC<Props> = ({ children }) => {
 
   const derivePageRootBackgroundColor = (path: string) => {
     let coloredPageRoot = [classes.root];
-    if (path === "/") coloredPageRoot.push(classes.redPageWrapper);
-    if (path === "/our-work") coloredPageRoot.push(classes.greenPageWrapper);
-    if (path === "/about") coloredPageRoot.push(classes.bluePageWrapper);
-    if (path === "/lets-talk") coloredPageRoot.push(classes.yellowPageWrapper);
+    switch (path) {
+      case "/":
+        coloredPageRoot.push(classes.redPageWrapper);
+        break;
+      case "/our-work":
+        coloredPageRoot.push(classes.greenPageWrapper);
+        break;
+      case "/about":
+        coloredPageRoot.push(classes.bluePageWrapper);
+        break;
+      case "/lets-talk":
+        coloredPageRoot.push(classes.yellowPageWrapper);
+        break;
+    }
     return clsx(coloredPageRoot);
   };
 
   return (
     <div className={derivePageRootBackgroundColor(pathname)}>
       <Container maxWidth="md" className={classes.main}>
-        <>
+        <Box mb={12}>
           <Grid container item justify="center">
             <Link to="/">
               <Logo />
             </Link>
           </Grid>
-          {children}
-        </>
+        </Box>
+        {children}
       </Container>
     </div>
   );
