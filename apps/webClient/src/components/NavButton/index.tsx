@@ -1,4 +1,6 @@
 import React from "react";
+import { NavLink } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/styles";
 import Button from "@material-ui/core/Button";
@@ -12,7 +14,7 @@ interface Props {
 }
 
 const useStyles = makeStyles((theme: Theme) => ({
-  baseBurron: {
+  baseButton: {
     backgroundColor: "transparent",
     borderRadius: 0,
     border: "solid 3px white",
@@ -22,6 +24,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   verticalBtn: {
     width: 60,
     height: 200,
+    marginTop: 40,
   },
   horizontalBtn: {
     width: 200,
@@ -34,6 +37,9 @@ const useStyles = makeStyles((theme: Theme) => ({
   verticalLabelLeft: {
     transform: "rotate(-180deg)",
   },
+  isCurrentPage: {
+    background: "white",
+  },
 }));
 
 const NavButton: React.FC<Props> = ({
@@ -43,6 +49,7 @@ const NavButton: React.FC<Props> = ({
   isLeft = false,
 }) => {
   const classes = useStyles();
+  const { pathname } = useLocation();
 
   const deriveButtonClassOverrides = (vertical: boolean, isLeft: boolean) => {
     if (!vertical) return {};
@@ -51,14 +58,27 @@ const NavButton: React.FC<Props> = ({
     return { label: clsx(labelOverride) };
   };
 
-  const horizontalButton = clsx([classes.baseBurron, classes.horizontalBtn]);
-  const verticalButton = clsx([classes.baseBurron, classes.verticalBtn]);
+  const deriveButtonClassName = (vertical: boolean, path: string) => {
+    const buttonClass = [classes.baseButton];
+    if (path === pathname) buttonClass.push(classes.isCurrentPage);
+    if (vertical) {
+      buttonClass.push(classes.verticalBtn);
+    } else {
+      buttonClass.push(classes.horizontalBtn);
+    }
+    return clsx(buttonClass);
+  };
 
-  const buttonClass = isVertical ? verticalButton : horizontalButton;
+  const buttonClass = deriveButtonClassName(isVertical, route);
   const buttonLabelOverride = deriveButtonClassOverrides(isVertical, isLeft);
 
   return (
-    <Button className={buttonClass} classes={buttonLabelOverride}>
+    <Button
+      className={buttonClass}
+      classes={buttonLabelOverride}
+      component={NavLink}
+      to={route}
+    >
       <strong>{text}</strong>
     </Button>
   );
