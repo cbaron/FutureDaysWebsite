@@ -21,56 +21,50 @@ const Home: React.FC<Props> = ({}) => {
 
   return (
     <>
-      <Box>
-        <Grid container>
-          <Grid item sm={2}>
-            <NavButton
-              route="/our-work"
-              text="our work"
-              isVertical={true}
-              isLeft={true}
-            />
+      <Grid container>
+        <Grid item sm={2}>
+          <NavButton
+            route="/our-work"
+            text="our work"
+            isVertical={true}
+            isLeft={true}
+          />
+        </Grid>
+        <Grid item container sm={8} justify="center">
+          <Grid item>
+            <Typography
+              gutterBottom
+              variant="h5"
+              className={classes.contrastHeader}
+            >
+              oh hello
+            </Typography>
           </Grid>
-          <Grid item container sm={8} justify="center">
-            <Grid item>
-              <Typography
-                gutterBottom
-                variant="h5"
-                className={classes.contrastHeader}
-              >
-                oh hello
+          <Grid item container justify="center">
+            <Box width="50%">
+              <Typography variant="body1" align="center" color="textSecondary">
+                <i>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                  Auctor elit sed vulputate mi. Orci eu lobortis elementum nibh
+                  tellus molestie nunc non blandit. Mi in nulla posuere
+                  sollicitudin aliquam ultrices sagittis.
+                </i>
               </Typography>
-            </Grid>
-            <Grid item container justify="center">
-              <Box width="50%">
-                <Typography
-                  variant="body1"
-                  align="center"
-                  color="textSecondary"
-                >
-                  <i>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                    do eiusmod tempor incididunt ut labore et dolore magna
-                    aliqua. Auctor elit sed vulputate mi. Orci eu lobortis
-                    elementum nibh tellus molestie nunc non blandit. Mi in nulla
-                    posuere sollicitudin aliquam ultrices sagittis.
-                  </i>
-                </Typography>
-              </Box>
-            </Grid>
-            <Grid item>
-              <Box mt={2}>
-                <Grid container item justify="center">
-                  <FlareIcon fontSize="large" />
-                </Grid>
-              </Box>
-            </Grid>
+            </Box>
           </Grid>
-          <Grid item container sm={2} justify="flex-end">
-            <NavButton route="/about" text="about us" isVertical={true} />
+          <Grid item>
+            <Box mt={2}>
+              <Grid container item justify="center">
+                <FlareIcon fontSize="large" />
+              </Grid>
+            </Box>
           </Grid>
         </Grid>
-      </Box>
+        <Grid item container sm={2} justify="flex-end">
+          <NavButton route="/about" text="about us" isVertical={true} />
+        </Grid>
+      </Grid>
       <Box mt={12}>
         <Grid item container justify="center">
           <NavButton route="/lets-talk" text="let's talk" />

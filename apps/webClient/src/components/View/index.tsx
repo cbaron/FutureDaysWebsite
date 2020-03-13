@@ -39,8 +39,6 @@ const useStyles = makeStyles(theme => ({
   main: {
     width: "100%",
     flexGrow: 1,
-    padding: 0,
-    marginTop: theme.spacing(16),
   },
   redPageWrapper: {
     backgroundColor: RED,
@@ -86,7 +84,7 @@ const View: React.FC<Props> = ({ children }) => {
   return (
     <div className={derivePageRootBackgroundColor(pathname)}>
       <Container maxWidth="md" className={classes.main}>
-        <Box mb={12}>
+        <Box mt={16} mb={12}>
           <Grid container item justify="center">
             <Link to="/">
               <Logo />
