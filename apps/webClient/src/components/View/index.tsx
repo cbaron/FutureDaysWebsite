@@ -128,13 +128,13 @@ const useStyles = makeStyles(theme => ({
     backgroundImage: YELLOW_GRADIENT,
   },
   "@keyframes homeToOurWork": {
-    "0%": { backgrounPosition: "93% 0%" },
+    "0%": { backgroundPosition: "93% 0%" },
     "100%": { backgroundPosition: "0% 100%" },
   },
   homeToOurWork: {
-    backgroundImage: `linear-gradient(225deg, #f47920, #b12029, #8ec640, #0e7c3f)`,
+    backgroundImage: `linear-gradient(225deg, #b12029, #8ec640, #0e7c3f)`,
     backgroundSize: "800% 800%",
-    animation: "$homeToOurWork 7s ease",
+    animation: "$homeToOurWork 1.5s forwards",
   },
 }));
 
