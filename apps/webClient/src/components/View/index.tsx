@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import clsx from "clsx";
 import { useLocation } from "react-router-dom";
@@ -7,7 +7,7 @@ import Container from "@material-ui/core/Container";
 import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
 import Logo from "../Logo";
-import transitions from "@material-ui/core/styles/transitions";
+import { usePrevious } from "../../util";
 
 interface Props {
   children: React.ReactNode;
@@ -127,33 +127,49 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: DARK_YELLOW,
     backgroundImage: YELLOW_GRADIENT,
   },
+  "@keyframes homeToOurWork": {
+    "0%": { backgrounPosition: "93% 0%" },
+    "100%": { backgroundPosition: "0% 100%" },
+  },
+  homeToOurWork: {
+    backgroundImage: `linear-gradient(225deg, #f47920, #b12029, #8ec640, #0e7c3f)`,
+    backgroundSize: "800% 800%",
+    animation: "$homeToOurWork 7s ease",
+  },
 }));
 
 const View: React.FC<Props> = ({ children }) => {
   const classes = useStyles();
   const { pathname } = useLocation();
+  const prevPath = usePrevious(pathname);
 
-  const derivePageRootBackgroundColor = (path: string) => {
-    let coloredPageRoot = [classes.root];
+  const derivePageRootBackgroundColor = (path: string, prevPath: string) => {
+    const rootClassNames = [classes.root];
     switch (path) {
       case "/":
-        coloredPageRoot.push(classes.redPageWrapper);
+        rootClassNames.push(classes.redPageWrapper);
         break;
       case "/our-work":
-        coloredPageRoot.push(classes.greenPageWrapper);
+        switch (prevPath) {
+          case "/":
+            rootClassNames.push(classes.homeToOurWork);
+            break;
+          default:
+            rootClassNames.push(classes.greenPageWrapper);
+        }
         break;
       case "/about":
-        coloredPageRoot.push(classes.bluePageWrapper);
+        rootClassNames.push(classes.bluePageWrapper);
         break;
       case "/lets-talk":
-        coloredPageRoot.push(classes.yellowPageWrapper);
+        rootClassNames.push(classes.yellowPageWrapper);
         break;
     }
-    return clsx(coloredPageRoot);
+    return clsx(rootClassNames);
   };
 
   return (
-    <div className={derivePageRootBackgroundColor(pathname)}>
+    <div className={derivePageRootBackgroundColor(pathname, prevPath)}>
       <Container maxWidth="md" className={classes.main}>
         <Box mt={16} mb={12}>
           <Grid container item justify="center">
