@@ -34,6 +34,12 @@ const useStyles = makeStyles(theme => ({
   listItem: {
     borderBottom: "3px solid white",
   },
+  navCloseButton: {
+    right: 16,
+    top: -8,
+    color: "white",
+    marginBottom: 60,
+  },
 }));
 
 const navLinks = [
@@ -44,14 +50,15 @@ const navLinks = [
 
 const MobileNav: React.FC<Props> = () => {
   const classes = useStyles();
-  const [isOpen, setIsOpen] = useState(false);
+  const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
 
   const toggleDrawer = () => {
-    setIsOpen(!isOpen);
+    setIsMobileNavOpen(!isMobileNavOpen);
   };
 
   const renderNavLink = (link, index) => {
-    let classWithBorder = index === 0 ? classes.listItemTop : classes.listItem;
+    const classWithBorder =
+      index === 0 ? classes.listItemTop : classes.listItem;
     return (
       <ListItem button key={link.label} className={classWithBorder}>
         <ListItemText>
@@ -77,16 +84,14 @@ const MobileNav: React.FC<Props> = () => {
           <MenuIcon fontSize="large" />
         </Button>
       </Grid>
-      <Drawer anchor="top" open={isOpen} onClose={toggleDrawer}>
+      <Drawer anchor="top" open={isMobileNavOpen} onClose={toggleDrawer}>
         <List
           onClick={toggleDrawer}
           onKeyDown={toggleDrawer}
           className={classes.navDrawer}
         >
           <Grid container item justify="flex-end">
-            <Button
-              style={{ right: 16, top: -8, color: "white", marginBottom: 60 }}
-            >
+            <Button onClick={toggleDrawer} className={classes.navCloseButton}>
               <CloseIcon fontSize="large" />
             </Button>
           </Grid>

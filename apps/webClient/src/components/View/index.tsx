@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import clsx from "clsx";
 import { useLocation } from "react-router-dom";
@@ -11,9 +11,7 @@ import Logo from "../Logo";
 import { smallScreenMaxBreakpoint } from "../../utils";
 import MobileNav from "../../components/MobileNav";
 
-interface Props {
-  children: React.ReactNode;
-}
+interface Props {}
 
 const RED = "rgb(177,32,41)";
 const RED_GRADIENT =
