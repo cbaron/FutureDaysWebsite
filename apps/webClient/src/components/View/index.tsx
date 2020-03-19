@@ -89,7 +89,7 @@ const View: React.FC<Props> = ({ children }) => {
     <div className={derivePageRootBackgroundColor(pathname)}>
       <Container maxWidth="md" className={classes.main}>
         {isSmallScreen && <MobileNav />}
-        <Box mt={isSmallScreen ? 2 : 16} mb={isSmallScreen ? 6 : 12}>
+        <Box mt={isSmallScreen ? 2 : 16} mb={12}>
           <Grid container item justify="center">
             <Link to="/">
               <Logo height={isSmallScreen ? 60 : 80} />
