@@ -1,11 +1,13 @@
 import React from "react";
 import { makeStyles } from "@material-ui/styles";
+import { useMediaQuery } from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
 import FlareIcon from "@material-ui/icons/Flare";
 import Typography from "@material-ui/core/Typography";
 import { Theme } from "@material-ui/core/styles/createMuiTheme";
 import NavButton from "../../components/NavButton";
+import { smallScreenMaxBreakpoint } from "../../utils";
 
 interface Props {}
 
@@ -18,11 +20,12 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 const Home: React.FC<Props> = ({}) => {
   const classes = useStyles();
+  const isSmallScreen = useMediaQuery(smallScreenMaxBreakpoint);
 
   return (
     <>
       <Grid container>
-        <Grid item sm={2}>
+        <Grid item xs={false} sm={2}>
           <NavButton
             route="/our-work"
             text="our work"
@@ -30,7 +33,7 @@ const Home: React.FC<Props> = ({}) => {
             isLeft={true}
           />
         </Grid>
-        <Grid item container sm={8} justify="center">
+        <Grid item container xs={12} sm={8} justify="center">
           <Grid item>
             <Typography
               gutterBottom
@@ -41,7 +44,7 @@ const Home: React.FC<Props> = ({}) => {
             </Typography>
           </Grid>
           <Grid item container justify="center">
-            <Box width="50%">
+            <Box maxWidth="80%">
               <Typography variant="body1" align="center" color="textSecondary">
                 <i>
                   Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
@@ -61,15 +64,17 @@ const Home: React.FC<Props> = ({}) => {
             </Box>
           </Grid>
         </Grid>
-        <Grid item container sm={2} justify="flex-end">
+        <Grid item container xs={false} sm={2} justify="flex-end">
           <NavButton route="/about" text="about us" isVertical={true} />
         </Grid>
       </Grid>
-      <Box mt={12}>
-        <Grid item container justify="center">
-          <NavButton route="/lets-talk" text="let's talk" />
-        </Grid>
-      </Box>
+      {!isSmallScreen && (
+        <Box mt={12}>
+          <Grid item container justify="center">
+            <NavButton route="/lets-talk" text="let's talk" />
+          </Grid>
+        </Box>
+      )}
     </>
   );
 };
