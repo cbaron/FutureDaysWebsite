@@ -1,5 +1,6 @@
 import React from "react";
 import { makeStyles } from "@material-ui/styles";
+import Hidden from "@material-ui/core/Hidden";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
 import FlareIcon from "@material-ui/icons/Flare";
@@ -62,15 +63,23 @@ const OurWork: React.FC<Props> = ({}) => {
 
   return (
     <Grid container>
-      <Grid item container sm={2} justify="flex-start" alignItems="flex-start">
-        <NavButton
-          route="/our-work"
-          text="our work"
-          isVertical={true}
-          isLeft={true}
-        />
-      </Grid>
-      <Grid item container sm={8} justify="center">
+      <Hidden only="xs">
+        <Grid
+          item
+          container
+          sm={2}
+          justify="flex-start"
+          alignItems="flex-start"
+        >
+          <NavButton
+            route="/our-work"
+            text="our work"
+            isVertical={true}
+            isLeft={true}
+          />
+        </Grid>
+      </Hidden>
+      <Grid item container xs={12} sm={8} justify="center">
         <Grid item>
           <Typography
             gutterBottom
@@ -81,7 +90,7 @@ const OurWork: React.FC<Props> = ({}) => {
           </Typography>
         </Grid>
         <Grid item container justify="center">
-          <Box width="50%">
+          <Grid item xs={12} sm={6}>
             <Typography variant="body1" align="center" color="textSecondary">
               <i>
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
@@ -91,7 +100,7 @@ const OurWork: React.FC<Props> = ({}) => {
                 sollicitudin aliquam ultrices sagittis.
               </i>
             </Typography>
-          </Box>
+          </Grid>
         </Grid>
         <Grid item>
           <Box mt={2}>
@@ -101,20 +110,22 @@ const OurWork: React.FC<Props> = ({}) => {
           </Box>
         </Grid>
         <Grid item>
-          <Box mt={8}>
+          <Box mt={6}>
             <ServiceType />
           </Box>
-          <Box mt={8}>
+          <Box mt={6}>
             <ServiceType />
           </Box>
-          <Box mt={8} mb={8}>
+          <Box mt={6} mb={6}>
             <ServiceType />
           </Box>
         </Grid>
       </Grid>
-      <Grid item container sm={2} justify="flex-end" alignItems="flex-start">
-        <NavButton route="/about" text="about us" isVertical={true} />
-      </Grid>
+      <Hidden only="xs">
+        <Grid item container sm={2} justify="flex-end" alignItems="flex-start">
+          <NavButton route="/about" text="about us" isVertical={true} />
+        </Grid>
+      </Hidden>
     </Grid>
   );
 };
