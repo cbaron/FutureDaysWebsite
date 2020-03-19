@@ -2,11 +2,14 @@ import React from "react";
 import { Link } from "react-router-dom";
 import clsx from "clsx";
 import { useLocation } from "react-router-dom";
+import { useMediaQuery } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 import Container from "@material-ui/core/Container";
 import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
 import Logo from "../Logo";
+import { smallScreenMaxBreakpoint } from "../../utils";
+import MobileNav from "../../components/MobileNav";
 
 interface Props {
   children: React.ReactNode;
@@ -60,6 +63,7 @@ const useStyles = makeStyles(theme => ({
 
 const View: React.FC<Props> = ({ children }) => {
   const classes = useStyles();
+  const isSmallScreen = useMediaQuery(smallScreenMaxBreakpoint);
   const { pathname } = useLocation();
 
   const derivePageRootBackgroundColor = (path: string) => {
@@ -84,6 +88,7 @@ const View: React.FC<Props> = ({ children }) => {
   return (
     <div className={derivePageRootBackgroundColor(pathname)}>
       <Container maxWidth="md" className={classes.main}>
+        {isSmallScreen && <MobileNav />}
         <Box mt={16} mb={12}>
           <Grid container item justify="center">
             <Link to="/">
