@@ -123,7 +123,6 @@ const useStyles = makeStyles(() => ({
   footer: {
     marginTop: "auto",
     borderTop: `2px solid ${DARK_GREY}`,
-    height: "13vh",
   },
   contactEmail: {
     color: "#fff",
@@ -178,7 +177,7 @@ const View: React.FC<Props> = ({ children }) => {
         {children}
       </Container>
       <Box className={classes.footer}>
-        <Box mt={1}>
+        <Box mt={1} mb={1}>
           <Grid
             container
             item
