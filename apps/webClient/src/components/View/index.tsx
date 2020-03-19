@@ -85,10 +85,10 @@ const View: React.FC<Props> = ({ children }) => {
     return clsx(coloredPageRoot);
   };
 
-  const logoBoxMarginTop = useCallback(() => (isSmallScreen ? 2 : 16), [
+  const deriveLogoBoxMarginTop = useCallback(() => (isSmallScreen ? 2 : 16), [
     isSmallScreen,
   ]);
-  const logoHeight = useCallback(() => (isSmallScreen ? 60 : 80), [
+  const deriveLogoHeight = useCallback(() => (isSmallScreen ? 60 : 80), [
     isSmallScreen,
   ]);
 
@@ -96,10 +96,10 @@ const View: React.FC<Props> = ({ children }) => {
     <div className={derivePageRootBackgroundColor(pathname)}>
       <Container maxWidth="md" className={classes.main}>
         {isSmallScreen && <MobileNav />}
-        <Box mt={logoBoxMarginTop()} mb={12}>
+        <Box mt={deriveLogoBoxMarginTop()} mb={12}>
           <Grid container item justify="center">
             <Link to="/">
-              <Logo height={logoHeight()} />
+              <Logo height={deriveLogoHeight()} />
             </Link>
           </Grid>
         </Box>
