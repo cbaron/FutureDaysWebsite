@@ -128,13 +128,37 @@ const useStyles = makeStyles(theme => ({
     backgroundImage: YELLOW_GRADIENT,
   },
   "@keyframes homeToOurWork": {
-    "0%": { backgroundPosition: "93% 0%" },
-    "100%": { backgroundPosition: "0% 100%" },
+    "0%": { backgroundPosition: "66% 66%" },
+    "50%": { backgroundPosition: "33% 33%" },
+    "100%": { backgroundPosition: "0% 0%" },
+  },
+  "@keyframes opacity": {
+    "0%": { opacity: 1 },
+    "20%": { opacity: 0.4 },
+    "40%": { opacity: 0.2 },
+    "50%": { opacity: 0.0 },
+    "60%": { opacity: 0.2 },
+    "80%": { opacity: 0.4 },
+    "100%": { opacity: 1 },
   },
   homeToOurWork: {
-    backgroundImage: `linear-gradient(225deg, #b12029, #8ec640, #0e7c3f)`,
-    backgroundSize: "800% 800%",
-    animation: "$homeToOurWork 1.5s forwards",
+    animation: "$opacity .75s forwards",
+  },
+  first: {
+    animation: "$homeToOurWork 5s forwards",
+  },
+  backgroundAnimationHelper: {
+    backgroundImage:
+      "linear-gradient(45deg, rgba(14,124,63,1) 0%, rgba(142,198,64,1) 33%, rgba(244,121,32,1) 66%, rgba(177,32,41,1) 100%)",
+    backgroundPosition: "66% 66%",
+    backgroundSize: "800%",
+    /*
+    position: "absolute",
+    height: "100%",
+    width: "100%",
+    left: 0,
+    top: 0,
+    */
   },
 }));
 
@@ -143,16 +167,19 @@ const View: React.FC<Props> = ({ children }) => {
   const { pathname } = useLocation();
   const prevPath = usePrevious(pathname);
 
+  const backgroundAnimationHelperClasses = [classes.backgroundAnimationHelper];
+
   const derivePageRootBackgroundColor = (path: string, prevPath: string) => {
-    const rootClassNames = [classes.root];
+    const rootClassNames = [classes.root, classes.backgroundAnimationHelper];
     switch (path) {
       case "/":
-        rootClassNames.push(classes.redPageWrapper);
+        //rootClassNames.push(classes.redPageWrapper);
         break;
       case "/our-work":
         switch (prevPath) {
           case "/":
-            rootClassNames.push(classes.homeToOurWork);
+            rootClassNames.push(classes.first);
+            //backgroundAnimationHelperClasses.push(classes.first);
             break;
           default:
             rootClassNames.push(classes.greenPageWrapper);
@@ -169,18 +196,21 @@ const View: React.FC<Props> = ({ children }) => {
   };
 
   return (
-    <div className={derivePageRootBackgroundColor(pathname, prevPath)}>
-      <Container maxWidth="md" className={classes.main}>
-        <Box mt={16} mb={12}>
-          <Grid container item justify="center">
-            <Link to="/">
-              <Logo />
-            </Link>
-          </Grid>
-        </Box>
-        {children}
-      </Container>
-    </div>
+    <>
+      <div className={derivePageRootBackgroundColor(pathname, prevPath)}>
+        <Container maxWidth="md" className={classes.main}>
+          <Box mt={16} mb={12}>
+            <Grid container item justify="center">
+              <Link to="/">
+                <Logo />
+              </Link>
+            </Grid>
+          </Box>
+          {children}
+        </Container>
+      </div>
+      {/*<div className={clsx(backgroundAnimationHelperClasses)} />*/}
+    </>
   );
 };
 
