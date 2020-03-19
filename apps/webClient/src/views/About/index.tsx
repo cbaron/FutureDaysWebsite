@@ -63,7 +63,7 @@ const About: React.FC<Props> = ({}) => {
           </Box>
         </Grid>
         <Grid item>
-          <Box mt={12}>
+          <Box mt={12} mb={4}>
             <Grid container spacing={8}>
               <Grid item xs={12} sm={6}>
                 <Box>
