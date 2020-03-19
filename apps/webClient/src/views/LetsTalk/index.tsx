@@ -50,7 +50,7 @@ const LetsTalk: React.FC<Props> = ({}) => {
             </Typography>
           </Grid>
           <Grid item container justify="center">
-            <Box maxWidth="75%">
+            <Grid item xs={10} sm={6}>
               <Box>
                 <Typography
                   variant="body1"
@@ -95,7 +95,7 @@ const LetsTalk: React.FC<Props> = ({}) => {
                   </i>
                 </Typography>
               </Box>
-            </Box>
+            </Grid>
           </Grid>
           <Grid item>
             <Box mt={2}>

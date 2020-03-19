@@ -90,7 +90,7 @@ const OurWork: React.FC<Props> = ({}) => {
           </Typography>
         </Grid>
         <Grid item container justify="center">
-          <Box maxWidth="75%">
+          <Grid item xs={12} sm={6}>
             <Typography variant="body1" align="center" color="textSecondary">
               <i>
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
@@ -100,7 +100,7 @@ const OurWork: React.FC<Props> = ({}) => {
                 sollicitudin aliquam ultrices sagittis.
               </i>
             </Typography>
-          </Box>
+          </Grid>
         </Grid>
         <Grid item>
           <Box mt={2}>
