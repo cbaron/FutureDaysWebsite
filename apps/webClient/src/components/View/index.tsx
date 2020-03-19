@@ -11,7 +11,9 @@ import Logo from "../Logo";
 import { smallScreenMaxBreakpoint } from "../../utils";
 import MobileNav from "../../components/MobileNav";
 
-interface Props {}
+interface Props {
+  children: React.ReactNode;
+}
 
 const RED = "rgb(177,32,41)";
 const RED_GRADIENT =

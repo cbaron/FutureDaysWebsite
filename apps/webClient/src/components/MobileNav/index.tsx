@@ -12,9 +12,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import MenuIcon from "@material-ui/icons/Menu";
 import CloseIcon from "@material-ui/icons/Close";
 
-interface Props {
-  children: ReactNode;
-}
+interface Props {}
 
 const GRAY = "#23221C";
 
