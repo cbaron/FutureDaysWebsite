@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
+import { camelCase } from "change-case";
 import clsx from "clsx";
 import { useLocation } from "react-router-dom";
 import { makeStyles } from "@material-ui/styles";
@@ -15,87 +16,69 @@ interface Props {
 
 const RED_GRADIENT =
   "linear-gradient(45deg, rgba(177,32,41,1) 0%, rgba(244,121,32,1) 100%)";
+
 const GREEN_GRADIENT =
   "linear-gradient(45deg, rgba(14,124,63,1) 0%, rgba(190,198,64,1) 100%)";
+
 const BLUE_GRADIENT =
   "linear-gradient(45deg, rgba(28,85,119,1) 0%, rgba(46,192,209,1) 100%)";
+
 const YELLOW_GRADIENT =
   "linear-gradient(45deg, rgba(190,121,42,1) 0%, rgba(254,228,104,1) 100%)";
 
 // Home Colors
-const DARK_ORANGE = "#B12029";
-const LIGHT_ORANGE = "#F47920";
+const DARK_ORANGE = "rgba(177, 32, 41, 1)";
+const LIGHT_ORANGE = "rgba(244, 121, 32, 1)";
 
 // About colors
-const DARK_BLUE = "#1C5577";
-const LIGHT_BLUE = "#2EC0D1";
+const DARK_BLUE = "rgba(28, 85, 119, 1)";
+const LIGHT_BLUE = "rgba(46, 192, 209, 1)";
 
 // Our Work colors
-const DARK_GREEN = "#0E7C3F";
-const LIGHT_GREEN = "#BEC640";
+const DARK_GREEN = "rgba(14, 124, 63, 1)";
+const LIGHT_GREEN = "rgba(190, 198, 64, 1)";
 
 // About colors
-const DARK_YELLOW = "#BE792A";
-const LIGHT_YELLOW = "#FEE468";
+const DARK_YELLOW = "rgba(190, 121, 42, 1)";
+const LIGHT_YELLOW = "rgba(254, 228, 104, 1)";
 
-const backgroundTransitionsMap = {
-  home: {
-    ourWork: [
-      [LIGHT_GREEN, DARK_ORANGE],
-      [DARK_GREEN, LIGHT_GREEN],
-    ],
-    about: [
-      [LIGHT_BLUE, DARK_ORANGE],
-      [DARK_BLUE, LIGHT_BLUE],
-    ],
-    letsTalk: [
-      [LIGHT_YELLOW, DARK_ORANGE],
-      [DARK_YELLOW, LIGHT_YELLOW],
-    ],
-  },
-  ourWork: {
-    home: [
-      [LIGHT_ORANGE, DARK_GREEN],
-      [DARK_ORANGE, LIGHT_ORANGE],
-    ],
-    about: [
-      [LIGHT_BLUE, DARK_GREEN],
-      [DARK_BLUE, LIGHT_BLUE],
-    ],
-    letsTalk: [
-      [LIGHT_YELLOW, DARK_GREEN],
-      [DARK_YELLOW, LIGHT_YELLOW],
-    ],
-  },
-  about: {
-    ourWork: [
-      [LIGHT_GREEN, DARK_BLUE],
-      [DARK_GREEN, LIGHT_GREEN],
-    ],
-    home: [
-      [LIGHT_ORANGE, DARK_BLUE],
-      [DARK_ORANGE, LIGHT_ORANGE],
-    ],
-    letsTalk: [
-      [LIGHT_YELLOW, DARK_BLUE],
-      [DARK_YELLOW, LIGHT_YELLOW],
-    ],
-  },
-  letsTalk: {
-    ourWork: [
-      [LIGHT_GREEN, DARK_YELLOW],
-      [DARK_GREEN, LIGHT_GREEN],
-    ],
-    about: [
-      [LIGHT_BLUE, DARK_YELLOW],
-      [DARK_BLUE, LIGHT_BLUE],
-    ],
-    home: [
-      [LIGHT_ORANGE, DARK_YELLOW],
-      [DARK_ORANGE, LIGHT_ORANGE],
-    ],
-  },
-};
+const routes = [
+  { path: "home", colors: [DARK_ORANGE, LIGHT_ORANGE] },
+  { path: "ourWork", colors: [DARK_GREEN, LIGHT_GREEN] },
+  { path: "about", colors: [DARK_BLUE, LIGHT_BLUE] },
+  { path: "letsTalk", colors: [DARK_YELLOW, LIGHT_YELLOW] },
+];
+
+function generateBImg(from, to, colors) {
+  const { fromColor1, fromColor2, toColor1, toColor2 } = colors;
+  return {
+    [camelCase(`${from}To${to}`)]: {
+      backgroundImage: `linear-gradient(45deg, ${toColor1} 0%, ${toColor2} 33%, ${fromColor1} 66%, ${fromColor2} 100%)`,
+    },
+  };
+}
+
+const backgrounGradientsObj = {};
+routes.forEach(from => {
+  const fromPage = from.path;
+  const fromColor1 = from.colors[0];
+  const fromColor2 = from.colors[1];
+  routes.forEach(to => {
+    const toPage = to.path;
+    if (fromPage === toPage) return;
+    const toColor1 = to.colors[0];
+    const toColor2 = to.colors[1];
+    Object.assign(
+      backgrounGradientsObj,
+      generateBImg(fromPage, toPage, {
+        fromColor1,
+        fromColor2,
+        toColor1,
+        toColor2,
+      }),
+    );
+  });
+});
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -113,19 +96,19 @@ const useStyles = makeStyles(theme => ({
   },
   redPageWrapper: {
     backgroundColor: DARK_ORANGE,
-    backgroundImage: RED_GRADIENT,
+    background: RED_GRADIENT,
   },
   greenPageWrapper: {
     backgroundColor: DARK_GREEN,
-    backgroundImage: GREEN_GRADIENT,
+    background: GREEN_GRADIENT,
   },
   bluePageWrapper: {
     backgroundColor: DARK_BLUE,
-    backgroundImage: BLUE_GRADIENT,
+    background: BLUE_GRADIENT,
   },
   yellowPageWrapper: {
     backgroundColor: DARK_YELLOW,
-    backgroundImage: YELLOW_GRADIENT,
+    background: YELLOW_GRADIENT,
   },
   "@keyframes homeToOurWork": {
     "0%": { backgroundPosition: "66% 66%" },
