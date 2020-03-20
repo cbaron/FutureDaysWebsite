@@ -19,7 +19,7 @@ const LibreBaskerville = {
 };
 
 const BLACK = "#000000";
-const DARK_GREY = "#373733";
+const DARK_GREY = "#23221C";
 
 const theme = createMuiTheme({
   palette: {

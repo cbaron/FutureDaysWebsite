@@ -3,10 +3,10 @@ import { makeStyles } from "@material-ui/styles";
 import Hidden from "@material-ui/core/Hidden";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
-import FlareIcon from "@material-ui/icons/Flare";
 import Typography from "@material-ui/core/Typography";
 import { Theme } from "@material-ui/core/styles/createMuiTheme";
 import NavButton from "../../components/NavButton";
+import BulbIcon from "../../components/BulbIcon";
 
 interface Props {}
 
@@ -52,11 +52,9 @@ const OurWork: React.FC<Props> = ({}) => {
         </Typography>
       </Grid>
       <Grid item>
-        <Box mt={2}>
-          <Grid container item justify="center">
-            <FlareIcon fontSize="large" />
-          </Grid>
-        </Box>
+        <Grid container item justify="center">
+          <BulbIcon />
+        </Grid>
       </Grid>
     </Grid>
   );
@@ -103,20 +101,20 @@ const OurWork: React.FC<Props> = ({}) => {
           </Grid>
         </Grid>
         <Grid item>
-          <Box mt={2}>
+          <Box mt={2} mb={4}>
             <Grid container item justify="center">
-              <FlareIcon fontSize="large" />
+              <BulbIcon />
             </Grid>
           </Box>
         </Grid>
         <Grid item>
-          <Box mt={6}>
+          <Box mt={2}>
             <ServiceType />
           </Box>
-          <Box mt={6}>
+          <Box mt={2}>
             <ServiceType />
           </Box>
-          <Box mt={6} mb={6}>
+          <Box mt={2} mb={2}>
             <ServiceType />
           </Box>
         </Grid>

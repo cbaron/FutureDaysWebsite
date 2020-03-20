@@ -3,10 +3,10 @@ import { makeStyles } from "@material-ui/styles";
 import Hidden from "@material-ui/core/Hidden";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
-import FlareIcon from "@material-ui/icons/Flare";
 import Typography from "@material-ui/core/Typography";
 import { Theme } from "@material-ui/core/styles/createMuiTheme";
 import NavButton from "../../components/NavButton";
+import SunBurstIcon from "../../components/SunBurstIcon";
 
 interface Props {}
 
@@ -59,7 +59,7 @@ const Home: React.FC<Props> = ({}) => {
           <Grid item>
             <Box mt={2}>
               <Grid container item justify="center">
-                <FlareIcon fontSize="large" />
+                <SunBurstIcon />
               </Grid>
             </Box>
           </Grid>
