@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
-import { camelCase } from "change-case";
+import * as shortid from "shortid";
 import clsx from "clsx";
 import { useLocation } from "react-router-dom";
 import { makeStyles } from "@material-ui/styles";
@@ -27,60 +27,74 @@ const YELLOW_GRADIENT =
   "linear-gradient(45deg, rgba(190,121,42,1) 0%, rgba(254,228,104,1) 100%)";
 
 // Home Colors
-const DARK_ORANGE = "rgba(177, 32, 41, 1)";
-const LIGHT_ORANGE = "rgba(244, 121, 32, 1)";
+const DARK_ORANGE = "#B12029";
+const LIGHT_ORANGE = "#F47920";
 
 // About colors
-const DARK_BLUE = "rgba(28, 85, 119, 1)";
-const LIGHT_BLUE = "rgba(46, 192, 209, 1)";
+const DARK_BLUE = "#1C5577";
+const LIGHT_BLUE = "#2EC0D1";
 
 // Our Work colors
-const DARK_GREEN = "rgba(14, 124, 63, 1)";
-const LIGHT_GREEN = "rgba(190, 198, 64, 1)";
+const DARK_GREEN = "#0E7C3F";
+const LIGHT_GREEN = "#8EC640";
 
 // About colors
-const DARK_YELLOW = "rgba(190, 121, 42, 1)";
-const LIGHT_YELLOW = "rgba(254, 228, 104, 1)";
+const DARK_YELLOW = "#BE792A";
+const LIGHT_YELLOW = "#FEE468";
 
-const routes = [
-  { path: "home", colors: [DARK_ORANGE, LIGHT_ORANGE] },
-  { path: "ourWork", colors: [DARK_GREEN, LIGHT_GREEN] },
-  { path: "about", colors: [DARK_BLUE, LIGHT_BLUE] },
-  { path: "letsTalk", colors: [DARK_YELLOW, LIGHT_YELLOW] },
+interface Route {
+  path: string;
+  colors: {
+    bottomLeft: string;
+    topRight: string;
+  };
+}
+
+const routes: Route[] = [
+  { path: "home", colors: { bottomLeft: DARK_ORANGE, topRight: LIGHT_ORANGE } },
+  {
+    path: "our-work",
+    colors: { bottomLeft: DARK_GREEN, topRight: LIGHT_GREEN },
+  },
+  { path: "about", colors: { bottomLeft: DARK_BLUE, topRight: LIGHT_BLUE } },
+  {
+    path: "lets-talk",
+    colors: { bottomLeft: DARK_YELLOW, topRight: LIGHT_YELLOW },
+  },
 ];
 
-function generateBImg(from, to, colors) {
-  const { fromColor1, fromColor2, toColor1, toColor2 } = colors;
+function deriveTransformKey(fromPath: string, toPath: string) {
+  return `${fromPath}-to-${toPath}`;
+}
+function deriveBackgroundImageStyle(fromRoute: Route, toRoute: Route) {
+  const key = deriveTransformKey(fromRoute.path, toRoute.path);
   return {
-    [camelCase(`${from}To${to}`)]: {
-      backgroundImage: `linear-gradient(45deg, ${toColor1} 0%, ${toColor2} 33%, ${fromColor1} 66%, ${fromColor2} 100%)`,
+    [key]: {
+      backgroundImage: `linear-gradient(45deg, ${toRoute.colors.bottomLeft} 0%, ${toRoute.colors.topRight} 33%, ${fromRoute.colors.topRight} 66%, ${fromRoute.colors.bottomLeft} 100%)`,
     },
   };
 }
 
+const backgrounGradientsObjReduced = routes.reduce((memo, fromRoute) => {
+  routes.forEach(toRoute => {
+    if (fromRoute.path !== toRoute.path) {
+      Object.assign(memo, deriveBackgroundImageStyle(fromRoute, toRoute));
+    }
+  });
+  return memo;
+}, {});
+
 const backgrounGradientsObj = {};
 routes.forEach(from => {
-  const fromPage = from.path;
-  const fromColor1 = from.colors[0];
-  const fromColor2 = from.colors[1];
   routes.forEach(to => {
-    const toPage = to.path;
-    if (fromPage === toPage) return;
-    const toColor1 = to.colors[0];
-    const toColor2 = to.colors[1];
-    Object.assign(
-      backgrounGradientsObj,
-      generateBImg(fromPage, toPage, {
-        fromColor1,
-        fromColor2,
-        toColor1,
-        toColor2,
-      }),
-    );
+    if (from.path === to.path) return;
+    Object.assign(backgrounGradientsObj, deriveBackgroundImageStyle(from, to));
   });
 });
 
-const useStyles = makeStyles(theme => ({
+console.log(backgrounGradientsObj);
+
+const useStyles = makeStyles(() => ({
   root: {
     width: "100vw",
     height: "100%",
@@ -110,77 +124,38 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: DARK_YELLOW,
     background: YELLOW_GRADIENT,
   },
-  "@keyframes homeToOurWork": {
+  "@keyframes animateBackground": {
     "0%": { backgroundPosition: "66% 66%" },
     "50%": { backgroundPosition: "33% 33%" },
     "100%": { backgroundPosition: "0% 0%" },
   },
-  "@keyframes opacity": {
-    "0%": { opacity: 1 },
-    "20%": { opacity: 0.4 },
-    "40%": { opacity: 0.2 },
-    "50%": { opacity: 0.0 },
-    "60%": { opacity: 0.2 },
-    "80%": { opacity: 0.4 },
-    "100%": { opacity: 1 },
-  },
-  homeToOurWork: {
-    animation: "$opacity .75s forwards",
-  },
-  first: {
-    animation: "$homeToOurWork 5s forwards",
+  animateBackground: {
+    animation: "$animateBackground 5s forwards",
   },
   backgroundAnimationHelper: {
-    backgroundImage:
-      "linear-gradient(45deg, rgba(14,124,63,1) 0%, rgba(142,198,64,1) 33%, rgba(244,121,32,1) 66%, rgba(177,32,41,1) 100%)",
     backgroundPosition: "66% 66%",
     backgroundSize: "800%",
-    /*
-    position: "absolute",
-    height: "100%",
-    width: "100%",
-    left: 0,
-    top: 0,
-    */
   },
+  ...backgrounGradientsObj,
 }));
 
 const View: React.FC<Props> = ({ children }) => {
   const classes = useStyles();
-  const { pathname } = useLocation();
-  const prevPath = usePrevious(pathname);
+  let { pathname } = useLocation();
+  pathname = pathname.slice(1) || "home";
+  const previousPath = usePrevious(pathname);
 
-  const backgroundAnimationHelperClasses = [classes.backgroundAnimationHelper];
-
-  const derivePageRootBackgroundColor = (path: string, prevPath: string) => {
-    const rootClassNames = [classes.root, classes.backgroundAnimationHelper];
-    switch (path) {
-      case "/":
-        //rootClassNames.push(classes.redPageWrapper);
-        break;
-      case "/our-work":
-        switch (prevPath) {
-          case "/":
-            rootClassNames.push(classes.first);
-            //backgroundAnimationHelperClasses.push(classes.first);
-            break;
-          default:
-            rootClassNames.push(classes.greenPageWrapper);
-        }
-        break;
-      case "/about":
-        rootClassNames.push(classes.bluePageWrapper);
-        break;
-      case "/lets-talk":
-        rootClassNames.push(classes.yellowPageWrapper);
-        break;
-    }
-    return clsx(rootClassNames);
-  };
+  const rootClassNames = [classes.root, classes.backgroundAnimationHelper];
+  if (previousPath) {
+    rootClassNames.push(
+      (classes as any)[deriveTransformKey(previousPath, pathname)],
+    );
+    rootClassNames.push(classes.animateBackground);
+  }
 
   return (
     <>
-      <div className={derivePageRootBackgroundColor(pathname, prevPath)}>
+      <div key={shortid.generate()} className={clsx(rootClassNames)}>
         <Container maxWidth="md" className={classes.main}>
           <Box mt={16} mb={12}>
             <Grid container item justify="center">
@@ -192,7 +167,6 @@ const View: React.FC<Props> = ({ children }) => {
           {children}
         </Container>
       </div>
-      {/*<div className={clsx(backgroundAnimationHelperClasses)} />*/}
     </>
   );
 };

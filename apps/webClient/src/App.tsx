@@ -5,7 +5,6 @@ import { CssBaseline } from "@material-ui/core";
 import { createMuiTheme } from "@material-ui/core/styles";
 import View from "./components/View";
 import Home from "./views/Home";
-import KCollege from "./views/KCollege";
 import OurWork from "./views/OurWork";
 import About from "./views/About";
 import LetsTalk from "./views/LetsTalk";
@@ -67,7 +66,6 @@ const App: React.FC<Props> = ({}) => {
           <CssBaseline />
           <View>
             <Switch>
-              <Route path="/kalamazoo-college" component={KCollege} />
               <Route path="/our-work" component={OurWork} />
               <Route path="/about" component={About} />
               <Route path="/lets-talk" component={LetsTalk} />
