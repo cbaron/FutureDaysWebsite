@@ -1,5 +1,6 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import { Link } from "react-router-dom";
+import * as shortid from "shortid";
 import clsx from "clsx";
 import { useLocation } from "react-router-dom";
 import { useMediaQuery } from "@material-ui/core";
@@ -8,28 +9,86 @@ import Container from "@material-ui/core/Container";
 import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
 import Logo from "../Logo";
-import { smallScreenMaxBreakpoint } from "../../utils";
+import { smallScreenMaxBreakpoint, usePrevious } from "../../util";
 import MobileNav from "../../components/MobileNav";
 
 interface Props {
   children: React.ReactNode;
 }
 
-const RED = "rgb(177,32,41)";
-const RED_GRADIENT =
-  "linear-gradient(45deg, rgba(177,32,41,1) 0%, rgba(244,121,32,1) 100%)";
-const GREEN = "rgb(14,124,63)";
-const GREEN_GRADIENT =
-  "linear-gradient(45deg, rgba(14,124,63,1) 0%, rgba(190,198,64,1) 100%)";
+// Home Colors
+const DARK_ORANGE = "#B12029";
+const LIGHT_ORANGE = "#F47920";
 
-const BLUE = "rgb(28,85,119)";
-const BLUE_GRADIENT =
-  "linear-gradient(45deg, rgba(28,85,119,1) 0%, rgba(46,192,209,1) 100%)";
-const YELLOW = "rgb(190,121,42)";
-const YELLOW_GRADIENT =
-  "linear-gradient(45deg, rgba(190,121,42,1) 0%, rgba(254,228,104,1) 100%)";
+// About colors
+const DARK_BLUE = "#1C5577";
+const LIGHT_BLUE = "#2EC0D1";
 
-const useStyles = makeStyles(theme => ({
+// Our Work colors
+const DARK_GREEN = "#0E7C3F";
+const LIGHT_GREEN = "#8EC640";
+
+// About colors
+const DARK_YELLOW = "#BE792A";
+const LIGHT_YELLOW = "#FEE468";
+
+interface Route {
+  path: string;
+  colors: {
+    bottomLeft: string;
+    topRight: string;
+  };
+}
+
+const routes: Route[] = [
+  { path: "home", colors: { bottomLeft: DARK_ORANGE, topRight: LIGHT_ORANGE } },
+  {
+    path: "our-work",
+    colors: { bottomLeft: DARK_GREEN, topRight: LIGHT_GREEN },
+  },
+  { path: "about", colors: { bottomLeft: DARK_BLUE, topRight: LIGHT_BLUE } },
+  {
+    path: "lets-talk",
+    colors: { bottomLeft: DARK_YELLOW, topRight: LIGHT_YELLOW },
+  },
+];
+
+function deriveTransformKey(fromPath: string, toPath: string) {
+  return `${fromPath}-to-${toPath}`;
+}
+
+function deriveBackgroundImageStyle(fromRoute: Route) {
+  const key = `${fromRoute.path}-static`;
+  return {
+    [key]: {
+      backgroundImage: `linear-gradient(45deg, ${fromRoute.colors.bottomLeft} 0%, ${fromRoute.colors.topRight} 100%)`,
+    },
+  };
+}
+
+function deriveAnimationBackgroundImageStyle(fromRoute: Route, toRoute: Route) {
+  const key = deriveTransformKey(fromRoute.path, toRoute.path);
+  return {
+    [key]: {
+      backgroundImage: `linear-gradient(45deg, ${toRoute.colors.bottomLeft} 0%, ${toRoute.colors.topRight} 33%, ${fromRoute.colors.topRight} 66%, ${fromRoute.colors.bottomLeft} 100%)`,
+    },
+  };
+}
+
+const backgrounGradientsObj = routes.reduce((memo, fromRoute) => {
+  Object.assign(memo, deriveBackgroundImageStyle(fromRoute));
+  routes.forEach(toRoute => {
+    if (fromRoute.path !== toRoute.path) {
+      Object.assign(
+        memo,
+        deriveAnimationBackgroundImageStyle(fromRoute, toRoute),
+      );
+    }
+  });
+  return memo;
+}, {});
+
+const useStyles = makeStyles(() => ({
   root: {
     width: "100vw",
     height: "100%",
@@ -43,47 +102,50 @@ const useStyles = makeStyles(theme => ({
     width: "100%",
     flexGrow: 1,
   },
-  redPageWrapper: {
-    backgroundColor: RED,
-    background: RED_GRADIENT,
+  "@keyframes animateBackground": {
+    "0%": { backgroundPosition: "66% 66%" },
+    "50%": { backgroundPosition: "33% 33%" },
+    "100%": { backgroundPosition: "0% 0%" },
   },
-  greenPageWrapper: {
-    backgroundColor: GREEN,
-    background: GREEN_GRADIENT,
+  animateBackground: {
+    animation: "$animateBackground 2s forwards",
   },
-  bluePageWrapper: {
-    backgroundColor: BLUE,
-    background: BLUE_GRADIENT,
+  backgroundAnimationHelper: {
+    backgroundPosition: "66% 66%",
+    backgroundSize: "400%",
   },
-  yellowPageWrapper: {
-    backgroundColor: YELLOW,
-    background: YELLOW_GRADIENT,
+  backgroundStaticHelper: {
+    backgroundPosition: "0% 0%",
+    backgroundSize: "100%",
   },
+  ...backgrounGradientsObj,
 }));
 
 const View: React.FC<Props> = ({ children }) => {
   const classes = useStyles();
   const isSmallScreen = useMediaQuery(smallScreenMaxBreakpoint);
-  const { pathname } = useLocation();
+  let { pathname } = useLocation();
+  pathname = pathname.slice(1) || "home";
+  const previousPath = usePrevious(pathname);
+  const [animatingId, setAnimatingId] = useState(shortid.generate());
+  const previousAnimatingId = usePrevious(animatingId);
+  const finishedAnimation =
+    previousAnimatingId && animatingId !== previousAnimatingId;
 
-  const derivePageRootBackgroundColor = (path: string) => {
-    let coloredPageRoot = [classes.root];
-    switch (path) {
-      case "/":
-        coloredPageRoot.push(classes.redPageWrapper);
-        break;
-      case "/our-work":
-        coloredPageRoot.push(classes.greenPageWrapper);
-        break;
-      case "/about":
-        coloredPageRoot.push(classes.bluePageWrapper);
-        break;
-      case "/lets-talk":
-        coloredPageRoot.push(classes.yellowPageWrapper);
-        break;
-    }
-    return clsx(coloredPageRoot);
-  };
+  const rootClassNames = [classes.root];
+  if (previousPath && !finishedAnimation && previousPath !== pathname) {
+    rootClassNames.push(classes.backgroundAnimationHelper);
+    rootClassNames.push(
+      (classes as any)[deriveTransformKey(previousPath, pathname)],
+    );
+    rootClassNames.push(classes.animateBackground);
+    setTimeout(() => {
+      setAnimatingId(shortid.generate());
+    }, 2000);
+  } else {
+    rootClassNames.push(classes.backgroundStaticHelper);
+    rootClassNames.push(classes[`${pathname}-static`]);
+  }
 
   const deriveLogoBoxMarginTop = useCallback(() => (isSmallScreen ? 2 : 16), [
     isSmallScreen,
@@ -93,19 +155,21 @@ const View: React.FC<Props> = ({ children }) => {
   ]);
 
   return (
-    <div className={derivePageRootBackgroundColor(pathname)}>
-      <Container maxWidth="md" className={classes.main}>
-        {isSmallScreen && <MobileNav />}
-        <Box mt={deriveLogoBoxMarginTop()} mb={12}>
-          <Grid container item justify="center">
-            <Link to="/">
-              <Logo height={deriveLogoHeight()} />
-            </Link>
-          </Grid>
-        </Box>
-        {children}
-      </Container>
-    </div>
+    <>
+      <div key={shortid.generate()} className={clsx(rootClassNames)}>
+        <Container maxWidth="md" className={classes.main}>
+          {isSmallScreen && <MobileNav />}
+          <Box mt={deriveLogoBoxMarginTop()} mb={12}>
+            <Grid container item justify="center">
+              <Link to="/">
+                <Logo height={deriveLogoHeight()} />
+              </Link>
+            </Grid>
+          </Box>
+          {children}
+        </Container>
+      </div>
+    </>
   );
 };
 
