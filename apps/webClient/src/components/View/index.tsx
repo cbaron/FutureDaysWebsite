@@ -61,7 +61,7 @@ function deriveBackgroundImageStyle(fromRoute: Route) {
   const key = `${fromRoute.path}-static`;
   return {
     [key]: {
-      backgroundImage: `linear-gradient(45deg, ${fromRoute.colors.bottomLeft} 0%, ${fromRoute.colors.topRight} 100%)`,
+      backgroundImage: `linear-gradient(45deg, ${fromRoute.colors.bottomLeft} 0%, ${fromRoute.colors.topRight} 33%)`,
     },
   };
 }
@@ -70,7 +70,7 @@ function deriveAnimationBackgroundImageStyle(fromRoute: Route, toRoute: Route) {
   const key = deriveTransformKey(fromRoute.path, toRoute.path);
   return {
     [key]: {
-      backgroundImage: `linear-gradient(45deg, ${toRoute.colors.bottomLeft} 0%, ${toRoute.colors.topRight} 33%, ${fromRoute.colors.topRight} 66%, ${fromRoute.colors.bottomLeft} 100%)`,
+      backgroundImage: `linear-gradient(45deg, ${toRoute.colors.bottomLeft} 0%, ${toRoute.colors.topRight} 33%, ${fromRoute.colors.bottomLeft} 66%, ${fromRoute.colors.topRight} 100%)`,
     },
   };
 }
@@ -97,26 +97,25 @@ const useStyles = makeStyles(() => ({
     overflow: "hidden",
     display: "flex",
     flexDirection: "column",
+    backgroundSize: "400%",
   },
   main: {
     width: "100%",
     flexGrow: 1,
   },
   "@keyframes animateBackground": {
-    "0%": { backgroundPosition: "66% 66%" },
-    "50%": { backgroundPosition: "33% 33%" },
+    "0%": { backgroundPosition: "100% 100%" },
     "100%": { backgroundPosition: "0% 0%" },
   },
   animateBackground: {
-    animation: "$animateBackground 2s forwards",
+    animation: "$animateBackground 3s forwards",
+    animationTimingFunction: "linear",
   },
   backgroundAnimationHelper: {
-    backgroundPosition: "66% 66%",
-    backgroundSize: "400%",
+    backgroundPosition: "100% 100%",
   },
   backgroundStaticHelper: {
     backgroundPosition: "0% 0%",
-    backgroundSize: "100%",
   },
   ...backgrounGradientsObj,
 }));
@@ -141,7 +140,7 @@ const View: React.FC<Props> = ({ children }) => {
     rootClassNames.push(classes.animateBackground);
     setTimeout(() => {
       setAnimatingId(shortid.generate());
-    }, 2000);
+    }, 3000);
   } else {
     rootClassNames.push(classes.backgroundStaticHelper);
     rootClassNames.push(classes[`${pathname}-static`]);
