@@ -14,18 +14,6 @@ interface Props {
   children: React.ReactNode;
 }
 
-const RED_GRADIENT =
-  "linear-gradient(45deg, rgba(177,32,41,1) 0%, rgba(244,121,32,1) 100%)";
-
-const GREEN_GRADIENT =
-  "linear-gradient(45deg, rgba(14,124,63,1) 0%, rgba(190,198,64,1) 100%)";
-
-const BLUE_GRADIENT =
-  "linear-gradient(45deg, rgba(28,85,119,1) 0%, rgba(46,192,209,1) 100%)";
-
-const YELLOW_GRADIENT =
-  "linear-gradient(45deg, rgba(190,121,42,1) 0%, rgba(254,228,104,1) 100%)";
-
 // Home Colors
 const DARK_ORANGE = "#B12029";
 const LIGHT_ORANGE = "#F47920";
@@ -112,22 +100,6 @@ const useStyles = makeStyles(() => ({
     width: "100%",
     flexGrow: 1,
   },
-  redPageWrapper: {
-    backgroundColor: DARK_ORANGE,
-    background: RED_GRADIENT,
-  },
-  greenPageWrapper: {
-    backgroundColor: DARK_GREEN,
-    background: GREEN_GRADIENT,
-  },
-  bluePageWrapper: {
-    backgroundColor: DARK_BLUE,
-    background: BLUE_GRADIENT,
-  },
-  yellowPageWrapper: {
-    backgroundColor: DARK_YELLOW,
-    background: YELLOW_GRADIENT,
-  },
   "@keyframes animateBackground": {
     "0%": { backgroundPosition: "66% 66%" },
     "50%": { backgroundPosition: "33% 33%" },
@@ -158,8 +130,6 @@ const View: React.FC<Props> = ({ children }) => {
     previousAnimatingId && animatingId !== previousAnimatingId;
 
   const rootClassNames = [classes.root];
-  console.log(previousPath);
-  console.log(finishedAnimation);
   if (previousPath && !finishedAnimation && previousPath !== pathname) {
     rootClassNames.push(classes.backgroundAnimationHelper);
     rootClassNames.push(
