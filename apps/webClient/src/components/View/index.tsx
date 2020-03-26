@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import * as shortid from "shortid";
 import clsx from "clsx";
@@ -66,7 +66,17 @@ const routes: Route[] = [
 function deriveTransformKey(fromPath: string, toPath: string) {
   return `${fromPath}-to-${toPath}`;
 }
-function deriveBackgroundImageStyle(fromRoute: Route, toRoute: Route) {
+
+function deriveBackgroundImageStyle(fromRoute: Route) {
+  const key = `${fromRoute.path}-static`;
+  return {
+    [key]: {
+      backgroundImage: `linear-gradient(45deg, ${fromRoute.colors.bottomLeft} 0%, ${fromRoute.colors.topRight} 100%)`,
+    },
+  };
+}
+
+function deriveAnimationBackgroundImageStyle(fromRoute: Route, toRoute: Route) {
   const key = deriveTransformKey(fromRoute.path, toRoute.path);
   return {
     [key]: {
@@ -75,24 +85,18 @@ function deriveBackgroundImageStyle(fromRoute: Route, toRoute: Route) {
   };
 }
 
-const backgrounGradientsObjReduced = routes.reduce((memo, fromRoute) => {
+const backgrounGradientsObj = routes.reduce((memo, fromRoute) => {
+  Object.assign(memo, deriveBackgroundImageStyle(fromRoute));
   routes.forEach(toRoute => {
     if (fromRoute.path !== toRoute.path) {
-      Object.assign(memo, deriveBackgroundImageStyle(fromRoute, toRoute));
+      Object.assign(
+        memo,
+        deriveAnimationBackgroundImageStyle(fromRoute, toRoute),
+      );
     }
   });
   return memo;
 }, {});
-
-const backgrounGradientsObj = {};
-routes.forEach(from => {
-  routes.forEach(to => {
-    if (from.path === to.path) return;
-    Object.assign(backgrounGradientsObj, deriveBackgroundImageStyle(from, to));
-  });
-});
-
-console.log(backgrounGradientsObj);
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -130,11 +134,15 @@ const useStyles = makeStyles(() => ({
     "100%": { backgroundPosition: "0% 0%" },
   },
   animateBackground: {
-    animation: "$animateBackground 5s forwards",
+    animation: "$animateBackground 2s forwards",
   },
   backgroundAnimationHelper: {
     backgroundPosition: "66% 66%",
-    backgroundSize: "800%",
+    backgroundSize: "400%",
+  },
+  backgroundStaticHelper: {
+    backgroundPosition: "0% 0%",
+    backgroundSize: "100%",
   },
   ...backgrounGradientsObj,
 }));
@@ -144,13 +152,26 @@ const View: React.FC<Props> = ({ children }) => {
   let { pathname } = useLocation();
   pathname = pathname.slice(1) || "home";
   const previousPath = usePrevious(pathname);
+  const [animatingId, setAnimatingId] = useState(shortid.generate());
+  const previousAnimatingId = usePrevious(animatingId);
+  const finishedAnimation =
+    previousAnimatingId && animatingId !== previousAnimatingId;
 
-  const rootClassNames = [classes.root, classes.backgroundAnimationHelper];
-  if (previousPath) {
+  const rootClassNames = [classes.root];
+  console.log(previousPath);
+  console.log(finishedAnimation);
+  if (previousPath && !finishedAnimation && previousPath !== pathname) {
+    rootClassNames.push(classes.backgroundAnimationHelper);
     rootClassNames.push(
       (classes as any)[deriveTransformKey(previousPath, pathname)],
     );
     rootClassNames.push(classes.animateBackground);
+    setTimeout(() => {
+      setAnimatingId(shortid.generate());
+    }, 2000);
+  } else {
+    rootClassNames.push(classes.backgroundStaticHelper);
+    rootClassNames.push(classes[`${pathname}-static`]);
   }
 
   return (
