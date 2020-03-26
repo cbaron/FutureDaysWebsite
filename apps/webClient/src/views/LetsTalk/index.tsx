@@ -1,11 +1,12 @@
 import React from "react";
 import { makeStyles } from "@material-ui/styles";
+import Hidden from "@material-ui/core/Hidden";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
-import FlareIcon from "@material-ui/icons/Flare";
 import Typography from "@material-ui/core/Typography";
 import { Theme } from "@material-ui/core/styles/createMuiTheme";
 import NavButton from "../../components/NavButton";
+import GlobeIcon from "../../components/GlobeIcon";
 
 interface Props {}
 
@@ -22,21 +23,23 @@ const LetsTalk: React.FC<Props> = ({}) => {
   return (
     <>
       <Grid container>
-        <Grid
-          item
-          container
-          sm={2}
-          justify="flex-start"
-          alignItems="flex-start"
-        >
-          <NavButton
-            route="/our-work"
-            text="our work"
-            isVertical={true}
-            isLeft={true}
-          />
-        </Grid>
-        <Grid item container sm={8} justify="center">
+        <Hidden only="xs">
+          <Grid
+            item
+            container
+            sm={2}
+            justify="flex-start"
+            alignItems="flex-start"
+          >
+            <NavButton
+              route="/our-work"
+              text="our work"
+              isVertical={true}
+              isLeft={true}
+            />
+          </Grid>
+        </Hidden>
+        <Grid item container xs={12} sm={8} justify="center">
           <Grid item>
             <Typography
               gutterBottom
@@ -47,7 +50,7 @@ const LetsTalk: React.FC<Props> = ({}) => {
             </Typography>
           </Grid>
           <Grid item container justify="center">
-            <Box width="50%">
+            <Grid item xs={10} sm={6}>
               <Box>
                 <Typography
                   variant="body1"
@@ -92,25 +95,29 @@ const LetsTalk: React.FC<Props> = ({}) => {
                   </i>
                 </Typography>
               </Box>
-            </Box>
+            </Grid>
           </Grid>
           <Grid item>
             <Box mt={2}>
               <Grid container item justify="center">
-                <FlareIcon fontSize="large" />
+                <GlobeIcon />
               </Grid>
             </Box>
           </Grid>
         </Grid>
-        <Grid item container sm={2} justify="flex-end">
-          <NavButton route="/about" text="about us" isVertical={true} />
-        </Grid>
+        <Hidden only="xs">
+          <Grid item container sm={2} justify="flex-end">
+            <NavButton route="/about" text="about us" isVertical={true} />
+          </Grid>
+        </Hidden>
       </Grid>
-      <Box mt={6}>
-        <Grid container justify="center">
-          <NavButton route="/lets-talk" text="let's talk" />
-        </Grid>
-      </Box>
+      <Hidden only="xs">
+        <Box mt={6}>
+          <Grid container justify="center">
+            <NavButton route="/lets-talk" text="let's talk" />
+          </Grid>
+        </Box>
+      </Hidden>
     </>
   );
 };

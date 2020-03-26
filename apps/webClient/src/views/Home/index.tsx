@@ -1,11 +1,12 @@
 import React from "react";
 import { makeStyles } from "@material-ui/styles";
+import Hidden from "@material-ui/core/Hidden";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
-import FlareIcon from "@material-ui/icons/Flare";
 import Typography from "@material-ui/core/Typography";
 import { Theme } from "@material-ui/core/styles/createMuiTheme";
 import NavButton from "../../components/NavButton";
+import SunBurstIcon from "../../components/SunBurstIcon";
 
 interface Props {}
 
@@ -22,15 +23,17 @@ const Home: React.FC<Props> = ({}) => {
   return (
     <>
       <Grid container>
-        <Grid item sm={2}>
-          <NavButton
-            route="/our-work"
-            text="our work"
-            isVertical={true}
-            isLeft={true}
-          />
-        </Grid>
-        <Grid item container sm={8} justify="center">
+        <Hidden only="xs">
+          <Grid item sm={2}>
+            <NavButton
+              route="/our-work"
+              text="our work"
+              isVertical={true}
+              isLeft={true}
+            />
+          </Grid>
+        </Hidden>
+        <Grid item container xs={12} sm={8} justify="center">
           <Grid item>
             <Typography
               gutterBottom
@@ -41,7 +44,7 @@ const Home: React.FC<Props> = ({}) => {
             </Typography>
           </Grid>
           <Grid item container justify="center">
-            <Box width="50%">
+            <Grid item xs={12} sm={6}>
               <Typography variant="body1" align="center" color="textSecondary">
                 <i>
                   Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
@@ -51,25 +54,29 @@ const Home: React.FC<Props> = ({}) => {
                   sollicitudin aliquam ultrices sagittis.
                 </i>
               </Typography>
-            </Box>
+            </Grid>
           </Grid>
           <Grid item>
             <Box mt={2}>
               <Grid container item justify="center">
-                <FlareIcon fontSize="large" />
+                <SunBurstIcon />
               </Grid>
             </Box>
           </Grid>
         </Grid>
-        <Grid item container sm={2} justify="flex-end">
-          <NavButton route="/about" text="about us" isVertical={true} />
-        </Grid>
+        <Hidden only="xs">
+          <Grid item container sm={2} justify="flex-end">
+            <NavButton route="/about" text="about us" isVertical={true} />
+          </Grid>
+        </Hidden>
       </Grid>
-      <Box mt={12}>
-        <Grid item container justify="center">
-          <NavButton route="/lets-talk" text="let's talk" />
-        </Grid>
-      </Box>
+      <Hidden only="xs">
+        <Box mt={12}>
+          <Grid item container justify="center">
+            <NavButton route="/lets-talk" text="let's talk" />
+          </Grid>
+        </Box>
+      </Hidden>
     </>
   );
 };

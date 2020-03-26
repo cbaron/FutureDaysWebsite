@@ -1,14 +1,16 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { Link } from "react-router-dom";
 import * as shortid from "shortid";
 import clsx from "clsx";
 import { useLocation } from "react-router-dom";
+import { useMediaQuery } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 import Container from "@material-ui/core/Container";
 import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
 import Logo from "../Logo";
-import { usePrevious } from "../../util";
+import { smallScreenMaxBreakpoint, usePrevious } from "../../util";
+import MobileNav from "../../components/MobileNav";
 
 interface Props {
   children: React.ReactNode;
@@ -121,6 +123,7 @@ const useStyles = makeStyles(() => ({
 
 const View: React.FC<Props> = ({ children }) => {
   const classes = useStyles();
+  const isSmallScreen = useMediaQuery(smallScreenMaxBreakpoint);
   let { pathname } = useLocation();
   pathname = pathname.slice(1) || "home";
   const previousPath = usePrevious(pathname);
@@ -144,14 +147,22 @@ const View: React.FC<Props> = ({ children }) => {
     rootClassNames.push(classes[`${pathname}-static`]);
   }
 
+  const deriveLogoBoxMarginTop = useCallback(() => (isSmallScreen ? 2 : 16), [
+    isSmallScreen,
+  ]);
+  const deriveLogoHeight = useCallback(() => (isSmallScreen ? 60 : 80), [
+    isSmallScreen,
+  ]);
+
   return (
     <>
       <div key={shortid.generate()} className={clsx(rootClassNames)}>
         <Container maxWidth="md" className={classes.main}>
-          <Box mt={16} mb={12}>
+          {isSmallScreen && <MobileNav />}
+          <Box mt={deriveLogoBoxMarginTop()} mb={12}>
             <Grid container item justify="center">
               <Link to="/">
-                <Logo />
+                <Logo height={deriveLogoHeight()} />
               </Link>
             </Grid>
           </Box>

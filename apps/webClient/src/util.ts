@@ -6,3 +6,5 @@ export function usePrevious(value: any) {
   });
   return ref.current;
 }
+
+export const smallScreenMaxBreakpoint = "(max-width:700px)";
