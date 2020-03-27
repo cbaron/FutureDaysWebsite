@@ -7,6 +7,7 @@ import { useMediaQuery } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 import Container from "@material-ui/core/Container";
 import Box from "@material-ui/core/Box";
+import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import Logo from "../Logo";
 import { smallScreenMaxBreakpoint, usePrevious } from "../../util";
@@ -15,6 +16,8 @@ import MobileNav from "../../components/MobileNav";
 interface Props {
   children: React.ReactNode;
 }
+
+const DARK_GREY = "#23221C";
 
 // Home Colors
 const DARK_ORANGE = "#B12029";
@@ -117,6 +120,14 @@ const useStyles = makeStyles(() => ({
   backgroundStaticHelper: {
     backgroundPosition: "0% 0%",
   },
+  footer: {
+    marginTop: "auto",
+    borderTop: `2px solid ${DARK_GREY}`,
+    height: "13vh",
+  },
+  contactEmail: {
+    color: "#fff",
+  },
   ...backgrounGradientsObj,
 }));
 
@@ -154,21 +165,42 @@ const View: React.FC<Props> = ({ children }) => {
   ]);
 
   return (
-    <>
-      <div key={shortid.generate()} className={clsx(rootClassNames)}>
-        <Container maxWidth="md" className={classes.main}>
-          {isSmallScreen && <MobileNav />}
-          <Box mt={deriveLogoBoxMarginTop()} mb={12}>
-            <Grid container item justify="center">
-              <Link to="/">
-                <Logo height={deriveLogoHeight()} />
-              </Link>
-            </Grid>
-          </Box>
-          {children}
-        </Container>
-      </div>
-    </>
+    <div key={shortid.generate()} className={clsx(rootClassNames)}>
+      <Container maxWidth="md" className={classes.main}>
+        {isSmallScreen && <MobileNav />}
+        <Box mt={deriveLogoBoxMarginTop()} mb={12}>
+          <Grid container item justify="center">
+            <Link to="/">
+              <Logo height={deriveLogoHeight()} svgColor="white" />
+            </Link>
+          </Grid>
+        </Box>
+        {children}
+      </Container>
+      <Box className={classes.footer}>
+        <Box mt={1}>
+          <Grid
+            container
+            item
+            justify="center"
+            alignItems="center"
+            direction="column"
+          >
+            <Logo height={35} svgColor={DARK_GREY} />
+            <Typography
+              gutterBottom
+              variant="body2"
+              className={classes.contactEmail}
+            >
+              <i>contact@future-days.us</i>
+            </Typography>
+            <Typography gutterBottom variant="body2">
+              <i>&copy;2020 FutureDays Software. All rights reserved.</i>
+            </Typography>
+          </Grid>
+        </Box>
+      </Box>
+    </div>
   );
 };
 
