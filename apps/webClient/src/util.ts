@@ -7,4 +7,4 @@ export function usePrevious(value: any) {
   return ref.current;
 }
 
-export const smallScreenMaxBreakpoint = "(max-width:700px)";
+export const smallScreenMaxBreakpoint = "(max-width:960px)";

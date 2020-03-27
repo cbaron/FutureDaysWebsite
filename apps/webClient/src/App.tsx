@@ -20,18 +20,7 @@ const LibreBaskerville = {
 const BLACK = "#000000";
 const DARK_GREY = "#23221C";
 
-const smallBreakPoint = 700;
-
 const theme = createMuiTheme({
-  breakpoints: {
-    values: {
-      xs: 0,
-      sm: smallBreakPoint,
-      md: 960,
-      lg: 1280,
-      xl: 1920,
-    },
-  },
   palette: {
     text: {
       primary: BLACK,
