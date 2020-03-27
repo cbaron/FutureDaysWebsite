@@ -7,11 +7,11 @@ import { useMediaQuery } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 import Container from "@material-ui/core/Container";
 import Box from "@material-ui/core/Box";
-import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import Logo from "../Logo";
 import { smallScreenMaxBreakpoint, usePrevious } from "../../util";
 import MobileNav from "../../components/MobileNav";
+import Footer from "../../components/Footer";
 
 interface Props {
   children: React.ReactNode;
@@ -170,35 +170,13 @@ const View: React.FC<Props> = ({ children }) => {
         <Box mt={deriveLogoBoxMarginTop()} mb={12}>
           <Grid container item justify="center">
             <Link to="/">
-              <Logo height={deriveLogoHeight()} svgColor="white" />
+              <Logo height={deriveLogoHeight()} color="white" />
             </Link>
           </Grid>
         </Box>
         {children}
       </Container>
-      <Box className={classes.footer}>
-        <Box mt={1} mb={1}>
-          <Grid
-            container
-            item
-            justify="center"
-            alignItems="center"
-            direction="column"
-          >
-            <Logo height={35} svgColor={DARK_GREY} />
-            <Typography
-              gutterBottom
-              variant="body2"
-              className={classes.contactEmail}
-            >
-              <i>contact@future-days.us</i>
-            </Typography>
-            <Typography gutterBottom variant="body2">
-              <i>&copy;2020 FutureDays Software. All rights reserved.</i>
-            </Typography>
-          </Grid>
-        </Box>
-      </Box>
+      <Footer />
     </div>
   );
 };
