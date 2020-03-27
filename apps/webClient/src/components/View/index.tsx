@@ -121,7 +121,6 @@ const useStyles = makeStyles(() => ({
     backgroundPosition: "0% 0%",
   },
   footer: {
-    marginTop: "auto",
     borderTop: `2px solid ${DARK_GREY}`,
   },
   contactEmail: {
