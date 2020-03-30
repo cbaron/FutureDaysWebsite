@@ -61,7 +61,7 @@ const OurWork: React.FC<Props> = ({}) => {
 
   return (
     <Grid container>
-      <Hidden only={["xs", "sm", "md"]}>
+      <Hidden only={["xs", "sm"]}>
         <Grid
           item
           container
@@ -119,7 +119,7 @@ const OurWork: React.FC<Props> = ({}) => {
           </Box>
         </Grid>
       </Grid>
-      <Hidden only={["xs", "sm", "md"]}>
+      <Hidden only={["xs", "sm"]}>
         <Grid item container md={2} justify="flex-end" alignItems="flex-start">
           <NavButton route="/about" text="about us" isVertical={true} />
         </Grid>
