@@ -61,11 +61,11 @@ const OurWork: React.FC<Props> = ({}) => {
 
   return (
     <Grid container>
-      <Hidden only="xs">
+      <Hidden only={["xs", "sm"]}>
         <Grid
           item
           container
-          sm={2}
+          md={2}
           justify="flex-start"
           alignItems="flex-start"
         >
@@ -77,7 +77,7 @@ const OurWork: React.FC<Props> = ({}) => {
           />
         </Grid>
       </Hidden>
-      <Grid item container xs={12} sm={8} justify="center">
+      <Grid item container xs={12} md={8} justify="center">
         <Grid item>
           <Typography
             gutterBottom
@@ -119,8 +119,8 @@ const OurWork: React.FC<Props> = ({}) => {
           </Box>
         </Grid>
       </Grid>
-      <Hidden only="xs">
-        <Grid item container sm={2} justify="flex-end" alignItems="flex-start">
+      <Hidden only={["xs", "sm"]}>
+        <Grid item container md={2} justify="flex-end" alignItems="flex-start">
           <NavButton route="/about" text="about us" isVertical={true} />
         </Grid>
       </Hidden>
