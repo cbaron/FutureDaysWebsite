@@ -8,7 +8,7 @@ import { Theme } from "@material-ui/core/styles/createMuiTheme";
 import NavButton from "../../components/NavButton";
 import SunBurstIcon from "../../components/SunBurstIcon";
 
-interface Props {}
+interface Props { }
 
 const useStyles = makeStyles((theme: Theme) => ({
   contrastHeader: {
@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-const Home: React.FC<Props> = ({}) => {
+const Home: React.FC<Props> = ({ }) => {
   const classes = useStyles();
 
   return (
@@ -40,18 +40,16 @@ const Home: React.FC<Props> = ({}) => {
               variant="h5"
               className={classes.contrastHeader}
             >
-              oh hello
+              oh, hello
             </Typography>
           </Grid>
           <Grid item container justify="center">
             <Grid item xs={12} sm={6}>
               <Typography variant="body1" align="center" color="textSecondary">
                 <i>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                  Auctor elit sed vulputate mi. Orci eu lobortis elementum nibh
-                  tellus molestie nunc non blandit. Mi in nulla posuere
-                  sollicitudin aliquam ultrices sagittis.
+                  FutureDays is an earth based technical consulting shop specializing in software.
+                  We partner with firms to formulate a technical strategy, to augment engineering resources,
+                  and to build scalable solutions.
                 </i>
               </Typography>
             </Grid>

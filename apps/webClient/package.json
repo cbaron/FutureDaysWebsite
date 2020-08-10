@@ -37,7 +37,7 @@
     "react-hot-loader": "^4.12.14",
     "source-map-loader": "^0.2.4",
     "typescript": "^3.6.3",
-    "webpack": "^4.42.1",
+    "webpack": "^4.44.1",
     "webpack-cli": "^3.1.0",
     "webpack-dev-server": "^3.1.5"
   },

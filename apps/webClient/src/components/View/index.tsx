@@ -108,7 +108,7 @@ const useStyles = makeStyles(() => ({
     "100%": { backgroundPosition: "0% 0%" },
   },
   animateBackground: {
-    animation: "$animateBackground 3s forwards",
+    animation: "$animateBackground 2s forwards",
     animationTimingFunction: "linear",
   },
   backgroundAnimationHelper: {
@@ -140,7 +140,7 @@ const View: React.FC<Props> = ({ children }) => {
     rootClassNames.push(classes.animateBackground);
     setTimeout(() => {
       setAnimatingId(shortid.generate());
-    }, 3000);
+    }, 2000);
   } else {
     rootClassNames.push(classes.backgroundStaticHelper);
     rootClassNames.push(classes[`${pathname}-static`]);

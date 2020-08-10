@@ -7,17 +7,22 @@ import Typography from "@material-ui/core/Typography";
 import { Theme } from "@material-ui/core/styles/createMuiTheme";
 import NavButton from "../../components/NavButton";
 import PeopleIcon from "../../components/PeopleIcon";
+import { Link } from '@material-ui/core';
 
-interface Props {}
+const LINKED_IN_URL = 'https://www.linkedin.com/in/futuredays/';
+
+interface Props { }
 
 const useStyles = makeStyles((theme: Theme) => ({
   contrastHeader: {
     color: "white",
     textTransform: "uppercase",
   },
+  link: {
+  }
 }));
 
-const About: React.FC<Props> = ({}) => {
+const About: React.FC<Props> = ({ }) => {
   const classes = useStyles();
 
   return (
@@ -44,67 +49,30 @@ const About: React.FC<Props> = ({}) => {
         </Grid>
         <Grid item container justify="center">
           <Grid item xs={12} sm={6}>
-            <Typography variant="body1" align="center" color="textSecondary">
-              <i>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                Auctor elit sed vulputate mi. Orci eu lobortis elementum nibh
-                tellus molestie nunc non blandit. Mi in nulla posuere
-                sollicitudin aliquam ultrices sagittis.
-              </i>
-            </Typography>
+            <Box mt={4}>
+              <Typography variant="body1" align="center" color="textSecondary">
+                <i>
+                  FutureDays is lead by
+              </i>{' '}
+                <Link className={classes.link}
+                  href={LINKED_IN_URL}
+                  underline="hover"
+                  color="textSecondary"
+                  rel="noopener"
+                  target="_blank"
+                >Chris Baron</Link>{' '}
+                <i>who has been writing single page web applications for a decade and a half.
+                Working with teams ranging from startups to enterprise to academia to starting startups, Chris has encountered and produced solutions a countless number of times.
+                These include getting mobile applications to look correct across devices all the way up to scaling a chat room up to handle .5 million users at a time.
+              He is supported by his loose network of engineers from various backgrounds along with a small team of junior and senior developers.</i>
+              </Typography>
+            </Box>
           </Grid>
         </Grid>
         <Grid item>
           <Box mt={2}>
             <Grid container item justify="center">
               <PeopleIcon />
-            </Grid>
-          </Box>
-        </Grid>
-        <Grid item>
-          <Box mt={12} mb={4}>
-            <Grid container spacing={8}>
-              <Grid item xs={12} sm={6}>
-                <Box>
-                  <Typography
-                    gutterBottom
-                    variant="h5"
-                    align="center"
-                    className={classes.contrastHeader}
-                  >
-                    partner name
-                  </Typography>
-                  <Typography
-                    variant="body1"
-                    align="center"
-                    color="textSecondary"
-                  >
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                    do
-                  </Typography>
-                </Box>
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <Box>
-                  <Typography
-                    gutterBottom
-                    variant="h5"
-                    align="center"
-                    className={classes.contrastHeader}
-                  >
-                    partner name
-                  </Typography>
-                  <Typography
-                    variant="body1"
-                    align="center"
-                    color="textSecondary"
-                  >
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                    do
-                  </Typography>
-                </Box>
-              </Grid>
             </Grid>
           </Box>
         </Grid>
