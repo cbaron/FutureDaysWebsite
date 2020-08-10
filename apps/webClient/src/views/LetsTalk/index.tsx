@@ -8,7 +8,7 @@ import { Theme } from "@material-ui/core/styles/createMuiTheme";
 import NavButton from "../../components/NavButton";
 import GlobeIcon from "../../components/GlobeIcon";
 
-interface Props {}
+interface Props { }
 
 const useStyles = makeStyles((theme: Theme) => ({
   contrastHeader: {
@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-const LetsTalk: React.FC<Props> = ({}) => {
+const LetsTalk: React.FC<Props> = ({ }) => {
   const classes = useStyles();
 
   return (
@@ -51,48 +51,13 @@ const LetsTalk: React.FC<Props> = ({}) => {
           </Grid>
           <Grid item container justify="center">
             <Grid item xs={10} sm={6}>
-              <Box>
-                <Typography
-                  variant="body1"
-                  align="center"
-                  color="textSecondary"
-                >
-                  <i>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                    consectetuer adipscing
-                  </i>
-                </Typography>
-              </Box>
               <Box mt={2}>
                 <Typography
                   variant="body1"
                   align="center"
                   color="textSecondary"
                 >
-                  <i>Phone (888) -222-3333</i>
-                </Typography>
-              </Box>
-              <Box mt={2}>
-                <Typography
-                  variant="body1"
-                  align="center"
-                  color="textSecondary"
-                >
-                  <i>Chat@FutureDays.com</i>
-                </Typography>
-              </Box>
-              <Box mt={2}>
-                <Typography
-                  variant="body1"
-                  align="center"
-                  color="textSecondary"
-                >
-                  <i>
-                    FutureDaysHQ <br />
-                    222 Main Street, City, State
-                    <br />
-                    ZIP CODE
-                  </i>
+                  <i>cbaron@future-days.us</i>
                 </Typography>
               </Box>
             </Grid>
