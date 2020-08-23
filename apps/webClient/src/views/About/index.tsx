@@ -52,7 +52,7 @@ const About: React.FC<Props> = ({ }) => {
             <Box mt={4}>
               <Typography variant="body1" align="center" color="textSecondary">
                 <i>
-                  FutureDays is lead by
+                  FutureDays is led by
               </i>{' '}
                 <Link className={classes.link}
                   href={LINKED_IN_URL}
@@ -61,10 +61,9 @@ const About: React.FC<Props> = ({ }) => {
                   rel="noopener"
                   target="_blank"
                 >Chris Baron</Link>{' '}
-                <i>who has been writing single page web applications for a decade and a half.
-                Working with teams ranging from startups to enterprise to academia to starting startups, Chris has encountered and produced solutions a countless number of times.
-                These include getting mobile applications to look correct across devices all the way up to scaling a chat room up to handle .5 million users at a time.
-              He is supported by his loose network of engineers from various backgrounds along with a small team of junior and senior developers.</i>
+                <i>
+                  who has been writing single page web applications and mobile for a decade and a half. Working with teams ranging from startups to enterprise to academia, Chris has produced solutions that include fading in live stream video on the home page, scaling up a chat room to handle .5 million users at a time, and managing a team of developers for a suite of internal web tools for a fortune 500 firm. He is supported by a network of engineers from various backgrounds and a core team of experienced developers.
+                </i>
               </Typography>
             </Box>
           </Grid>

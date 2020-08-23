@@ -47,9 +47,7 @@ const Home: React.FC<Props> = ({ }) => {
             <Grid item xs={12} sm={6}>
               <Typography variant="body1" align="center" color="textSecondary">
                 <i>
-                  FutureDays is an earth based technical consulting shop specializing in software.
-                  We partner with firms to formulate a technical strategy, to augment engineering resources,
-                  and to build scalable solutions.
+                  FutureDays is an earth-based technical consulting shop specializing in software. We partner with firms to formulate a technical strategy, to augment engineering resources, and build scalable solutions.
                 </i>
               </Typography>
             </Grid>

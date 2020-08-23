@@ -17,17 +17,17 @@ interface Service {
 const SERVICES: Service[] = [
   {
     title: 'Software Engineering',
-    description: 'A lot of teams need help on the resource side.  Sometimes we encounter a situtation where a high level or deep understanding of complex processes is needed.  In either case, we can quickly evaluate the context and continuously deliver solutions.',
+    description: 'You need help on the resource side. Sometimes we encounter a situation where high level or deep understanding of complex processes is needed. We quickly evaluate the context and continuously deliver solutions.',
     performedFor: ['Fortune 500 financial services firm, 20MM global logistics company, 3MM building energy efficiency startup, US based marketing firm']
   },
   {
     title: 'Technical Evaluation',
-    description: 'Its common for a founder or leader to want to know where they stand.  We take a look and take pleasure in answering questions to inform a new roadmap so that you feel comfortable discussing the future.',
+    description: `It's common for a founder or leader to want to know where they stand. We take a look and take pleasure in answering questions to inform a new roadmap so that you feel comfortable discussing the future.`,
     performedFor: ['3MM building energy efficiency startup, Seed stage measurement hardware firm']
   },
   {
     title: 'Equity Partnership / CTO / Advisor',
-    description: 'For many startups Its not easy to find a technical cofounder . After trust is built, we do equity partnerships which provide access to opinions, experience, and development from senior leaders from our team to ensure leadership does not have to worry about the technical side.',
+    description: `It isn't easy to find a technical co-founder. Equity partnerships provide access to our experience, expertise, and solid development skills. This ensures you worry less about the tech, allowing your leadership to focus on the goals.`,
     performedFor: ['3MM collegiate sports services company']
   },
 ]
@@ -103,14 +103,16 @@ const OurWork: React.FC<Props> = ({ }) => {
           <Grid item xs={12} sm={6}>
             <Typography variant="body1" align="center" color="textSecondary">
               <i>
-                We are experienced and clinical generalists offering breadth and depth.
-                In the past we've jumped into codebases and starting knocking out work tickets.
-                We've mentored developers while optimizing the product their working on.
-                We partner with startups to lead their technical team.
-                We do everything because we know how how the 0s and 1s work under the hood.
-                We make your future days easier.
+                We are experienced, clinical generalists offering breadth and depth. We jump into codebases to start knocking out work tickets. We mentor developers while optimizing the product. We partner with startups to lead their technical teams. We do everything because we know how the 0s and 1s work, under the hood.
               </i>
             </Typography>
+            <Box mt={2}>
+              <Typography variant="body1" align="center" color="textSecondary">
+                <i>
+                  We make your future days easier.
+              </i>
+              </Typography>
+            </Box>
           </Grid>
         </Grid>
         <Grid item>
